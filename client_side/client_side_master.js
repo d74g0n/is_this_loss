@@ -18,16 +18,13 @@ const clog = function (x) {
 // -=-=-=-=-=- [ DEBUG CREATOR ]
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CANVAS SECTION ]
-// 01_canvas.js
-// -=-=-=-=-=-=-=-=-=-=-=-=-=- [ GAME OPTIONS SECTION ]
-// USED: FPS. BG. 
 const game_defaults = {
     //    cols: ['blue', 'red', 'yellow', 'white'],
     //    players: 0,
     bg: 'rgb(15,100,15)',
     fps: 8
 }
-// -=-=-=-=-=-=-=-=-=-=-=-=-=- [ GAME OPTIONS SECTION ]
+
 const CanvasDefault = {
     // this is the main canvas - if scoreboard canvas is added perhaps naming refactor.
     dx: 49,
@@ -300,39 +297,7 @@ function spawnPlayers(playernum = 0) {
 
 }
 
-function spawn4Players() {
-
-
-    // have to refactor into canvas dimensions -1 +1 and directions, and colour:
-    let _spawning_Data = [
-    [2, 17, pallette_main.yellow],
-    [48, 17, pallette_main.green],
-    [25, 2, pallette_main.blue],
-    [25, 32, pallette_main.red],
-    [10, 2, pallette_main.purple],
-    [40, 32, pallette_triad_y.blue],
-    [10, 32, pallette_main.cyan],
-    [40, 2, pallette_main.orange]
-];
-
-    console.log(_spawning_Data);
-    //    players.push(createPlayer('d74', pallette_main.yellow, 2, 17, 'd', 1));
-    //    players.push(createPlayer('AI', pallette_main.green, 48, 17, 'a', -1));
-    //    players.push(createPlayer('AI', pallette_main.red, 25, 32, 'w', 0, -1));
-    //    players.push(createPlayer('AI', pallette_main.blue, 25, 2, 's', 0, 1));
-    players.push(createPlayer('AI', pallette_main.purple, 10, 2, 's', 0, 1));
-    players.push(createPlayer('AI', pallette_main.cyan, 10, 32, 'w', 0, -1));
-    players.push(createPlayer('AI', pallette_main.orange, 40, 2, 's', 0, 1));
-    players.push(createPlayer('AI', pallette_triad_y.blue, 40, 32, 'w', 0, -1));
-
-    if (_verbose) {
-        console.log('[PLAYERLISTCREATED][' + players + ']');
-    }
-
-}
-
 spawnPlayers(8);
-//spawn4Players();
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ PLAYERS SECTION ]
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ DRAWING SECTION ]
@@ -624,7 +589,7 @@ function find_direction(arrA,arrB) {
 // Needs:
 
 //    - lerp systems.
-//    - stroke draw snake system.
+//    - stroke draw OUTLINE of snake system.
 //    - background animatey (post lerp)
 
 
@@ -883,6 +848,7 @@ function dirty_Gameloop() {
 // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ GATHERING AI DATA (SENSE) BEGINS: ]
 function players_look() {
     for (player in players) {
+        //LRUD=leftRightUpDown
         players[player].setLRUD(indexofmax(player_look(player)));
     }
 }
@@ -1009,12 +975,6 @@ function indexofmax(arr = [0]) {
     
 }
 // -=-=-=-=-=-=-=-=-=-=--= [ AI RELATED LOGIC: ]
-
-
-
-
-
-
 // THIS HAS TO TIE INTO SOCKET EMITS OF CONTROL DATA.
 
 //var timers = [];
@@ -1140,15 +1100,6 @@ function keychecker(e) {
 }
 
 
-
-
-
-
-
-
-
-
-
 // -=-=-=-=-=- [ DEBUG CREATOR ] =-=-=-=-=-=-=-
 // -=-=-=-=- [CREATOR MODE MADNESS]
 // building a page/stage flipper:
@@ -1195,6 +1146,11 @@ function asShow(){
 }
 
 
-function toomanylinesofcodehahahahaha(over = 1212, or = 9001) {
-    return console.log('eatmytits');
-}
+function legend() {
+    // -=-=-=- [ CREATOR CONSOLE LEGEND: ]
+    //  asShow() - shows name_modal input modal.  
+    // -=-=- [ KEYS: ]
+    // 1 - start game loop
+    // 2 - stop game loop
+    
+} 

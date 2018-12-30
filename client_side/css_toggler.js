@@ -1,3 +1,5 @@
+// -=-= this is just debugging / creator level mucking about:
+
 function TOG_display(ElIdStr = "Name_modal") {
 // take an element and toggle the css display property
 // between "block" and "none"
@@ -17,7 +19,7 @@ function TOG_display(ElIdStr = "Name_modal") {
 const dss = {
     targetId: undefined,
     setTargetId: function(target) {
-      return .targetId =  document.getElementById(target);  
+      return dss.targetId =  document.getElementById(target);  
     },
     display: function(param) {
         
