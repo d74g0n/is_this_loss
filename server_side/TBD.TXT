@@ -1,0 +1,36 @@
+make login - db - etc.
+
+
+
+
+Naming conventions of filenames:
+
+[LEGEND: ] ss = server_side
+
+    ss.js,
+ss_router.js,
+ss_server.js,
+ss_requestHandler.js,
+
+
+    *
+    each js is 1
+function;
+so that
+if any
+function fatal errors;
+only it will crash removing the fatal part from the global scope.*
+
+  [Db]
+
+var PlayerId = {
+    joined: 'datestring on creation of NewEntry',
+
+
+
+
+
+
+
+
+}

@@ -1,0 +1,16 @@
+{
+  "name": "loss_server",
+  "version": "1.0.0",
+  "description": "Backend of is_this_loss snakegame",
+  "main": "startserver",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backend",
+    "server",
+    "game"
+  ],
+  "author": "d74g0n",
+  "license": "UNLICENCED"
+}

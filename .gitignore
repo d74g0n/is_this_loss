@@ -27,7 +27,6 @@ $RECYCLE.BIN/
 # =========================
 
 node_modules/
-server_side/
 
 # =========================
 # https://github.com/github/gitignore/blob/master/Node.gitignore
