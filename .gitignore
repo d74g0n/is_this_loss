@@ -27,6 +27,8 @@ $RECYCLE.BIN/
 # =========================
 
 node_modules/
+outter/
+*.txt
 
 # =========================
 # https://github.com/github/gitignore/blob/master/Node.gitignore
