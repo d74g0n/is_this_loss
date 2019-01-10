@@ -1,8 +1,3 @@
-// -=-=-=-=-=- [ DEBUG CREATOR/MODE ] =-=-=-=-=-=-=-
-
-// REFACTOR - PLAYERS will have to be controlled by server lobby setup.
-//var players = [];
-
 const _verbose = false;
 if (_verbose) {
     console.log('[VERBOSE][CREATOR_MODE]');
@@ -1127,18 +1122,8 @@ function quickstart() {
 
 
 var timers = [];
-function toggle_gametimer(){
-    
 
-    
-    
-    
-    
-    
-    
-}
-
-
+quickstart();
 
 // Alias's (quick console namenclature)
 function asShow(){

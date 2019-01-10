@@ -16,9 +16,17 @@ var requestHandlers = require("./ss_requestHandlers");
 var handle = {}; // -=[Request URL ROUTE MAP:
 //handle["/robots.txt"] = requestHandlers.robotstxt;
 handle["/favicon.ico"] = requestHandlers.favicon;
-handle["/"] = requestHandlers.sendloginSNAFU; // TBA ASSOCIATIONS.
-handle["/emptypage"] = requestHandlers.mainmenu; // fwd
-handle["/index.html"] = requestHandlers.mainmenu;
+//handle the html aspect of the call:
+handle["/"] = requestHandlers.sn_html; // TBA ASSOCIATIONS.
+handle["/emptypage"] = requestHandlers.sn_html; // fwd
+handle["/index.html"] = requestHandlers.sn_html;
+//handle CSS:
+handle["/snafu_init.css"] = requestHandlers.sn_init;
+//handle JS:
+handle["/client_side_master.js"] = requestHandlers.sn_csm;
+handle["/login.js"] = requestHandlers.sn_login;
+handle["/css_toggler.js"] = requestHandlers.sn_csstog;
+
 
 // -=-=[ Launch ]
 server.start(router.route, handle);
