@@ -60,11 +60,39 @@ function sn_csstog(res) {
     res.end();
 }
 
+function socklog(res) {
+    global.clog("[ss_reqHan][socklog]");
+    res.writeHead(200, {
+        "Content-Type": "text/html"
+    }); //?
+    var sendingfile = fs.readFileSync('./sockettest/s_login.html');
+    res.write(sendingfile);
+    res.end();
+}
+
+
+function socketclient(res) { // currently siting online source - must fix.
+    global.clog("[ss_reqHan][socketclient]");
+    res.writeHead(200, {
+        "Content-Type": "application/javascript"
+    }); //?
+    var sendingfile = fs.readFileSync('./sockettest/socket.io.min.js');
+    res.write(sendingfile);
+    res.end();
+}
+
+
+
 exports.favicon = favicon;
 exports.sn_html = sn_html;
 exports.sn_init = sn_init;
 exports.sn_csm = sn_csm;
 exports.sn_login = sn_login;
 exports.sn_csstog = sn_csstog;
+
+exports.socklog = socklog;
+//socket.io.min
+exports.socketclient = socketclient;
+
 
 //exports.robotstxt = robotstxt;   // TBDTBDTBD FINALS.

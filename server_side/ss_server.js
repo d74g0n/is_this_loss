@@ -1,15 +1,17 @@
-var webserver_port = global.server_config.port;  // PORT HARDCODED HERE.
-var http = require("http");
+var webserver_port = global.server_config.port; // PORT HARDCODED HERE.
 var url = require("url");
 
 function start(route, handle) {
     function onRequest(request, response) {
         var pathname = url.parse(request.url).pathname;
         var clientip = request.connection.remoteAddress;
-//        global.clog("[ss_server][onRequest][Cl_IP: " + clientip + "]");
+        global.clog("[ss_server][start-onRequest][Cl_IP: " + clientip + "]");
         route(handle, pathname, response);
     }
-    http.createServer(onRequest).listen(webserver_port);
+    let qserver = global.http.createServer(onRequest).listen(webserver_port);
+    global.io.listen(qserver);
     global.clog("[ss_server][Start][onRequest][Port:" + webserver_port + "]");
 }
+
+
 exports.start = start;

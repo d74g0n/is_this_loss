@@ -13,8 +13,8 @@ function route(handle, pathname, response) {
     } else {
         //        console.log("[ROUTE_sERR][404 Not Found: " + pathname + "]");
         global.clog("[ss_router][route-ERRORHANDLED][" + pathname + "] => [404]");
-        response.write("404 Not Found \n");
-        response.end();
+//        response.write("404 Not Found \n");
+//        response.end();
     }
 }
 

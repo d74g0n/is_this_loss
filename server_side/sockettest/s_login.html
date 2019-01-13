@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>SOCKET WIP LOGIN</title>
+<!--    <link href="/snafu_init.css" rel="stylesheet" type="text/css">-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    <style>
+
+        * {
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    /*                background: rgba(10,10,30);*/
+    background: green; /* temp debug level stuff */
+}
+    
+    
+#InputDiv {
+    margin-top: 1em;
+/*    margin-top: 400px;*/
+    padding: .5em;
+    background: green;
+    background: green;
+    width: 300px;
+    border-radius: 7px;
+/*    border: 1px solid red;*/
+    border: 1px solid rgb(204,43,43);
+    font-style: italic;
+}
+
+#inputName, #inputPass {
+    text-align: center;
+    font-size: 20px;
+    border-radius: 7px;
+    background: gold;
+    border-color: rgb(204,43,43);
+    color: blue;
+}
+
+.modal {
+    display: none;
+    display: block;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 50%;
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    overflow: hidden;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: darkblue;
+/*    background-color: rgb(104,196,255);*/
+    margin: 15% auto;
+    margin: 7em auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid gold;
+    border: 1px solid rgb(204,43,43);
+        border-radius: 7px;
+    width: 350px;
+    /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #c00;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: -0.7em;
+    margin-right: -0.5em;
+    text-shadow: 1px 1px #200;
+    transition: 0.1s;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.label {
+/*    padding-left: 1em;*/
+    color: gold;
+    text-shadow: 0.5px 0.5px #ff0000;
+}
+
+button:hover {
+    border-radius: 7px;
+    background: gold;
+    border-color: rgb(204,43,43);
+    color: darkblue;
+    border-width: 1px;
+}
+
+button {
+    border-radius: 7px;
+    background: darkblue;
+    border-color: rgb(204,43,43);
+    color: gold;
+    border-width: 1px;
+    transition: 0.2s;
+}
+
+</style>
+</head>
+
+<body>
+    <!-- The Modal -->
+    <div id="Name_modal" class="modal">
+        <br> <br> <br> <br>
+        <center>
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--                <span class="close">&times;</span>-->
+                <span class="label"> WHO AM I? </span>
+                <div id="InputDiv">
+                    <input type="text" id="inputName" maxlength="17" name="Name" value="SNAFU_MASTER"><br><br>
+                    <!--                    <span class="label"> SAFEWORD? </span> <br>-->
+                    <input type="text" id="inputPass" maxlength="17" name="Pass" value="PASSWORD"><br><br>
+                    <button onclick='setInputValue()'>Submit</button>
+                    <button onclick='clearInputBox()'>Clear</button>
+
+                    <script>
+                        var name_modal = document.getElementById('Name_modal');
+                        var socket = io.connect();
+                        function setInputValue(targ = "inputName") {
+                            let name = document.getElementById(targ);
+                            console.log('[][setInputValue()][name.value: ' + name.value + ']');
+                            let pass = document.getElementById("inputPass");
+                            console.log('[][setInputValue()][name.value: ' + pass.value + ']');
+                            let user = {
+                                name: name.value,
+                                pass: pass.value
+                            }
+                            // check validity - then cookie?
+                            name_modal.style.display = "none";
+//                            return user;
+                            return socket.emit('login', user);
+                        }
+
+                        function clearInputBox() {
+                            socket.emit('chat message', 'blerp');
+                        }
+
+                    
+                    
+                    </script>
+
+                    <script>
+                        socket.on('chat message', function(msg) {
+                            console.log('[io][Recieved MSG: ' + msg + ']');
+                        });
+
+                    </script>
+
+
+
+
+
+                </div>
+            </div> <!-- Modal content -->
+        </center>
+    </div>
+
+</body>
+
+</html>

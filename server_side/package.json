@@ -12,5 +12,8 @@
     "game"
   ],
   "author": "d74g0n",
-  "license": "UNLICENCED"
+  "license": "UNLICENCED",
+  "dependencies": {
+    "socket.io": "^2.2.0"
+  }
 }

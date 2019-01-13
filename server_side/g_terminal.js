@@ -10,30 +10,27 @@ stdin.resume();
 stdin.setEncoding('utf8');
 // on any data into stdin
 stdin.on('data', function (key) {
-    
-    var lastkey = key;
-    // ctrl-c ( end of text )
-    
-//    console.log(key);
+    var lastkey = key; //unused
+
     if (key === 'l') {
         clearConsole();
         console.log('[_terminal][CLEAR][CTRL+C TO EXIT]');
-//        key = ' ';
+        global.testemit();
+    }
+    if (key === 't') {
+        console.log('[_terminal][t][testemit()]');
+        global.testemit();
     }
     if (key === '\u0003') {
         // ctrl-c
         process.exit();
     }
     // write the key to stdout all normal like
-    // process.stdout.write( key );
-//    process.stdout.write(key);
-    
-    console.log('[_terminal][KEYPRESSED:]['+ key +']');
+    //    process.stdout.write(key);
+    console.log('[_terminal][KEYPRESSED:][' + key + ']');
     key = '';
-
-
 });
 
-    var clearConsole = function () {
-        return process.stdout.write('\x1B[2J\x1B[0f\u001b[0;0H');
-    }
+var clearConsole = function () {
+    return process.stdout.write('\x1B[2J\x1B[0f\u001b[0;0H');
+}

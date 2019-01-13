@@ -4,6 +4,10 @@ global.server_config = require("./serverconfig.json");
 console.log('[LAUNCHING with CONFIGURATION:]');
 console.log(global.server_config);
 
+
+global.http = require("http");
+global.io = require('socket.io')(global.http); // IMPLIMENTING NOW
+
 // -=-=[ Load Modules: ]
 var ddb = require("./g_verbose");
 var term = require("./g_terminal");
@@ -27,6 +31,9 @@ handle["/client_side_master.js"] = requestHandlers.sn_csm;
 handle["/login.js"] = requestHandlers.sn_login;
 handle["/css_toggler.js"] = requestHandlers.sn_csstog;
 
+// socket work:
+handle["/socklog"] = requestHandlers.socklog;
+handle["/socket.io.min.js"] = requestHandlers.socketclient;
 
 // -=-=[ Launch ]
 server.start(router.route, handle);
