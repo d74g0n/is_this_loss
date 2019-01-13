@@ -7,26 +7,26 @@ console.log('[ss_socket][Listening]');
 
 io.on('connection', function (socket) {
     var d = new Date();
-    console.log("[io][" + d + " ] Clients Connected: " + io.engine.clientsCount);
+    console.log("[io_socket][" + d + " ] Clients Connected: " + io.engine.clientsCount);
 
 
     socket.on('disconnect', function () {
         var d = new Date();
-        console.log("[io][" + d + " ] Clients Connected: " + io.engine.clientsCount);
+        console.log("[io_socket][" + d + " ] Clients Connected: " + io.engine.clientsCount);
     });
 
 
     socket.on('chat message', function (msg) { // unused - left for future use.
         io.emit('chat message', msg);
-        console.log('[io][chat message: ' + msg + ']');
+        console.log('[io_socket][chat message: ' + msg + ']');
 
     });
 
     socket.on('login', function (msg) { // unused - left for future use.
         //        io.emit('chat message', msg);
         //        console.log('[io][tester: ' + msg + ']');
-        console.log('[io][login: ' + JSON.stringify(msg) + ']');
-        console.log('[io][HELLO! ' + msg.name + ']');
+        console.log('[io_socket][login: ' + JSON.stringify(msg) + ']');
+        console.log('[io_socket][HELLO! ' + msg.name + ']');
         // PROCESS LOGIN.
     });
 
