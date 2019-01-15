@@ -12,6 +12,16 @@
     global.clog("[GLOBALSCOPE][g_verbose][init][VERBOSE:" + _isVerbose.toString().toUpperCase() + "]");
 })();
 
-
+global.firstkey = function(obj) {
+    if (global.io.engine.clientsCount > 0) {
+//        .remoteAddress
+        return obj[Object.keys(obj)[global.io.engine.clientsCount-1]];
+    } else {
+        return obj[Object.keys(obj)[0]];
+    }
+}
 // Project Citations:
 // http://robinosborne.co.uk/2013/01/10/year-of-101-january-node-js-serving-web-content/
+
+
+

@@ -2,9 +2,9 @@
   "name": "loss_server",
   "version": "1.0.0",
   "description": "Backend of is_this_loss snakegame",
-  "main": "startserver",
+  "main": "bootup.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo './node bootup.js' && exit 1"
   },
   "keywords": [
     "backend",

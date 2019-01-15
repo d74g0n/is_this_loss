@@ -21,6 +21,10 @@ stdin.on('data', function (key) {
         console.log('[_terminal][t][testemit()]');
         global.testemit();
     }
+    if (key === 'e') {
+        console.log('[_terminal][global.io.engine::]');
+        console.log(global.io.engine);
+    }
     if (key === '\u0003') {
         // ctrl-c
         process.exit();
@@ -30,6 +34,10 @@ stdin.on('data', function (key) {
     console.log('[_terminal][KEYPRESSED:][' + key + ']');
     key = '';
 });
+
+
+
+
 
 var clearConsole = function () {
     return process.stdout.write('\x1B[2J\x1B[0f\u001b[0;0H');

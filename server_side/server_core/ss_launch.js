@@ -1,15 +1,15 @@
 // -=-=[ Load Settings: ]
 console.log('[ss_launch][LAUNCH]'); // pre clog.
 global.server_config = require("./serverconfig.json");
-console.log('[LAUNCHING with CONFIGURATION:]');
+console.log('[LAUNCHING with CONFIGURATION::]');
 console.log(global.server_config);
 
-
 global.http = require("http");
-global.io = require('socket.io')(global.http); // IMPLIMENTING NOW
+global.io = require('socket.io')(global.http); 
 
 // -=-=[ Load Modules: ]
 var ddb = require("./g_verbose");
+var ddb = require("./g_state");
 var term = require("./g_terminal");
 var socket = require("./ss_socket"); // WIP
 var server = require("./ss_server");
@@ -33,7 +33,11 @@ handle["/css_toggler.js"] = requestHandlers.sn_csstog;
 
 // socket work:
 handle["/socklog"] = requestHandlers.socklog;
-handle["/socket.io.min.js"] = requestHandlers.socketclient;
+handle["/character_creator.css"] = requestHandlers.sn_css_character;
+handle["/character_creator.js"] = requestHandlers.sn_js_character;  // depreciated
+handle["/cc_simple_snake.js"] = requestHandlers.cc_simple_snake;
+handle["/socket.io.dev.js"] = requestHandlers.socketclient;
+handle["/cookie_main.js"] = requestHandlers.cookiemain;
 
 // -=-=[ Launch ]
 server.start(router.route, handle);
