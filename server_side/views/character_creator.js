@@ -1,3 +1,19 @@
+console.log(function () {
+/*[ ] WRITE TEXT TO PREVIEW CANVAS FOR SERVER_STATUS ETC...
+[TADO Functional]:
+ [ ] COOKIES - fleshed (dep:STRING_ENGINE)
+ [ ] String Processing:
+     [ ] Char_Create NAME Validation.
+     [ ] Char_Create COOKIE in / Out.
+ [ ] SAVE CHARACTER / LOAD CHARACTER
+ [ ] CONNECT / READY - SOCKET CONNECT / DATA
+ [Bells and Whistles]
+ 
+ [ ] RNDCOLOR_'SEED' : ( add 'until mousemove?' - color shifter on snake. )
+     [ ] COLOR LERPER
+*/
+});
+
 const game_defaults = {
     _verbose: true,
     bg: 'rgb(15,100,15)',
@@ -42,19 +58,7 @@ const clog = function (x) {
 };
 clog('[note][clog() replaces console.log]');
 
-clog(function () {
-    // TODO LIST:
-    // -----------
-    // I) Functional:
-    // a) Add cookies SAVE LOAD. 
-    // aii) learn logics for socket data.
-    // b) pass to lobby situtation (inbetween rounds area)
-    // II) Bells and Whistles:
-    // add 'until mousemove?' - color shifter on snake.
 
-    // WidthxHeight Logic of canvas Color Preview is off. (scale related?)
-
-});
 // -=-=-=-=- [ MAIN CANVAS :
 const CanvasDefault = {
     dx: 16,

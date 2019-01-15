@@ -9,7 +9,7 @@ body {
 }
 
 #preview {
-    background: darkgreen;
+    background: 'rgb(0,55,0)';
     width: 256px;
     height: 80px;
     border: 1px solid black;
