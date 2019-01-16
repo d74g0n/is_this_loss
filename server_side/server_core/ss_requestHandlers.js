@@ -65,7 +65,7 @@ function socklog(res) {
     res.writeHead(200, {
         "Content-Type": "text/html"
     }); //?
-    var sendingfile = fs.readFileSync('./views/character_creator.html');
+    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.html');
     res.write(sendingfile);
     res.end();
 }
@@ -75,7 +75,7 @@ function sn_css_character(res) {
     res.writeHead(200, {
         "Content-Type": "text/css"
     }); //?
-    var sendingfile = fs.readFileSync('./views/character_creator.css');
+    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.css');
     res.write(sendingfile);
     res.end();
 }
@@ -85,7 +85,7 @@ function sn_js_character(res) {
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?
-    var sendingfile = fs.readFileSync('./views/character_creator.js');
+    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.js');
     res.write(sendingfile);
     res.end();
 }
@@ -94,7 +94,7 @@ function cookiemain(res) {
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?
-    var sendingfile = fs.readFileSync('./views/cookie_main.js');
+    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.cookie.js');
     res.write(sendingfile);
     res.end();
 }

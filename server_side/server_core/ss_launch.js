@@ -21,9 +21,18 @@ var handle = {}; // -=[Request URL ROUTE MAP:
 //handle["/robots.txt"] = requestHandlers.robotstxt;
 handle["/favicon.ico"] = requestHandlers.favicon;
 //handle the html aspect of the call:
+/*
+
 handle["/"] = requestHandlers.sn_html; // TBA ASSOCIATIONS.
 handle["/emptypage"] = requestHandlers.sn_html; // fwd
 handle["/index.html"] = requestHandlers.sn_html;
+*/
+// NEED TO RENAME SOCKLOG lol:
+handle["/"] = requestHandlers.socklog; 
+handle["/emptypage"] = requestHandlers.socklog; 
+handle["/index.html"] = requestHandlers.socklog;
+
+
 //handle CSS:
 handle["/snafu_init.css"] = requestHandlers.sn_init;
 //handle JS:
@@ -37,7 +46,7 @@ handle["/character_creator.css"] = requestHandlers.sn_css_character;
 handle["/character_creator.js"] = requestHandlers.sn_js_character;  // depreciated
 handle["/cc_simple_snake.js"] = requestHandlers.cc_simple_snake;
 handle["/socket.io.dev.js"] = requestHandlers.socketclient;
-handle["/cookie_main.js"] = requestHandlers.cookiemain;
+handle["/character_creator.cookie.js"] = requestHandlers.cookiemain;
 
 // -=-=[ Launch ]
 server.start(router.route, handle);

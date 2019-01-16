@@ -25,6 +25,7 @@ stdin.on('data', function (key) {
         console.log('[_terminal][global.io.engine::]');
         console.log(global.io.engine);
     }
+
     if (key === '\u0003') {
         // ctrl-c
         process.exit();

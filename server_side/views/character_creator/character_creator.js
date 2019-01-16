@@ -1,29 +1,32 @@
+console.log('[FAIRWARNING][this game cannot function without using browser cookies]');
+console.log('[CURRENT_COOKIES][' + document.cookie + ']');
 console.log(function () {
-/*[ ] WRITE TEXT TO PREVIEW CANVAS FOR SERVER_STATUS ETC...
-[TADO Functional]:
- [ ] COOKIES - fleshed (dep:STRING_ENGINE)
- [ ] String Processing:
-     [ ] Char_Create NAME Validation.
-     [ ] Char_Create COOKIE in / Out.
- [ ] SAVE CHARACTER / LOAD CHARACTER
- [ ] CONNECT / READY - SOCKET CONNECT / DATA
- [Bells and Whistles]
- 
- [ ] RNDCOLOR_'SEED' : ( add 'until mousemove?' - color shifter on snake. )
-     [ ] COLOR LERPER
-*/
+    /*
+    [ ] Login To Server / Lobby.
+    [ ] Possible Footer-Chatter/server-data
+    [ ] [BW] eye's on heads.
+    [ ] [BW] sound.
+    
+    [ ] day night cycle.
+
+    */
 });
 
 const game_defaults = {
-    _verbose: true,
+    _verbose: false,
     bg: 'rgb(15,100,15)',
     color_init: 'rgb(255,181,79)',
     fps: 120,
-    lps: 8
+    lps: 8,
+    valid_factor: [120, 60, 40, 30, 24, 20, 15, 12, 10, 8, 6, 5, 4, 3, 2, 1],
+    speed: 0,
+//    lerpamt: .25,
+    lerpamt: .2,
 }
-// WIP:
+// WIP: STILL UNUSED
 const Player_Details = {
     color: undefined,
+    name: undefined,
 }
 
 const Page_Triggers = { // FLESHED OUT BUT UNUSED:
@@ -57,8 +60,6 @@ const clog = function (x) {
     }
 };
 clog('[note][clog() replaces console.log]');
-
-
 // -=-=-=-=- [ MAIN CANVAS :
 const CanvasDefault = {
     dx: 16,
@@ -73,7 +74,9 @@ const CanvasDefault = {
     _left: 0,
     _top: 0,
     _gapX: 0.5,
+    _gapX: 1,
     _gapY: 0.5,
+    _gapY: 1,
 }
 
 const canvas = document.getElementById('preview');
@@ -204,6 +207,20 @@ function drawSquare(x = 2, y = 3, color = preview_snake.color) {
     fSq(x, y, color);
 }
 
+function writeText(string = 'SNAFU', scaleX = canvas.width / 2, scaleY = canvas.height / 3, font = '32px serif', fillStyle = preview_snake.color, strokeStyle = 'black', textBaseline = 'top', textAlign = 'center') {
+    c.fillStyle = fillStyle;
+    c.strokeStyle = strokeStyle;
+    c.font = font;
+    c.textAlign = textAlign;
+    c.textBaseline = textBaseline;
+    c.fillText(string, scaleX, scaleY);
+    c.strokeText(string, scaleX, scaleY);
+
+    //    clog('[WRITETEXT]['+string+']');
+
+    // REMEMBER SHADOWING?
+}
+
 function GlobalAlpha(num = 1) {
     c.globalAlpha = num;
 }
@@ -218,6 +235,7 @@ function background(color = game_defaults.bg) {
     //doubles as a clear inbetween frames.
     c.fillStyle = color;
     c.fillRect(0, 0, canvas.width, canvas.height)
+    writeText();
 }
 
 function drawSnake(color = preview_snake.color) {
@@ -261,8 +279,7 @@ function collide_isEdge() {
     return check_Edge(preview_snake.x + preview_snake.vx, preview_snake.y + preview_snake.vy);
 }
 // -=-=-=-=-[ game loop: ]
-let frame_tracking = 1;
-
+let frame_tracking = 0; // TADO
 function snake_animation() { // game loop essentially.
 
     if (FPSfifteen(frame_tracking)) {
@@ -284,65 +301,32 @@ function snake_animation() { // game loop essentially.
 
 let timers = [];
 timers.push(setInterval(snake_animation, 1000 / game_defaults.fps));
-// -=-=-=-=-[ color picker: ]
-const color_picker = document.getElementById('colorpickwindow');
-color_picker.onclick = color_read;
 
-function color_read(e) {
-
-    // the final multipliers are based on the canvas not reading propper:
-    var x = (e.pageX - this.offsetLeft) * 1.16;
-    // the y offseet does NOT want black (walls color) chosen:
-    var y = (e.pageY - this.offsetTop) * (5);
-
-/*
-    clog(e.x + ',' + e.y);
-    clog('[' + x + 'x' + y + ']');
-*/
-
-    ctx = document.getElementById('colorpickwindow').getContext('2d');
-    var img_data = ctx.getImageData(x, y, 1, 1).data;
-    var R = img_data[0];
-    var G = img_data[1];
-    var B = img_data[2];
-    preview_snake.color = 'rgb(' + R + ',' + G + ',' + B + ')';
+function target_cursor() {
+    return change_cursor('crosshair');
 }
-//-=-=-=-=-[KEY CHECKING ]
-document.onkeydown = keychecker;
 
-function keychecker(e) {
+function default_cursor() {
+    return change_cursor('default');
+}
 
-    console.log('[KEYPRESS][' + e.key + ']')
-
-    if (e.key == 'ArrowDown') {
-        game_defaults.lps--;
-        console.log(game_defaults.lps);
-        console.log('ArrowDown Triggered');
-    }
-    if (e.key == 'ArrowUp') {
-        game_defaults.lps++;
-        console.log(game_defaults.lps);
-        console.log('ArrowUp Triggered');
-    }
-    if (e.key == 'ArrowLeft') {
-        console.log('ArrowLeft Triggered');
-    }
-    if (e.key == 'ArrowRight') {
-        console.log('ArrowRight Triggered');
-    }
-
-
-    if (e.key == '1') {
-        background();
-        //        drawSnake('rgba(255,181,79,1)');
-        snake_animation();
+function change_cursor(cursortype = 'default') {
+    // default- change cursor to string passed.
+    let current_cursor = document.body.style.cursor;
+    // check if alread is there for 'secret triggers'
+    // returns true when already is set.  evolves to cursor_mgmt?
+    if (current_cursor == cursortype) {
+        clog('[cursor_match:]['+cursortype+']');
+        return true;
+    } else {
+        clog('[change_cursor:]['+cursortype+']');
+        return document.body.style.cursor = cursortype;
     }
 }
+//-=-=-=-^ Cursor Related.
+
 
 function FPSfifteen(currentframe) {
-
-    let speedfactor = [1, 15, 30, 60]; // come back to this.
-
     if (currentframe % game_defaults.lps == 0) {
         return true;
     } else {
@@ -357,12 +341,14 @@ function draw_lerp(frame) {
     drawSquare(preview_snake.lx, preview_snake.ly, color);
 }
 
-function headlerp(start = preview_snake.x, end = preview_snake.x + preview_snake.vx, amt = .25) {
+function headlerp(start = preview_snake.x, end = preview_snake.x + preview_snake.vx, amt = game_defaults.lerpamt) {
     let x_lerped = lerp(preview_snake.lx, preview_snake.x + preview_snake.vx, amt);
     let y_lerped = lerp(preview_snake.ly, preview_snake.y + preview_snake.vy, amt);
     preview_snake.lx = x_lerped;
     preview_snake.ly = y_lerped;
     draw_lerp();
+    
+//    c.strokeRect(dx(x_lerped + 0.5), dy(y_lerped + 0.5), 16, 16);
 }
 
 function lerp(start, end, amt) {
@@ -417,35 +403,88 @@ function draw_gradient(canvas) {
 
 }
 
-draw_gradient(document.getElementById('colorpickwindow'));
 
-// -=-=-=-=-=-=-=-=- ^^ END OF FUNCTIONALITY AND ANIMATION ^^ -=-=-=-=-=-=-=-=-=-
+//-=-=-=-=-=-=-=-=-=-=-
 
+//-=-=-=- ALL INPUTS:
+// -=-=- WIP
+const trap_rightclick = document.body.addEventListener('contextmenu', function(ev) {
+    change_cursor('help');
+    ev.preventDefault();
+    return false;
+}, false);
 
-
-// -=-=-==[ VIEW/PAGE BUTTONS:
-
-function btn_defaults() {
-    clog('[btn_defaults]');
-}
-
-function btn_ready() {
-    clog('[btn_ready]');
-}
-
-function btn_load() {
-    clog('[btn_load]');
-}
-
-function btn_save() {
-    clog('[btn_save]');
+function Catch_Right_Click(e) {
+    
 }
 
 
 
 
 
+// -=-=-=-=-[ color picker: ]
+const color_picker = document.getElementById('colorpickwindow');
+color_picker.onclick = color_read;
+color_picker.onmouseover = target_cursor;
+color_picker.onmouseout = default_cursor;
+
+function color_read(e) {
+
+    // the final multipliers are based on the canvas not reading propper:
+    var x = (e.pageX - this.offsetLeft) * 1.16;
+    // the y offseet does NOT want black (walls color) chosen:
+    var y = (e.pageY - this.offsetTop) * (5);
+
+    /*
+        clog(e.x + ',' + e.y);
+        clog('[' + x + 'x' + y + ']');
+    */
+
+    ctx = document.getElementById('colorpickwindow').getContext('2d');
+    var img_data = ctx.getImageData(x, y, 1, 1).data;
+    var R = img_data[0];
+    var G = img_data[1];
+    var B = img_data[2];
+    preview_snake.color = 'rgb(' + R + ',' + G + ',' + B + ')';
+}
+//-=-=-=-=-[KEY CHECKING ]
+document.onkeydown = keychecker;
+
+function keychecker(e) {
+
+    console.log('[KEYPRESS][' + e.key + ']')
+
+    if (e.key == 'ArrowDown') {
+        game_defaults.speed--;
+        game_defaults.lps = game_defaults.valid_factor[game_defaults.speed];
+        console.log('[SPEED' + game_defaults.speed + '][' + game_defaults.lps + ']');
+        console.log('ArrowDown Triggered');
+    }
+    if (e.key == 'ArrowUp') {
+        game_defaults.speed++;
+        game_defaults.lps = game_defaults.valid_factor[game_defaults.speed];
+        console.log('[SPEED' + game_defaults.speed + '][' + game_defaults.lps + ']');
+        console.log('ArrowUp Triggered');
+    }
+    if (e.key == 'ArrowLeft') {
+        console.log('ArrowLeft Triggered');
+    }
+    if (e.key == 'ArrowRight') {
+        console.log('ArrowRight Triggered');
+    }
+
+    if (e.key == 'c') {
+        console.log(document.cookie);
+    }
+
+    if (e.key == '1') {
+        background();
+        //        drawSnake('rgba(255,181,79,1)');
+        snake_animation();
+    }
+}
+//-=-=-=-=-=-=-=-=-=-=-
 
 
-
-
+// -=-=-=-=- FINAL EXECUTIONS:
+draw_gradient(color_picker);
