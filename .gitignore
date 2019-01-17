@@ -28,6 +28,7 @@ $RECYCLE.BIN/
 
 node_modules/
 outter/
+sound/
 *.txt
 
 # =========================

@@ -10,7 +10,7 @@ function favicon(response) { // SYSTEM.RES
     response.end(img, 'binary');
 }
 // -=-=-=-=-=- [ To Be USED::
-function sn_html(res) { // MAIN HTML SNAFU
+/*function sn_html(res) { // MAIN HTML SNAFU
     global.clog("[ss_reqHan][sn_html][SENT]");
     res.writeHead(200, {
         "Content-Type": "text/html"
@@ -18,9 +18,9 @@ function sn_html(res) { // MAIN HTML SNAFU
     var sendingfile = fs.readFileSync('./snafu_res/index.html');
     res.write(sendingfile);
     res.end();
-}
+}*/
 
-function sn_init(res) {
+/*function sn_init(res) {
     global.clog("[ss_reqHan][sn_init][SENT]");
     res.writeHead(200, {
         "Content-Type": "text/css"
@@ -28,9 +28,9 @@ function sn_init(res) {
     var sendingfile = fs.readFileSync('./snafu_res/snafu_init.css');
     res.write(sendingfile);
     res.end();
-}
+}*/
 
-function sn_csm(res) {
+/*function sn_csm(res) {
     global.clog("[ss_reqHan][sn_csm][SENT]");
     res.writeHead(200, {
         "Content-Type": "application/javascript"
@@ -38,9 +38,9 @@ function sn_csm(res) {
     var sendingfile = fs.readFileSync('./snafu_res/client_side_master.js');
     res.write(sendingfile);
     res.end();
-}
+}*/
 
-function sn_login(res) {
+/*function sn_login(res) {
     global.clog("[ss_reqHan][sn_login][SENT]");
     res.writeHead(200, {
         "Content-Type": "application/javascript"
@@ -48,8 +48,8 @@ function sn_login(res) {
     var sendingfile = fs.readFileSync('./snafu_res/login.js');
     res.write(sendingfile);
     res.end();
-}
-
+}*/
+/*
 function sn_csstog(res) {
     global.clog("[ss_reqHan][sn_csstog][SENT]");
     res.writeHead(200, {
@@ -58,7 +58,7 @@ function sn_csstog(res) {
     var sendingfile = fs.readFileSync('./snafu_res/css_toggler.js');
     res.write(sendingfile);
     res.end();
-}
+}*/
 // -=-=-=-=-=- [ To Be USED^^^
 function socklog(res) {
     global.clog("[ss_reqHan][socklog][SENT]");
@@ -99,10 +99,7 @@ function cookiemain(res) {
     res.end();
 }
 
-
-
-
-function cc_simple_snake(res) {
+/*function cc_simple_snake(res) {
     global.clog("[ss_reqHan][sn_csstog]");
     res.writeHead(200, {
         "Content-Type": "application/javascript"
@@ -110,10 +107,57 @@ function cc_simple_snake(res) {
     var sendingfile = fs.readFileSync('./views/cc_simple_snake.js');
     res.write(sendingfile);
     res.end();
+}*/
+
+
+// round views:
+function round_html(res) {
+    global.clog("[ss_reqHan][round_html]");
+    res.writeHead(200, {
+        "Content-Type": "text/html"
+    }); //?
+    var sendingfile = fs.readFileSync('./views/round/round.html');
+    res.write(sendingfile);
+    res.end();
 }
 
-//cc_simple_snake
-//sn_js_character
+function round_css(res) {
+    global.clog("[ss_reqHan][round_css]");
+    res.writeHead(200, {
+        "Content-Type": "text/css"
+    }); //?
+    var sendingfile = fs.readFileSync('./views/round/round.css');
+    res.write(sendingfile);
+    res.end();
+}
+
+function round_main_js(res) {
+    global.clog("[ss_reqHan][round_main_js]");
+    res.writeHead(200, {
+        "Content-Type": "application/javascript"
+    }); //?
+    var sendingfile = fs.readFileSync('./views/round/round.main.js');
+    res.write(sendingfile);
+    res.end();
+}
+
+function round_js(res) {
+    global.clog("[ss_reqHan][round_js]");
+    res.writeHead(200, {
+        "Content-Type": "application/javascript"
+    }); //?
+    var sendingfile = fs.readFileSync('./views/round/round.js');
+    res.write(sendingfile);
+    res.end();
+}
+
+
+
+
+
+
+
+
 function socketclient(res) {
     global.clog("[ss_reqHan][socketclient]");
     res.writeHead(200, {
@@ -124,19 +168,27 @@ function socketclient(res) {
     res.end();
 }
 exports.favicon = favicon;
-exports.sn_html = sn_html;
-exports.sn_init = sn_init;
-exports.sn_csm = sn_csm;
-exports.sn_login = sn_login;
-exports.sn_csstog = sn_csstog;
+//exports.sn_html = sn_html;
+//exports.sn_init = sn_init;
+//exports.sn_csm = sn_csm;
+//exports.sn_login = sn_login;
+//exports.sn_csstog = sn_csstog;
 
 exports.socklog = socklog;
 exports.sn_css_character = sn_css_character;
 exports.sn_js_character = sn_js_character;
-exports.cc_simple_snake = cc_simple_snake;
+//exports.cc_simple_snake = cc_simple_snake;
 exports.cookiemain = cookiemain;
 //socket.io.min
 exports.socketclient = socketclient;
+
+
+
+// round views:
+exports.round_html = round_html;
+exports.round_css = round_css;
+exports.round_main_js = round_main_js;
+exports.round_js = round_js;
 
 
 //exports.robotstxt = robotstxt;   // TBDTBDTBD FINALS.

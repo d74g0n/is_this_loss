@@ -1,3 +1,4 @@
+// -=-=-=- [ Cookie Cores:
 function readAllCookies() {
     console.log(document.cookie);
 }
@@ -27,18 +28,7 @@ function eraseCookie(name) {
     document.cookie = name + '=; Max-Age=-99999999;';
 }
 
-function usage() {
-    //    https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript
-    setCookie('ppkcookie', 'testcookie', 7);
-
-
-    /*    if (x) {
-        [do something with x]
-        }*/
-
-}
-
-// -=-=-==[ VIEW/PAGE BUTTONS:
+// -=-=-=- [ Button Logic:
 function btn_defaults() {
     clog('[btn_defaults]');
     preview_snake.color = game_defaults.color_init;
@@ -48,6 +38,10 @@ function btn_defaults() {
 
 function btn_ready() {
     clog('[btn_ready][TODO LOBBY]');
+    setCookie('snafu', 'lobby', 1); // trap refresh with cookie
+    //socket connect
+    global_wipepage();
+    // wait for socket chat 'loadlobby' msg to trigger loadlobby(); html code.
 }
 
 function btn_load() {
@@ -85,4 +79,12 @@ function cookieloader() {
 
 
     }
+}
+
+function clear_page(){
+    return document.body.innerHTML = "";
+}
+
+function socket_load_page(body_msg) {
+    return document.body.innerHTML = body_msg;
 }

@@ -325,7 +325,6 @@ function change_cursor(cursortype = 'default') {
 }
 //-=-=-=-^ Cursor Related.
 
-
 function FPSfifteen(currentframe) {
     if (currentframe % game_defaults.lps == 0) {
         return true;
@@ -402,10 +401,7 @@ function draw_gradient(canvas) {
 
 
 }
-
-
 //-=-=-=-=-=-=-=-=-=-=-
-
 //-=-=-=- ALL INPUTS:
 // -=-=- WIP
 const trap_rightclick = document.body.addEventListener('contextmenu', function(ev) {
@@ -417,10 +413,6 @@ const trap_rightclick = document.body.addEventListener('contextmenu', function(e
 function Catch_Right_Click(e) {
     
 }
-
-
-
-
 
 // -=-=-=-=-[ color picker: ]
 const color_picker = document.getElementById('colorpickwindow');
@@ -484,7 +476,6 @@ function keychecker(e) {
     }
 }
 //-=-=-=-=-=-=-=-=-=-=-
-
 
 // -=-=-=-=- FINAL EXECUTIONS:
 draw_gradient(color_picker);

@@ -358,7 +358,7 @@ function fSq(x, y, color = 'rgba(255,255,255,1)') {
 }
 // stroke and filled square (common):
 function dSq(x, y, color = 'rgba(255,255,255,1)') {
-//    sSq(x, y, color);
+    sSq(x, y, color);
     fSq(x, y, color);
 }
 // draw text:

@@ -8,29 +8,24 @@
     <!--    REMOVE SOCKET UNTIL DATAFINISHED COLLECTING::-->
     <!--    <script type="text/javascript" src="/socket.io.dev.js"></script>-->
     <link href="/character_creator.css" rel="stylesheet" type="text/css">
- <script type="text/javascript" src="/character_creator.cookie.js"></script>
+    <script type="text/javascript" src="/character_creator.cookie.js"></script>
 </head>
 
 <body onload="btn_load()">
-
     <!--    complete form  -->
     <div id="Name_modal" class="modal">
         <center>
-        <h5 id="quote" style='color: rgb(0,56,0); font-style: italic; margin-bottom: 0px;  text-shadow: 1px 0px 1px 1px rgb(56, 0, 0);'>"Recognize Abstract Patterns"</h5>
-        <h5 id="quote"  style='color: rgb(0,46,0); font-style: italic; margin-top: 0px;'>"~D74G0N"</h5>
-            
-
-        
+            <h5 id="quote" style='color: rgb(0,56,0); font-style: italic; margin-bottom: 0px;  text-shadow: 1px 0px 1px 1px rgb(56, 0, 0);'>"Recognize Abstract Patterns"</h5>
+            <h5 id="quote" style='color: rgb(0,46,0); font-style: italic; margin-top: 0px;'>"~D74G0N"</h5>
             <div class="modal-content">
-<!--                need to add id's to these buttons so load can dissapear etc - move style to css:-->
-                <button onclick='btn_load()' style="margin-right: 20px; background: darkgreen;">Load</button>
+                <!--                need to add id's to these buttons so load can dissapear etc - move style to css:-->
+                <button onclick='btn_load()' style="margin-right: 20px; background: transparent;">Load</button>
                 <span class="label"> WHO AM I? </span>
-                <button onclick='btn_save()' style="margin-left: 20px; background: darkgreen;">Save</button>
+                <button onclick='btn_save()' style="margin-left: 20px; background: transparent;">Save</button>
                 <div id="InputDiv">
-                    <input type="text" id="inputName" maxlength="17" name="Name" value="" ><br>
+                    <input type="text" id="inputName" maxlength="17" name="Name" value=""><br>
                     <!-- <input type="text" id="inputPass" maxlength="17" name="Pass" value="PASSWORD"><br><br>-->
-
-                    <div id="minicanvas" >
+                    <div id="minicanvas">
                         <canvas id="preview" style="margin-top: 4px;">
                         </canvas><br>
                         <div id="colorpicker">
@@ -38,7 +33,6 @@
                         </div>
                         <script type="text/javascript" src="/character_creator.js"></script>
                     </div>
-
                     <button onclick='btn_ready()'>Ready</button>
                     <button onclick='btn_defaults()'>Defaults</button>
                 </div>
