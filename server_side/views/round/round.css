@@ -7,20 +7,8 @@ body {
     background: green;
 }
 
-#topper {
-    background: black;
-    height: 40px;
-    width: 100%;
-    position: fixed;
-    color: gold;
-    box-shadow: 0px 0px 4px 4px rgb(56, 56, 56);
 
-}
 
-#playerlist {
-    padding: 0;
-    margin: 4px;
-}
 
 #score_ul {
     margin: 0;
@@ -53,15 +41,7 @@ body {
     color: gold;
 }
 
-#footey {
-    background: black;
-    height: 40px;
-    width: 100%;
-    position: fixed;
-    bottom: 0px;
-    box-shadow: 0px 0px 4px 4px rgb(56, 56, 56);
 
-}
 
 canvas {
     margin-top: 3em;
@@ -84,8 +64,6 @@ canvas {
     background: darkgreen;
     box-shadow: 0px 0px 2px 1px rgb(0, 0, 0);
 }
-
-
 
 #InputDiv {
     margin-top: 1em;
@@ -122,7 +100,6 @@ canvas {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* Modal Content/Box */
 .modal-content {
     background-color: darkblue;
     /*    background-color: rgb(104,196,255);*/
@@ -137,7 +114,6 @@ canvas {
     /* Could be more or less, depending on screen size */
 }
 
-/* The Close Button */
 .close {
     color: #c00;
     float: right;

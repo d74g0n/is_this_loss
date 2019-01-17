@@ -1,122 +1,87 @@
 //var exec = require("child_process").exec;
 var fs = require('fs');
 
+const views = {
+    viewdir: './views' ,
+    chardir: '/character_creator',
+    rounddir: '/round',
+    common: '/common',
+    sound: '/sfx',
+    cc: function () {
+        return (views.viewdir + views.chardir).toString();
+    },
+    round: function() {
+        return (views.viewdir + views.rounddir).toString();
+    },
+    com: function() {
+        return (views.viewdir + views.common).toString();
+    },
+    sfx: function () {
+        return (views.viewdir + views.common + views.sound).toString();
+    }
+};
+
 function favicon(response) { // SYSTEM.RES
     global.clog("[ss_reqHan][favicon][SENT]");
-    var img = fs.readFileSync('./views/common/favicon.png');
-    response.writeHead(200, {
-        "Content-Type": "image/png"
-    });
+    var img = fs.readFileSync(views.com() + '/favicon.png');
+    response.writeHead(200, { "Content-Type": "image/png" });
     response.end(img, 'binary');
 }
-// -=-=-=-=-=- [ To Be USED::
-/*function sn_html(res) { // MAIN HTML SNAFU
-    global.clog("[ss_reqHan][sn_html][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "text/html"
-    });
-    var sendingfile = fs.readFileSync('./snafu_res/index.html');
-    res.write(sendingfile);
-    res.end();
-}*/
 
-/*function sn_init(res) {
-    global.clog("[ss_reqHan][sn_init][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "text/css"
-    });
-    var sendingfile = fs.readFileSync('./snafu_res/snafu_init.css');
-    res.write(sendingfile);
-    res.end();
-}*/
-
-/*function sn_csm(res) {
-    global.clog("[ss_reqHan][sn_csm][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync('./snafu_res/client_side_master.js');
-    res.write(sendingfile);
-    res.end();
-}*/
-
-/*function sn_login(res) {
-    global.clog("[ss_reqHan][sn_login][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync('./snafu_res/login.js');
-    res.write(sendingfile);
-    res.end();
-}*/
-/*
-function sn_csstog(res) {
-    global.clog("[ss_reqHan][sn_csstog][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync('./snafu_res/css_toggler.js');
-    res.write(sendingfile);
-    res.end();
-}*/
-// -=-=-=-=-=- [ To Be USED^^^
-function socklog(res) {
-    global.clog("[ss_reqHan][socklog][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "text/html"
-    }); //?
-    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.html');
-    res.write(sendingfile);
-    res.end();
-}
-
-function sn_css_character(res) {
-    global.clog("[ss_reqHan][sn_csstog][SENT]");
+function snafu_css(res) {
+    global.clog("[ss_reqHan][snafu_css]");
     res.writeHead(200, {
         "Content-Type": "text/css"
     }); //?
-    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.css');
+    var sendingfile = fs.readFileSync(views.com() + '/snafu.css');
     res.write(sendingfile);
     res.end();
 }
 
-function sn_js_character(res) {
-    global.clog("[ss_reqHan][sn_csstog][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.js');
+function landingscreen(res) {
+    global.clog("[ss_reqHan][landingscreen][SENT]");
+    res.writeHead(200, { "Content-Type": "text/html" }); 
+    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.html');
     res.write(sendingfile);
     res.end();
 }
+
+function cc_css(res) {
+    global.clog("[ss_reqHan][cc_css][SENT]");
+    res.writeHead(200, { "Content-Type": "text/css" }); 
+    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.css');
+    res.write(sendingfile);
+    res.end();
+}
+
+function cc_js(res) {
+    global.clog("[ss_reqHan][sn_csstog][SENT]");
+    res.writeHead(200, { "Content-Type": "application/javascript" }); 
+    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.js');
+    res.write(sendingfile);
+    res.end();
+}
+
 function cookiemain(res) {
     global.clog("[ss_reqHan][cookiemain][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync('./views/character_creator/character_creator.cookie.js');
+    res.writeHead(200, { "Content-Type": "application/javascript" }); 
+    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.cookie.js');
     res.write(sendingfile);
     res.end();
 }
 
-/*function cc_simple_snake(res) {
-    global.clog("[ss_reqHan][sn_csstog]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync('./views/cc_simple_snake.js');
+function cc_sfx_js(res) {
+    global.clog("[ss_reqHan][cc_sfx_js][SENT]");
+    res.writeHead(200, { "Content-Type": "application/javascript" }); 
+    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.sfx.js');
     res.write(sendingfile);
     res.end();
-}*/
+}
 
-
-// round views:
 function round_html(res) {
     global.clog("[ss_reqHan][round_html]");
-    res.writeHead(200, {
-        "Content-Type": "text/html"
-    }); //?
-    var sendingfile = fs.readFileSync('./views/round/round.html');
+    res.writeHead(200, { "Content-Type": "text/html" }); 
+    var sendingfile = fs.readFileSync(views.round() + '/round.html');
     res.write(sendingfile);
     res.end();
 }
@@ -126,7 +91,7 @@ function round_css(res) {
     res.writeHead(200, {
         "Content-Type": "text/css"
     }); //?
-    var sendingfile = fs.readFileSync('./views/round/round.css');
+    var sendingfile = fs.readFileSync(views.round() + '/round.css');
     res.write(sendingfile);
     res.end();
 }
@@ -136,7 +101,7 @@ function round_main_js(res) {
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?
-    var sendingfile = fs.readFileSync('./views/round/round.main.js');
+    var sendingfile = fs.readFileSync(views.round() + '/round.main.js');
     res.write(sendingfile);
     res.end();
 }
@@ -146,17 +111,10 @@ function round_js(res) {
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?
-    var sendingfile = fs.readFileSync('./views/round/round.js');
+    var sendingfile = fs.readFileSync(views.round() + '/round.js');
     res.write(sendingfile);
     res.end();
 }
-
-
-
-
-
-
-
 
 function socketclient(res) {
     global.clog("[ss_reqHan][socketclient]");
@@ -167,28 +125,51 @@ function socketclient(res) {
     res.write(sendingfile);
     res.end();
 }
+
+// -=-=-= [ SFX ]
+function fx000(res) {
+    global.clog("[ss_reqHan][fx000][SENT]");
+    res.writeHead(200, { "Content-Type": "audio/wav" }); 
+    var sendingfile = fs.readFileSync(views.sfx() + '/fx000.wav');
+    res.write(sendingfile);
+    res.end();
+}
+
+function fx001(res) {
+    global.clog("[ss_reqHan][fx001][SENT]");
+    res.writeHead(200, { "Content-Type": "audio/wav" }); 
+    var sendingfile = fs.readFileSync(views.sfx() + '/fx001.wav');
+    res.write(sendingfile);
+    res.end();
+}
+
+function ost001(res) {
+    global.clog("[ss_reqHan][ost001][SENT]");
+    res.writeHead(200, { "Content-Type": "audio/wav" }); 
+    var sendingfile = fs.readFileSync(views.sfx() + '/ost001.wav');
+    res.write(sendingfile);
+    res.end();
+}
+
+
 exports.favicon = favicon;
-//exports.sn_html = sn_html;
-//exports.sn_init = sn_init;
-//exports.sn_csm = sn_csm;
-//exports.sn_login = sn_login;
-//exports.sn_csstog = sn_csstog;
-
-exports.socklog = socklog;
-exports.sn_css_character = sn_css_character;
-exports.sn_js_character = sn_js_character;
-//exports.cc_simple_snake = cc_simple_snake;
+exports.snafu_css = snafu_css;
+// views:
+exports.landingscreen = landingscreen;
+// character creation view:
+exports.cc_css = cc_css;
+exports.cc_js = cc_js;
 exports.cookiemain = cookiemain;
-//socket.io.min
+exports.cc_sfx_js = cc_sfx_js;
 exports.socketclient = socketclient;
-
-
-
-// round views:
+// round view:
 exports.round_html = round_html;
 exports.round_css = round_css;
 exports.round_main_js = round_main_js;
 exports.round_js = round_js;
+//exports.robotstxt = robotstxt;   
 
 
-//exports.robotstxt = robotstxt;   // TBDTBDTBD FINALS.
+exports.fx000 = fx000;
+exports.fx001 = fx001;
+exports.ost001 = ost001;

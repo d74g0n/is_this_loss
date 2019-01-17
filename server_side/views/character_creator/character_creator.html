@@ -4,19 +4,25 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>SNAFU_CHARACTER</title>
+    <title>SNAFUBAB</title>
     <!--    REMOVE SOCKET UNTIL DATAFINISHED COLLECTING::-->
     <!--    <script type="text/javascript" src="/socket.io.dev.js"></script>-->
     <link href="/character_creator.css" rel="stylesheet" type="text/css">
+    <link href="/snafu.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="/character_creator.cookie.js"></script>
+    <script type="text/javascript" src="/character_creator.sfx.js"></script>
 </head>
 
 <body onload="btn_load()">
+    <div id="topper">
+        <center>
+            <h5 id="quote">"Recognize Abstract Patterns"</h5>
+        </center>
+    </div>
     <!--    complete form  -->
     <div id="Name_modal" class="modal">
         <center>
-            <h5 id="quote" style='color: rgb(0,56,0); font-style: italic; margin-bottom: 0px;  text-shadow: 1px 0px 1px 1px rgb(56, 0, 0);'>"Recognize Abstract Patterns"</h5>
-            <h5 id="quote" style='color: rgb(0,46,0); font-style: italic; margin-top: 0px;'>"~D74G0N"</h5>
+
             <div class="modal-content">
                 <!--                need to add id's to these buttons so load can dissapear etc - move style to css:-->
                 <button onclick='btn_load()' style="margin-right: 20px; background: transparent;">Load</button>
@@ -37,6 +43,10 @@
                     <button onclick='btn_defaults()'>Defaults</button>
                 </div>
             </div> <!-- modal-content end -->
+        </center>
+    </div>
+    <div id="footey">
+        <center>
         </center>
     </div>
     <!--    form complete   -->

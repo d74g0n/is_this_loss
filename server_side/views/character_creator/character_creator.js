@@ -17,10 +17,10 @@ const game_defaults = {
     bg: 'rgb(15,100,15)',
     color_init: 'rgb(255,181,79)',
     fps: 120,
-    lps: 8,
+    lps: 24,
     valid_factor: [120, 60, 40, 30, 24, 20, 15, 12, 10, 8, 6, 5, 4, 3, 2, 1],
     speed: 0,
-//    lerpamt: .25,
+    //    lerpamt: .25,
     lerpamt: .2,
 }
 // WIP: STILL UNUSED
@@ -316,10 +316,10 @@ function change_cursor(cursortype = 'default') {
     // check if alread is there for 'secret triggers'
     // returns true when already is set.  evolves to cursor_mgmt?
     if (current_cursor == cursortype) {
-        clog('[cursor_match:]['+cursortype+']');
+        clog('[cursor_match:][' + cursortype + ']');
         return true;
     } else {
-        clog('[change_cursor:]['+cursortype+']');
+        clog('[change_cursor:][' + cursortype + ']');
         return document.body.style.cursor = cursortype;
     }
 }
@@ -346,8 +346,8 @@ function headlerp(start = preview_snake.x, end = preview_snake.x + preview_snake
     preview_snake.lx = x_lerped;
     preview_snake.ly = y_lerped;
     draw_lerp();
-    
-//    c.strokeRect(dx(x_lerped + 0.5), dy(y_lerped + 0.5), 16, 16);
+
+    //    c.strokeRect(dx(x_lerped + 0.5), dy(y_lerped + 0.5), 16, 16);
 }
 
 function lerp(start, end, amt) {
@@ -404,14 +404,14 @@ function draw_gradient(canvas) {
 //-=-=-=-=-=-=-=-=-=-=-
 //-=-=-=- ALL INPUTS:
 // -=-=- WIP
-const trap_rightclick = document.body.addEventListener('contextmenu', function(ev) {
+const trap_rightclick = document.body.addEventListener('contextmenu', function (ev) {
     change_cursor('help');
     ev.preventDefault();
     return false;
 }, false);
 
 function Catch_Right_Click(e) {
-    
+
 }
 
 // -=-=-=-=-[ color picker: ]
@@ -468,6 +468,37 @@ function keychecker(e) {
     if (e.key == 'c') {
         console.log(document.cookie);
     }
+
+    if (e.key == 'm') {
+        console.log(ost.length);
+        if (ost.length == 0) {
+            clog('[OST][INITALIZED]');
+            load_ost_track(1);
+        } else {
+            if (!ost[0].paused) {
+                clog('[OST][PAUSED]');
+                ost[0].pause();
+            } else {
+                clog('[OST][PLAYING]');
+                ost[0].play();
+            }
+        }
+    }
+
+    if (e.key == ',') {
+        main_vol = (main_vol - 0.01);
+        if (main_vol < 0) {main_vol = 0;}
+        ost[0].volume = main_vol;
+//        console.log(main_vol);
+    }
+
+    if (e.key == '.') {
+        main_vol = main_vol + 0.01;
+        if (main_vol > 1) {main_vol = 1;};
+        ost[0].volume = main_vol;
+//        console.log(main_vol);
+    }
+
 
     if (e.key == '1') {
         background();

@@ -34,14 +34,21 @@ function btn_defaults() {
     preview_snake.color = game_defaults.color_init;
     document.getElementById("inputName").value = 'SNAFU_MASTER';
     //    name.value = 'SNAFU_MASTER';
+    sfx[0].play();
+
 }
 
 function btn_ready() {
+    sfx[1].play();
+    
+/*
+    
     clog('[btn_ready][TODO LOBBY]');
     setCookie('snafu', 'lobby', 1); // trap refresh with cookie
     //socket connect
     global_wipepage();
     // wait for socket chat 'loadlobby' msg to trigger loadlobby(); html code.
+*/
 }
 
 function btn_load() {
@@ -76,7 +83,6 @@ function cookieloader() {
 
         document.getElementById("inputName").value = getCookie('name');
         preview_snake.color = getCookie('color');
-
 
     }
 }
