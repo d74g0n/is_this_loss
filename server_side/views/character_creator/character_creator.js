@@ -467,18 +467,8 @@ function keychecker(e) {
 
     if (e.key == 'm') {
 //        console.log(ost.length);
-        if (ost.length == 0) {
-            clog('[OST][INITALIZED]');
-            load_ost_track(1);
-        } else {
-            if (!ost[0].paused) {
-                clog('[OST][PAUSED]');
-                ost[0].pause();
-            } else {
-                clog('[OST][PLAYING]');
-                ost[0].play();
-            }
-        }
+        window.sound_sys.toggle_ost();
+  
     }
 
     if (e.key == ',') {
