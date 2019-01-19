@@ -1,5 +1,8 @@
-// -=-=-=-=- FINAL GLOBAL USAGE:
-function setCookie(name, value, days) {
+// Wrap everything Here into cookie_sys for easy delete/clean up/garbage collection.
+window.cookie_sys = {};
+// Global Scope - Never To Garbage:
+window.global_sys = {};
+window.global_sys.setCookie = function (name, value, days) {
     var expires = "";
     if (days) {
         var date = new Date();
@@ -9,7 +12,7 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
-function getCookie(name) {
+window.global_sys.getCookie = function(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
@@ -20,38 +23,38 @@ function getCookie(name) {
     return false;
 }
 
-function eraseCookie(name) {
+window.global_sys.eraseCookie = function(name) {
     document.cookie = name + '=; Max-Age=-99999999;';
 }
 
-function setBody(pagedata = "") {
+window.global_sys.setBody = function(pagedata = "") {
     //without parameters this is clear Body.
     return document.body.innerHTML = pagedata;
 }
-
 // -=-=-=- [ Debugger Delet Cookie Cores:
-function readAllCookies() {
-    //DEBUGGERLEVEL DELET
+window.global_sys.readAllCookies = function() {
+    //DEBUGGER LEVEL | DONE = DELET
     console.log(document.cookie);
 }
 
-// -=-=-=- [ Button Logic: LOGIN SCOPE ONLY.
-function cookieloader() {
+
+// LOGIN / CC BIN:
+window.cookie_sys.cookieloader = function () {
     if (document.cookie.length > 0) {
-        document.getElementById("inputName").value = getCookie('name');
-        preview_snake.color = getCookie('color');
+        document.getElementById("inputName").value = window.global_sys.getCookie('name');
+        preview_snake.color = window.global_sys.getCookie('color');
     }
     // need logic here that auto passes to proper state-view.
 }
 
-function btn_load() {
+window.cookie_sys.btn_load = function () {
 // attempt to avoid uncaught in promist DOMException
 /*    if (sfx[1].loaded) {
         sfx[1].play();
     }*/
 
-    let value = getCookie('name');
-    let value2 = getCookie('color');
+    let value = window.global_sys.getCookie('name');
+    let value2 = window.global_sys.getCookie('color');
     if (!value) {
         value = 'SNAFU_MASTER';
     }
@@ -63,45 +66,26 @@ function btn_load() {
     clog('[btn_load][' + value + ']');
 }
 
-function btn_save() {
-    // EXPIRES!!! FIGURE OUT.
+window.cookie_sys.btn_save = function() {
     sfx[0].play();
     var value = document.getElementById("inputName").value;
     var value2 = preview_snake.color;
     clog('[btn_save][' + value + ']');
     clog('[btn_save][' + value2 + ']');
-    setCookie('name', value, 7);
-    setCookie('color', value2, 7);
-
-    //    writeText('saved!');
-    //    document.cookie = "name =" + (value || "")  + expires + "; path=/";
+    window.global_sys.setCookie('name', value, 7);
+    window.global_sys.setCookie('color', value2, 7);
+    //    writeText('saved!'); // needs visual confirms.
 }
 
-function btn_defaults() {
+window.cookie_sys.btn_defaults = function() {
     clog('[btn_defaults]');
     preview_snake.color = game_defaults.color_init;
     document.getElementById("inputName").value = 'SNAFU_MASTER';
-    //    name.value = 'SNAFU_MASTER';
     sfx[0].play();
 
 }
 
-function btn_ready() {
-// CLEAR TIMER.
-    
+window.cookie_sys.btn_ready = function () {
     clearInterval(timers[0]);
     sfx[0].play();
-
-
-
-//    setBody('');
-
-    /*
-        
-        clog('[btn_ready][TODO LOBBY]');
-        setCookie('snafu', 'lobby', 1); // trap refresh with cookie
-        //socket connect
-        global_wipepage();
-        // wait for socket chat 'loadlobby' msg to trigger loadlobby(); html code.
-    */
 }

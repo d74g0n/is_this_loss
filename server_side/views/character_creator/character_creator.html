@@ -13,7 +13,7 @@
 
 </head>
 
-<body onload="btn_load()">
+<body onload="window.cookie_sys.btn_load()">
     <div id="topper">
         <center>
             <h5 id="quote">"Recognize Abstract Patterns"</h5>
@@ -25,9 +25,9 @@
 
             <div class="modal-content">
                 <!--                need to add id's to these buttons so load can dissapear etc - move style to css:-->
-                <button onclick='btn_load()' style="margin-right: 20px; background: transparent;">Load</button>
+                <button onclick='window.cookie_sys.btn_load()' style="margin-right: 20px; background: transparent;">Load</button>
                 <span class="label"> WHO AM I? </span>
-                <button onclick='btn_save()' style="margin-left: 20px; background: transparent;">Save</button>
+                <button onclick='window.cookie_sys.btn_save()' style="margin-left: 20px; background: transparent;">Save</button>
                 <div id="InputDiv">
                     <input type="text" id="inputName" maxlength="17" name="Name" value=""><br>
                     <!-- <input type="text" id="inputPass" maxlength="17" name="Pass" value="PASSWORD"><br><br>-->
@@ -40,8 +40,8 @@
                         <script type="text/javascript" src="/character_creator.js"></script>
                             <script type="text/javascript" src="/character_creator.sfx.js"></script>
                     </div>
-                    <button onclick='btn_ready()'>Ready</button>
-                    <button onclick='btn_defaults()'>Defaults</button>
+                    <button onclick='window.cookie_sys.btn_ready()'>Ready</button>
+                    <button onclick='window.cookie_sys.btn_defaults()'>Defaults</button>
                 </div>
             </div> <!-- modal-content end -->
         </center>
