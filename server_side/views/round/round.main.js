@@ -778,7 +778,7 @@ function LEVEL_splashscreen() {
     Shadow(1, 'gold');
     clrShadow();
     GlobalAlpha(0.4);
-    writeText("d74g0n's", undefined, 180, '24px serif', 'black', 'black', 'bottom');
+//    writeText("d74g0n's", undefined, 180, '24px serif', 'black', 'black', 'bottom');
     GlobalAlpha(1);
     Shadow(3, 'red');
     writeText("BATTLE-ROYALE!", undefined, 260, '34px serif', 'gold', 'gold', 'top');

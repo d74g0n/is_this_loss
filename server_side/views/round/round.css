@@ -154,3 +154,27 @@ button {
     border-width: 1px;
     transition: 0.2s;
 }
+
+
+@font-face { 
+	 font-family: "Audiowide-Regular"; 
+	 src: url("./Audiowide-Regular.ttf") format("truetype");
+} 
+
+td  {
+    text-align: center;
+    width: 10%;
+    font-family: 'Audiowide-Regular';   
+}
+
+#score_number {
+    padding-top: 4px;
+    font-size: 64px;
+    color: gold;
+}
+
+score_name {
+    padding: 0px;
+    margin: 0px;
+    
+}

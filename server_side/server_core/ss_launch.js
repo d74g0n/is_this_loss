@@ -20,6 +20,8 @@ var requestHandlers = require("./ss_requestHandlers");
 var handle = {}; // -=[Request URL ROUTE MAP:
 //handle["/robots.txt"] = requestHandlers.robotstxt;
 handle["/favicon.ico"] = requestHandlers.favicon;
+// wrong font name - FIX ME
+handle["/Audiowide-Regular.ttf"] = requestHandlers.fontA;
 handle["/snafu.css"] = requestHandlers.snafu_css;
 //handle the html aspect of the call:
 /*
@@ -28,8 +30,9 @@ handle["/"] = requestHandlers.sn_html; // TBA ASSOCIATIONS.
 handle["/emptypage"] = requestHandlers.sn_html; // fwd
 handle["/index.html"] = requestHandlers.sn_html;
 */
-// NEED TO RENAME SOCKLOG lol:  LOGIN
+// character_creator / Login
 handle["/"] = requestHandlers.landingscreen; 
+handle["/cc"] = requestHandlers.landingscreen; 
 handle["/emptypage"] = requestHandlers.landingscreen; 
 handle["/index.html"] = requestHandlers.landingscreen;
 handle["/snafubab"] = requestHandlers.landingscreen;
@@ -39,6 +42,7 @@ handle["/character_creator.js"] = requestHandlers.cc_js;
 
 // ROUND SECTION DEPENDANCIES
 handle["/round.html"] = requestHandlers.round_html; 
+handle["/round"] = requestHandlers.round_html; 
 handle["/round.css"] = requestHandlers.round_css; 
 handle["/round.main.js"] = requestHandlers.round_main_js;
 handle["/round.js"] = requestHandlers.round_js;

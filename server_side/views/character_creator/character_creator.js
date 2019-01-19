@@ -13,7 +13,7 @@ console.log(function () {
 });
 
 const game_defaults = {
-    _verbose: false,
+    _verbose: true,
     bg: 'rgb(15,100,15)',
     color_init: 'rgb(255,181,79)',
     fps: 120,
@@ -410,10 +410,6 @@ const trap_rightclick = document.body.addEventListener('contextmenu', function (
     return false;
 }, false);
 
-function Catch_Right_Click(e) {
-
-}
-
 // -=-=-=-=-[ color picker: ]
 const color_picker = document.getElementById('colorpickwindow');
 color_picker.onclick = color_read;
@@ -470,7 +466,7 @@ function keychecker(e) {
     }
 
     if (e.key == 'm') {
-        console.log(ost.length);
+//        console.log(ost.length);
         if (ost.length == 0) {
             clog('[OST][INITALIZED]');
             load_ost_track(1);

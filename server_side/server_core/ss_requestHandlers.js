@@ -28,6 +28,13 @@ function favicon(response) { // SYSTEM.RES
     response.end(img, 'binary');
 }
 
+function fontA(response) { // SYSTEM.RES
+    global.clog("[ss_reqHan][favicon][SENT]");
+    var img = fs.readFileSync(views.com() + '/fontA.ttf');
+    response.writeHead(200, { "Content-Type": "application/x-font-truetype" });
+    response.end(img, 'binary');
+}
+
 function snafu_css(res) {
     global.clog("[ss_reqHan][snafu_css]");
     res.writeHead(200, {
@@ -37,6 +44,8 @@ function snafu_css(res) {
     res.write(sendingfile);
     res.end();
 }
+
+//application/x-font-truetype
 
 function landingscreen(res) {
     global.clog("[ss_reqHan][landingscreen][SENT]");
@@ -153,6 +162,7 @@ function ost001(res) {
 
 
 exports.favicon = favicon;
+exports.fontA = fontA;
 exports.snafu_css = snafu_css;
 // views:
 exports.landingscreen = landingscreen;

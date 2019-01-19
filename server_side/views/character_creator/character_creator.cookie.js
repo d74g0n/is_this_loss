@@ -1,8 +1,4 @@
-// -=-=-=- [ Cookie Cores:
-function readAllCookies() {
-    console.log(document.cookie);
-}
-
+// -=-=-=-=- FINAL GLOBAL USAGE:
 function setCookie(name, value, days) {
     var expires = "";
     if (days) {
@@ -28,30 +24,32 @@ function eraseCookie(name) {
     document.cookie = name + '=; Max-Age=-99999999;';
 }
 
-// -=-=-=- [ Button Logic:
-function btn_defaults() {
-    clog('[btn_defaults]');
-    preview_snake.color = game_defaults.color_init;
-    document.getElementById("inputName").value = 'SNAFU_MASTER';
-    //    name.value = 'SNAFU_MASTER';
-    sfx[0].play();
-
+function setBody(pagedata = "") {
+    //without parameters this is clear Body.
+    return document.body.innerHTML = pagedata;
 }
 
-function btn_ready() {
-    sfx[1].play();
-    
-/*
-    
-    clog('[btn_ready][TODO LOBBY]');
-    setCookie('snafu', 'lobby', 1); // trap refresh with cookie
-    //socket connect
-    global_wipepage();
-    // wait for socket chat 'loadlobby' msg to trigger loadlobby(); html code.
-*/
+// -=-=-=- [ Debugger Delet Cookie Cores:
+function readAllCookies() {
+    //DEBUGGERLEVEL DELET
+    console.log(document.cookie);
+}
+
+// -=-=-=- [ Button Logic: LOGIN SCOPE ONLY.
+function cookieloader() {
+    if (document.cookie.length > 0) {
+        document.getElementById("inputName").value = getCookie('name');
+        preview_snake.color = getCookie('color');
+    }
+    // need logic here that auto passes to proper state-view.
 }
 
 function btn_load() {
+// attempt to avoid uncaught in promist DOMException
+/*    if (sfx[1].loaded) {
+        sfx[1].play();
+    }*/
+
     let value = getCookie('name');
     let value2 = getCookie('color');
     if (!value) {
@@ -67,30 +65,43 @@ function btn_load() {
 
 function btn_save() {
     // EXPIRES!!! FIGURE OUT.
+    sfx[0].play();
     var value = document.getElementById("inputName").value;
     var value2 = preview_snake.color;
     clog('[btn_save][' + value + ']');
     clog('[btn_save][' + value2 + ']');
     setCookie('name', value, 7);
     setCookie('color', value2, 7);
-    
-//    writeText('saved!');
+
+    //    writeText('saved!');
     //    document.cookie = "name =" + (value || "")  + expires + "; path=/";
 }
 
-function cookieloader() {
-    if (document.cookie.length > 0) {
+function btn_defaults() {
+    clog('[btn_defaults]');
+    preview_snake.color = game_defaults.color_init;
+    document.getElementById("inputName").value = 'SNAFU_MASTER';
+    //    name.value = 'SNAFU_MASTER';
+    sfx[0].play();
 
-        document.getElementById("inputName").value = getCookie('name');
-        preview_snake.color = getCookie('color');
-
-    }
 }
 
-function clear_page(){
-    return document.body.innerHTML = "";
-}
+function btn_ready() {
+// CLEAR TIMER.
+    
+    clearInterval(timers[0]);
+    sfx[0].play();
 
-function socket_load_page(body_msg) {
-    return document.body.innerHTML = body_msg;
+
+
+//    setBody('');
+
+    /*
+        
+        clog('[btn_ready][TODO LOBBY]');
+        setCookie('snafu', 'lobby', 1); // trap refresh with cookie
+        //socket connect
+        global_wipepage();
+        // wait for socket chat 'loadlobby' msg to trigger loadlobby(); html code.
+    */
 }
