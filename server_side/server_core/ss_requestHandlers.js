@@ -50,7 +50,8 @@ function snafu_css(res) {
 function landingscreen(res) {
     global.clog("[ss_reqHan][landingscreen][SENT]");
     res.writeHead(200, { "Content-Type": "text/html" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.html');
+//    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.html');
+    var sendingfile = fs.readFileSync(views.cc() + '/cc_login.html');
     res.write(sendingfile);
     res.end();
 }

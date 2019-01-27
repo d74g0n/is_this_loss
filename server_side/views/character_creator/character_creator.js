@@ -23,31 +23,8 @@ const game_defaults = {
     //    lerpamt: .25,
     lerpamt: .2,
 }
-// WIP: STILL UNUSED
-const Player_Details = {
-    color: undefined,
-    name: undefined,
-}
 
-const Page_Triggers = { // FLESHED OUT BUT UNUSED:
-    // when uh CONNECT/READY clicked - snake leaves canvas out top logic.
-    isDonePickingSnake: false, // while false do loop.  else break thru roof... ++[BW
-    isOffFullyScreen: false,
-    trigger_SeqenceA: function () {
-        clog('[trigger_SeqenceA][DONE]');
-        return this.isDonePickingSnake = true;
-    },
-    trigger_SeqenceB: function () {
-        clog('[trigger_SeqenceB][DONE]');
-        return this.isOffFullyScreen = true;
-    },
-    readout: function () {
-        clog('READOUT::');
-        return clog(this);
-    }
-}
-
-const PT = Page_Triggers;
+window.game_defaults = game_defaults;
 // -=-=- [ Creator related informations.  
 // -= [ clog is simple verbosity mgmt.
 if (game_defaults._verbose) {
@@ -84,10 +61,9 @@ const canvas = document.getElementById('preview');
 let c = (function initCanvas() {
     canvas.width = CanvasDefault.cdx();
     canvas.height = CanvasDefault.cdy();
-    //    canvas.style.border = '2px solid green';
-    //    if (_verbose) {
-    clog('[LOAD][initCanvas]|[Dimensions:(W:' + canvas.width + ' H:' + canvas.height + ')]');
-    //    }
+        if (game_defaults._verbose) {
+    clog('[LOAD][initLOGINCanvas]|[Dimensions:(W:' + canvas.width + ' H:' + canvas.height + ')]');
+        }
     return canvas.getContext('2d');
 })();
 
@@ -467,7 +443,13 @@ function keychecker(e) {
 
     if (e.key == 'm') {
 //        console.log(ost.length);
-        window.sound_sys.toggle_ost();
+        window.gsound_sys.toggle_ost();
+  
+    }
+    
+        if (e.key == 'w') {
+//        console.log(ost.length);
+        console.log(window);
   
     }
 
