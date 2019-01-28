@@ -3,11 +3,25 @@
 <!--May want to Trap Ctrl-S for 'saving'-->
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=2.0">
     <meta charset="UTF-8">
     <title>SNLAFU</title>
-    <!--    REMOVE SOCKET UNTIL DATAFINISHED COLLECTING::-->
+    <!--socket.io connection:-->
     <script type="text/javascript" src="/socket.io.dev.js"></script>
+    <script>
+        var scale = 2.0;
+        var viewport = document.getElementById("viewport");
+//        console.log(viewport);
+        if (viewport != null) {
+            viewport.setAttribute("content",
+                "initial-scale=" + scale + ", " +
+                "maximum-scale=" + scale + ", " +
+                "minimum-scale=" + scale + ", " +
+                "user-scalable=yes");
+            
+        }
+//        console.log(viewport);
+    </script>
     <script>
         // SOCKET SKETCH PAD LOGIN:
         const socket = io('http://localhost:1055');
@@ -17,20 +31,22 @@
         }
         
         socket.on('welcome', function(data) {
-         console.log('welcome done'); 
-         console.log(JSON.stringify(data));
-            window.global_sys.setCookie('state', data.state, 1);
+         console.log('[onwelcome]'); 
+//         console.log(JSON.stringify(data));
+            window.global_sys.setCookie('state', 'lobby', 1);
+            window.global_sys.setCookie('sid', socket.id, 1);
             // DEBUG LEVEL
             window.global_sys.readAllCookies();
+//            data.page = '<center><p>page data recieved</p></center>';
+            window.cookie_sys.prepWrapper(data);
+        });
+        
+        socket.on('loadhtml', function (html_data) {
+//            let whatever_element.innerHTML = html_data;
         });
         
     </script>
 
-    <!-- REFACTORED INTO STYLE TAGS FOR LESS SERVER ACTION.
-    <link href="/character_creator.css" rel="stylesheet" type="text/css">
-    <link href="/snafu.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="/character_creator.cookie.js"></script>
--->
     <style id="/character_creator.css">
         * {
     user-select: none;
@@ -160,7 +176,20 @@ button {
             color: gold;
             box-shadow: 0px 0px 4px 4px rgb(56, 56, 56);
             overflow: hidden;
-
+        }
+        
+        #wrapper {
+            position: fixed;
+            top: 41px;
+            width: 1vw;
+            width: 100%;
+            height: 100%;
+            background: green;
+/*            background: blue;*/
+            color: black;
+            z-index: -1;
+            overflow: hidden;
+            display: none;
         }
 
         #playerlist {
@@ -195,7 +224,8 @@ button {
 
 // Global Scope - Never To Garbage:
 window.global_sys = {};
-
+      
+        
 window.global_sys.setCookie = function (name, value, days) {
     var expires = "";
     if (days) {
@@ -220,10 +250,14 @@ window.global_sys.getCookie = function (name) {
 window.global_sys.eraseCookie = function (name) {
     document.cookie = name + '=; Max-Age=-99999999;';
 }
-
-window.global_sys.setBody = function (pagedata = "") {
+// DONT NEED::: REFACTOR OUT:::
+window.global_sys.setScreen = function (pagedata = "NO PAGE DATA") {
     //without parameters this is clear Body.
-    return document.body.innerHTML = pagedata;
+    
+        window.wrapper = document.getElementById("wrapper");
+    window.wrapper.innerHTML = pagedata;
+    
+//    return document.body.innerHTML = pagedata;
 }
 // -=-=-=- [ Debugger Delet Cookie Cores:
 window.global_sys.readAllCookies = function () {
@@ -240,7 +274,7 @@ window.cookie_sys.cookieloader = function () {
     }
     // need logic here that auto passes to proper state-view.
 }
-
+// -=-=-[ LOGIN BUTTONS HERE ]
 window.cookie_sys.btn_load = function () {
 
     let value = window.global_sys.getCookie('name');
@@ -293,15 +327,22 @@ window.cookie_sys.btn_ready = function () {
         window.global_sys.setCookie('state', 'greet', 1);
         console.log(clientdata);
         socket.emit('login', clientdata);
-/*        This as socket response:::
-        window.global_sys.setCookie('state', 'logged', 1); 
-*/
+//window.global_sys.readAllCookies();
     
-    window.global_sys.readAllCookies();
+        // DELETE UNNEEDED CODE?  window.cookie_sys.delele(btn_ALLBUTTONS)
+        
+    }
     
+    window.cookie_sys.prepWrapper = function(htmlin) {
+    let Name_modal = document.getElementById('Name_modal');
+    Name_modal.style.display = 'none';
+    window.global_sys.setScreen(htmlin);
+    window.wrapper.style.display = 'block';
+        
     }
     
     login();
+//    window.cookie_sys.prepWrapper();
     
 }
 
@@ -396,10 +437,6 @@ function splay(media) {
 //load_ost_track(); // this causes music to autoplay.
     </script>
 
-
-
-
-
 </head>
 
 <body onload="window.cookie_sys.btn_load()">
@@ -407,6 +444,8 @@ function splay(media) {
         <center>
             <h5 id="quote">"Recognize Abstract Patterns"</h5>
         </center>
+    </div>
+    <div id="wrapper">
     </div>
     <!--    complete form  -->
     <div id="Name_modal" class="modal">

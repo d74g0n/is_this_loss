@@ -1,16 +1,5 @@
 console.log('[FAIRWARNING][this game cannot function without using browser cookies]');
 console.log('[CURRENT_COOKIES][' + document.cookie + ']');
-console.log(function () {
-    /*
-    [ ] Login To Server / Lobby.
-    [ ] Possible Footer-Chatter/server-data
-    [ ] [BW] eye's on heads.
-    [ ] [BW] sound.
-    
-    [ ] day night cycle.
-
-    */
-});
 
 const game_defaults = {
     _verbose: true,
@@ -22,6 +11,7 @@ const game_defaults = {
     speed: 0,
     //    lerpamt: .25,
     lerpamt: .2,
+    // every 8th frame @ 120fps moving a total of 15px.
 }
 
 window.game_defaults = game_defaults;

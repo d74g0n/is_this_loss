@@ -1,4 +1,19 @@
 // manages the sessions for private msging etc.
+
+    var fs = require('fs');
+
+function loadandsendwrapperdata(state) {
+    // choose by state which file:
+
+    var wrapperdata = fs.readFileSync('./views/round/round_wrapper.html', 'binary');
+//    console.log(JSON.stringify(wrapperdata));
+    return wrapperdata;
+}
+
+
+
+
+
 var sessionsConnections = {};
 
 
@@ -50,12 +65,14 @@ io.on('connection', function (socket) {
 
     socket.on('login', function (player_data) {
         console.log('[io_socket][on.LOGIN][' + JSON.stringify(player_data) + ']');
-            // trigger gamestateload.
-            io.emit('welcome', player_data);
+
+       let wrapperdat = loadandsendwrapperdata('TBA');
+        // trigger gamestateload.
+        io.emit('welcome', wrapperdat);
     });
 
     socket.on('controllerdata', function (data) {
-         console.log('[io_socket][on.controllerdata]['+data+']');
+        console.log('[io_socket][on.controllerdata][' + data + ']');
         // DO CONTROLLER LOGIC WIRING.
     });
 
