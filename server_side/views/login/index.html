@@ -8,11 +8,6 @@
     <title>SNAFUBAL</title>
     <link href="loginbasic.css" rel="stylesheet" type="text/css">
     <script id='soundsystem'>
-        /*
- This works as a refactor so far.  gsound_sys is global doesn't really need to be in a bin like the rest.
-doing so would perhaps expand the code even.
-*/
-
         window.gsound_sys = {};
         // -=-=-=- [ GLOBAL Sound System ]
         window.gsound_sys.toggle_ost = function() {
@@ -74,8 +69,8 @@ doing so would perhaps expand the code even.
                 if (ost[num].loaded) {
                     ost[num].play();
                 } else {
-
-                    console.log('NOT LOADED');
+                    console.log('LOADING OST [TRACK]['+num+']');
+//                    global.flog('LOADING OST [TRACK]['+num+']');
                     splay(ost[num]);
                 }
             }
@@ -209,6 +204,7 @@ doing so would perhaps expand the code even.
                 }
                 document.getElementById("inputName").value = value;
                 preview_snake.color = value2;
+                 sfx[1].play();
                 clog('[BIN.buts.load][lname][' + value + ']');
                 clog('[BIN.buts.load][color]' + value2 + ']');
             },
@@ -250,7 +246,7 @@ doing so would perhaps expand the code even.
                 preview_snake.color = BIN.game_defaults.color_init;
                 document.getElementById("inputName").value = 'SNAFU_MASTER';
                 // STEREO WIRING:: 
-                //                sfx[0].play();
+                sfx[1].play();
             }
         }
     </script>

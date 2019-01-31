@@ -1,5 +1,6 @@
-# 'is_this_loss' 
-###  A nostalgic mutation of intellivisions SNAFU.
+# 'SNAFUBAB' 
+### Situation: Normal, All F'd Up Beyond All Belief.
+####  A nostalgic mutation of intellivisions SNAFU.
   
   A multiplayer snake game.  I have never made a non-local multiplayer game before.
   This project is for me to understand the best patterns related to online multiplayer backends.
@@ -10,7 +11,7 @@
   Sometimes the outter wall is not the limit, but how big is the hidden limit?
   Sometimes the length slowly increases over time, other times it increases with each step.
   
-  The goal is to make it functional, then make it ellegant.  The goal is also to avoid module use.
+  The goal is to make it functional, then make it ellegant.  Also to avoid module use.
   
   Currently I am using only socket.io 
   
