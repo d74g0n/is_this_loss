@@ -3,7 +3,7 @@ var fs = require('fs');
 
 const views = {
     viewdir: './views' ,
-    chardir: '/character_creator',
+    chardir: '/login',
     rounddir: '/round',
     common: '/common',
     sound: '/sfx',
@@ -35,6 +35,7 @@ function fontA(response) { // SYSTEM.RES
     response.end(img, 'binary');
 }
 
+/*
 function snafu_css(res) {
     global.clog("[ss_reqHan][snafu_css]");
     res.writeHead(200, {
@@ -44,14 +45,14 @@ function snafu_css(res) {
     res.write(sendingfile);
     res.end();
 }
+*/
 
 //application/x-font-truetype
 
 function landingscreen(res) {
     global.clog("[ss_reqHan][landingscreen][SENT]");
     res.writeHead(200, { "Content-Type": "text/html" }); 
-//    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.html');
-    var sendingfile = fs.readFileSync(views.cc() + '/cc_login.html');
+    var sendingfile = fs.readFileSync(views.cc() + '/index.html');
     res.write(sendingfile);
     res.end();
 }
@@ -59,10 +60,11 @@ function landingscreen(res) {
 function cc_css(res) {
     global.clog("[ss_reqHan][cc_css][SENT]");
     res.writeHead(200, { "Content-Type": "text/css" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.css');
+    var sendingfile = fs.readFileSync(views.cc() + '/index.css');
     res.write(sendingfile);
     res.end();
 }
+/*
 
 function cc_js(res) {
     global.clog("[ss_reqHan][sn_csstog][SENT]");
@@ -87,6 +89,7 @@ function cc_sfx_js(res) {
     res.write(sendingfile);
     res.end();
 }
+*/
 
 function round_html(res) {
     global.clog("[ss_reqHan][round_html]");

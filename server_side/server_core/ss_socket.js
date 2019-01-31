@@ -1,60 +1,56 @@
-// manages the sessions for private msging etc.
-
-    var fs = require('fs');
+var fs = require('fs');
 
 function loadandsendwrapperdata(state) {
     // choose by state which file:
-
     var wrapperdata = fs.readFileSync('./views/round/round_wrapper.html', 'binary');
-//    console.log(JSON.stringify(wrapperdata));
+    //    console.log(JSON.stringify(wrapperdata));
     return wrapperdata;
 }
+// -=-=- ABOVE IS FISHOUT OF WATER^^^
+// -=-=-=- CLEAN START:: SS_SOCKET
 
-
-
+function quote_generator() {
+    const quote_lib = [
+    'Q',
+    'WWG1WGA',
+    'Pay Attention',
+    'Happy wife, Happy life ~ Eddie Day',
+    'Recognize Abstract Patterns',
+    'When does a sheep dog bark?',
+    'All we do is Pattern Match',
+];
+    let _rndQuoteIndex = function () {
+        return (Math.random() * ((quote_lib.length - 1) - 0) + 0).toFixed(0);
+    }
+    return quote_lib[_rndQuoteIndex()];
+}
 
 
 var sessionsConnections = {};
-
-
-// FLESHING OUT::
-let state = {
-    connected_players: [],
-    serverstate: 'lobby',
-};
-// FLESHING OUT::
-let connected_player = {
-    id: 'socketid',
-    name: 'unloaded',
-    color: 'black',
-}
-
 const io = global.io;
 console.log('[ss_socket][Listening]');
 
 const session_manager = function (socket) {
     sessionsConnections[socket.handshake.sessionID] = socket;
-    // DEBUG LEVEL:
-    return sessionsConnections[socket.handshake.sessionID].emit('chat message', '[S][PRIVATE][connected]');
-}
-// refactor for id?
-function manage_session(socket) {
-    sessionsConnections[socket.handshake.sessionID] = socket;
-    return sessionsConnections[socket.handshake.sessionID].emit('chat message', '[S][connected]');
-
+    return sessionsConnections[socket.handshake.sessionID];
 }
 
 io.on('connection', function (socket) {
     var d = new Date();
+    console.log("[" + socket.id.toString() + "][" + d + " ] Clients Connected: " + io.engine.clientsCount);
+    //add's newest client in while emitting that ithas done so to new client only:
+    // session_manager(socket);
+    // DEBUG :: below is verbose of above:: DEBUG::
+    session_manager(socket).emit('console_message', '[SERVER][WHISPER][STATUS: CONNECTED TO SNAFUBAD!]');
+    sessionsConnections[socket.handshake.sessionID].emit('connection_quote', quote_generator());
 
-    console.log("[io_socket][" + d + " ] Clients Connected: " + io.engine.clientsCount);
-    //add's newest client in:
-    session_manager(socket);
+    // BASIC CONNECTION LOGIC DONE.
+
 
     socket.on('disconnect', function () {
         var d = new Date();
-        console.log("[io_socket][" + d + " ] Clients Connected: " + io.engine.clientsCount);
-
+        console.log("[" + socket.id.toString() + "][" + d + " ] Clients Connected: " + io.engine.clientsCount);
+        //        console.log("[io_socket][" + d + " ] Clients Connected: " + io.engine.clientsCount);
     });
     /*
         socket.on('chat message', function (msg) {
@@ -66,7 +62,7 @@ io.on('connection', function (socket) {
     socket.on('login', function (player_data) {
         console.log('[io_socket][on.LOGIN][' + JSON.stringify(player_data) + ']');
 
-       let wrapperdat = loadandsendwrapperdata('TBA');
+        let wrapperdat = loadandsendwrapperdata('TBA');
         // trigger gamestateload.
         io.emit('welcome', wrapperdat);
     });

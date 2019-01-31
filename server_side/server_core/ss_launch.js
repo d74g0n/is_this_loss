@@ -37,7 +37,8 @@ handle["/emptypage"] = requestHandlers.landingscreen;
 handle["/index.html"] = requestHandlers.landingscreen;
 handle["/snafubab"] = requestHandlers.landingscreen;
 
-handle["/character_creator.css"] = requestHandlers.cc_css;
+handle["/loginbasic.css"] = requestHandlers.cc_css;
+//handle["/character_creator.css"] = requestHandlers.cc_css;
 handle["/character_creator.js"] = requestHandlers.cc_js; 
 
 // ROUND SECTION DEPENDANCIES
