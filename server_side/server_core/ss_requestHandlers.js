@@ -167,14 +167,14 @@ function ost001(res) {
 
 exports.favicon = favicon;
 exports.fontA = fontA;
-exports.snafu_css = snafu_css;
+//exports.snafu_css = snafu_css;
 // views:
 exports.landingscreen = landingscreen;
 // character creation view:
 exports.cc_css = cc_css;
-exports.cc_js = cc_js;
-exports.cookiemain = cookiemain;
-exports.cc_sfx_js = cc_sfx_js;
+//exports.cc_js = cc_js;
+//exports.cookiemain = cookiemain;
+//exports.cc_sfx_js = cc_sfx_js;
 exports.socketclient = socketclient;
 // round view:
 exports.round_html = round_html;
