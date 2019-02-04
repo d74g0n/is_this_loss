@@ -3,7 +3,7 @@ var fs = require('fs');
 function loadandsendwrapperdata(state) {
     // choose by state which file:
     var wrapperdata = fs.readFileSync('./views/round/round_wrapper.html', 'binary');
-    //    console.log(JSON.stringify(wrapperdata));
+    
     return wrapperdata;
 }
 // -=-=- ABOVE IS FISHOUT OF WATER^^^
@@ -74,9 +74,13 @@ io.on('connection', function (socket) {
 
 });
 
+
 global.testemit = function () {
     // this is bound to letter 't' on terminal for testing:
     io.emit('canvasload', true);
 }
+
+
+
 
 exports.testemit = testemit;

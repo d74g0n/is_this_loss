@@ -1,4 +1,12 @@
-     * {
+/*this is known as loginbasic.css in server launch/requestHandler*/
+        @font-face {
+            font-family: "Audiowide-Regular";
+            src: url("./Audiowide-Regular.ttf") format("truetype");
+        }
+
+
+      * {
+/*           font-family: "Audiowide-Regular";*/
             user-select: none;
         }
 

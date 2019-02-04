@@ -1,27 +1,191 @@
 <!DOCTYPE html>
-<!--
-Notes:
-This is the most advanced/clean login system I have built.
-This is highest refactor
--=
-
-
--->
 <html>
 
 <head>
 
+    <style>
+        * {
+            user-select: none;
+        }
+
+        #score_ul {
+            margin: 0;
+            width: 95%;
+            height: 100%;
+            background: transparent;
+            text-decoration: none;
+            list-style: none;
+            align-content: center;
+            padding: 0;
+        }
+
+        #score_li {
+            margin: 10px;
+            padding-left: 8px;
+            padding-right: 8px;
+            float: left;
+            display: block;
+            /*    height: 50px;*/
+            background: transparent;
+            width: auto;
+            max-width: 195px;
+            border-radius: 16px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border: 2px solid black;
+        }
+
+        #cookie_playername {
+            color: gold;
+        }
+
+
+
+        
+        #board {
+            margin-top: 4em;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid black;
+            width: 784px;
+            height: 528px;
+            background: darkgreen;
+            box-shadow: 0px 0px 2px 1px rgb(0, 0, 0);
+        }
+
+
+        #score_div {
+            margin-top: 3em;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid black;
+            width: 784px;
+            height: 107px;
+            background: darkgreen;
+            box-shadow: 0px 0px 2px 1px rgb(0, 0, 0);
+        }
+
+        #InputDiv {
+            margin-top: 1em;
+            padding: .5em;
+            background: green;
+            background: green;
+            width: 300px;
+            border-radius: 7px;
+            border: 1px solid rgb(204, 43, 43);
+            font-style: italic;
+        }
+
+        #inputName {
+            text-align: center;
+            font-size: 20px;
+            border-radius: 7px;
+            background: gold;
+            border-color: rgb(204, 43, 43);
+            color: blue;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 50%;
+            height: 100%;
+            overflow: auto;
+            overflow: hidden;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: darkblue;
+            /*    background-color: rgb(104,196,255);*/
+            margin: 15% auto;
+            margin: 7em auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid gold;
+            border: 1px solid rgb(204, 43, 43);
+            border-radius: 7px;
+            width: 350px;
+            /* Could be more or less, depending on screen size */
+        }
+
+        .close {
+            color: #c00;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: -0.7em;
+            margin-right: -0.5em;
+            text-shadow: 1px 1px #200;
+            transition: 0.1s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .label {
+            /*    padding-left: 1em;*/
+            color: gold;
+            text-shadow: 0.5px 0.5px #ff0000;
+        }
+
+        button:hover {
+            border-radius: 7px;
+            background: gold;
+            border-color: rgb(204, 43, 43);
+            color: darkblue;
+            border-width: 1px;
+        }
+
+        button {
+            border-radius: 7px;
+            background: darkblue;
+            border-color: rgb(204, 43, 43);
+            color: gold;
+            border-width: 1px;
+            transition: 0.2s;
+        }
+
+
+        @font-face {
+            font-family: "Audiowide-Regular";
+            src: url("./Audiowide-Regular.ttf") format("truetype");
+        }
+
+        td {
+            text-align: center;
+            width: 10%;
+            font-family: 'Audiowide-Regular';
+        }
+
+        #score_number {
+            padding-top: 4px;
+            font-size: 64px;
+            color: gold;
+        }
+
+        score_name {
+            padding: 0px;
+            margin: 0px;
+
+        }
+
+    </style>
+
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>SNAFUBAD</title>
-         
+    <title>SNAFUBAL</title>
     <link href="loginbasic.css" rel="stylesheet" type="text/css">
     <script id='soundsystem'>
-        /*
- This works as a refactor so far.  gsound_sys is global doesn't really need to be in a bin like the rest.
-doing so would perhaps expand the code even.
-*/
-
         window.gsound_sys = {};
         // -=-=-=- [ GLOBAL Sound System ]
         window.gsound_sys.toggle_ost = function() {
@@ -83,8 +247,8 @@ doing so would perhaps expand the code even.
                 if (ost[num].loaded) {
                     ost[num].play();
                 } else {
-
-                    console.log('NOT LOADED');
+                    console.log('LOADING OST [TRACK][' + num + ']');
+                    //                    global.flog('LOADING OST [TRACK]['+num+']');
                     splay(ost[num]);
                 }
             }
@@ -149,21 +313,46 @@ doing so would perhaps expand the code even.
      
     socket.on('welcome', function (data) {
         console.log('[onwelcome]');
-        //         console.log(JSON.stringify(data));
+//                 console.log(JSON.stringify(data));
         global.setCookie('state', 'lobby', 1);
         global.setCookie('sid', socket.id, 1);
         // DEBUG LEVEL
-//        global.readAllCookies();
-        global.prepWrapper(data);
+        console.log(document.cookie);
+//        console.log(data);
+        global.prepRound(data);
     });
     </script>
 
     <script id="JS_cookiecoreA">
         const global = window;
+    // -=-=-=- Passing New JS Here:      
+        global.setGFn = function (keyname, fn){
+            global.keyname = fn;
+        }
+        
+        global.runGFn = function (keyname) {
+            keyname = keyname.toString();
+            global.keyname();
+        }
+        
+        global.runAnon = function (anonfn) {
+            console.log('[RC-----I]');
+            anonfn();
+            console.log('[RC-----O]');
+        }
+
+        // usage::
+        let exampleFn = function(test = 'hello'){
+           console.log(test) ;
+        };
+
+        global.runAnon(exampleFn);
         
          global.flog = function (msg) {
              document.getElementById('footcenter').innerHTML = window.footyprep(msg);
          }
+         
+         // cookie handling::
 
         global.getCookie = function(name) {
             var nameEQ = name + "=";
@@ -175,6 +364,7 @@ doing so would perhaps expand the code even.
             }
             return false;
         }
+        
         global.setCookie = function(name, value, days) {
             var expires = "";
             if (days) {
@@ -185,15 +375,6 @@ doing so would perhaps expand the code even.
             document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
         
-         global.prepWrapper = function(htmlin) {
-            let Name_modal = document.getElementById('Name_modal');
-            Name_modal.style.display = 'none';
-             // READY BUTTON RELATED ready()
-             
-//            global.setScreen(htmlin);
-//            window.wrapper.style.display = 'block';
-        }
-         
         global.setRoundHtml = function(htmldata) {
             let roundAnchor = document.getElementById('roundAnchor');
             roundAnchor.innerHTML = htmldata;
@@ -234,6 +415,7 @@ doing so would perhaps expand the code even.
                 }
                 document.getElementById("inputName").value = value;
                 preview_snake.color = value2;
+                 sfx[1].play();
                 clog('[BIN.buts.load][lname][' + value + ']');
                 clog('[BIN.buts.load][color]' + value2 + ']');
             },
@@ -251,7 +433,7 @@ doing so would perhaps expand the code even.
             },
             ready: function() {
                 // AUDIO NOTE:
-              clearInterval(timers[0]);
+                clearInterval(timers[0]);
                 sfx[0].play();
                 
                 function login() {
@@ -263,21 +445,24 @@ doing so would perhaps expand the code even.
                     clientdata.state = 'greet';
                     global.setCookie('state', 'greet', 1);
                     socket.emit('login', clientdata);
-//                    setTimeout(roundcode, 1000);
+                    setTimeout(roundcode, 1000);
                 }
 
                 login();
-                //    prepWrapper();
+
             },
             defaults: function() {
                 clog('[BIN.buts.defaults]');
                 preview_snake.color = BIN.game_defaults.color_init;
                 document.getElementById("inputName").value = 'SNAFU_MASTER';
                 // STEREO WIRING:: 
-                //                sfx[0].play();
+                sfx[1].play();
             }
         }
     </script>
+
+    
+    
 </head>
 
 <body onload="BIN.buts.load()">
@@ -285,9 +470,16 @@ doing so would perhaps expand the code even.
         <center>
             <h5 id="quote">"Recognize Abstract Patterns"</h5>
         </center>
-    </div>
+            </div>
+        <div id="roundframe">
+            <center id="roundAnchor">
+
+            </center>
+        </div>
+
+
+
     <div id="Name_modal" class="modal">
-<!--         <script type="text/javascript" src="round.main.js"></script>-->
         <center>
             <div class="modal-content">
                 <button onclick='BIN.buts.load()' style="margin-right: 20px; background: transparent;">Load</button>
@@ -560,6 +752,7 @@ doing so would perhaps expand the code even.
 
 
                             engine.writeText = function(string = 'SNAFU', scaleX = _e.preview_canvas.width / 2, scaleY = _e.preview_canvas.height / 3, font = '32px serif', fillStyle = preview_snake.color, strokeStyle = 'black', textBaseline = 'top', textAlign = 'center') {
+//                                c.font = '48px Audiowide-Regular';
                                 c.fillStyle = fillStyle;
                                 c.strokeStyle = strokeStyle;
                                 c.font = font;
