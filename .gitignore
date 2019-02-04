@@ -31,9 +31,12 @@ outter/
 sound/
 *.txt
 *.ttf
-
+*.gitattributes
+.gitattributes
+.gitignore
 _DEP/
 unused/
+unused
 
 # =========================
 # https://github.com/github/gitignore/blob/master/Node.gitignore
