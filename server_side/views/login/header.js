@@ -166,13 +166,14 @@ global.prepWrapper = function (htmlin) {
     //            window.wrapper.style.display = 'block';
 }
 
+//TBR::
 global.setRoundHtml = function (htmldata) {
     let roundAnchor = document.getElementById('roundAnchor');
     roundAnchor.innerHTML = htmldata;
     document.getElementById('roundframe').style.display = 'none';
     document.getElementById('roundframe').style.display = 'block';
 }
-
+//TBR:: no patch in the code - we will send it with index.html
 global.prepRound = function (htmlin) {
     // used with ready_btn:
     let Name_modal = document.getElementById('Name_modal');

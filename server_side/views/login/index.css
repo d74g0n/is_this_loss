@@ -181,3 +181,56 @@ button {
 canvas {
     background: darkgreen;
 }
+
+
+@font-face { 
+	 font-family: "Audiowide-Regular"; 
+	 src: url("./Audiowide-Regular.ttf") format("truetype");
+} 
+
+td  {
+    text-align: center;
+    width: 10%;
+    font-family: 'Audiowide-Regular';   
+}
+
+#score_number {
+    padding-top: 4px;
+    font-size: 64px;
+    color: gold;
+}
+
+score_name {
+    padding: 0px;
+    margin: 0px;
+    
+}
+
+
+
+#score_ul {
+    margin: 0;
+    width: 95%;
+    height: 100%;
+    background: transparent;
+    text-decoration: none;
+    list-style: none;
+    align-content: center;
+    padding: 0;
+}
+
+#score_li {
+    margin: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+    float: left;
+    display: block;
+    /*    height: 50px;*/
+    background: transparent;
+    width: auto;
+    max-width: 195px;
+    border-radius: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: 2px solid black;
+}

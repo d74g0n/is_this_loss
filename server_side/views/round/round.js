@@ -5,20 +5,14 @@ let roundcode = function () {
         console.log('[VERBOSE][CREATOR_MODE]');
     }
     const clog = function (x) {
-        // fn is here to shorten and limit console.log 
-        // add write to canvas text lvl debugger INCREASE POWER++
         if (_verbose) {
             return console.log(x);
         }
     };
     clog('[note][clog() replaces console.log]');
-    // -=-=- [CLOG - END]
-    // -=-=-=-=-=- [ DEBUG CREATOR ]
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CANVAS SECTION ]
     const game_defaults = {
-        //    cols: ['blue', 'red', 'yellow', 'white'],
-        //    players: 0,
         bg: 'rgb(15,100,15)',
         fps: 8
     }
@@ -54,9 +48,7 @@ let roundcode = function () {
         return canvas.getContext('2d');
     })();
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CANVAS SECTION ]
-
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ PLAYERS SECTION ]
-    // REFACTOR: INTO GAMEDATA?
     var players = [];
 
     function createPlayer(name = 'default', globalid, color = 'blue', x = 2, y = 4, direction = 'd', vx = 0, vy = 0, isAlive = false) {
@@ -100,7 +92,6 @@ let roundcode = function () {
                     //                this.loc.pop();
                 }
 
-
             }
 
             this.init = function () {
@@ -109,11 +100,6 @@ let roundcode = function () {
             }
 
             this.setLRUD = function (lrudindex) {
-                //            console.log('LRUDDER: ' + lrudindex);    
-                //            var random_boolean = Math.random() >= 0.5;
-                //            console.log('random_boolean: ' + random_boolean);            
-
-                //            if (random_boolean) {
 
                 switch (lrudindex) {
                     case 2:
@@ -232,12 +218,8 @@ let roundcode = function () {
                     this.smD(); // go RIGHT (relative turnRight of DOWN)
                     return true;
                 }
-
                 return false;
-
             }
-
-
         }
 
         return new Player(name, color, x, y);
@@ -247,7 +229,7 @@ let roundcode = function () {
         // zero is player one.
         playernum--;
 
-        const pallette_main = {
+    const pallette_main = {
             red: 'rgb(204,43,43)',
             yellow: 'rgb(255,181,79)', // marigold. (complement of blue)
             blue: 'rgb(12,163,255)', // (lighthappy)
@@ -257,7 +239,7 @@ let roundcode = function () {
             orange: 'rgb(255,128,57)', // comliment of cyan?
         }
 
-        const pallette_triad_y = {
+    const pallette_triad_y = {
             yellow: 'rgb(255,253,79)', // standard yellow.
             blue: 'rgb(104,196,255)', // amazing blue.
             red: 'rgb(204,43,43)', // poppin red.
@@ -266,7 +248,7 @@ let roundcode = function () {
 
 
 
-        let _spawning_Data = [
+    let _spawning_Data = [
         [2, 17, pallette_main.yellow, 'd'],
         [48, 17, pallette_main.green, 'a'],
         [25, 2, pallette_main.blue, 's'],
@@ -289,15 +271,9 @@ let roundcode = function () {
 
         }
 
-
-
-
-
     }
-
-    spawnPlayers(8);
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ PLAYERS SECTION ]
-
+    spawnPlayers(8);
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ DRAWING SECTION ]
     // set globalalpha
     function GlobalAlpha(num = 1) {
@@ -584,19 +560,6 @@ let roundcode = function () {
 
     }
 
-    // Needs:
-
-    //    - lerp systems.
-    //    - stroke draw OUTLINE of snake system.
-    //    - background animatey (post lerp)
-
-
-    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ DRAWING SECTION ]
-
-
-
-
-
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CALCULATIONS SECTION ]
     // scales the x values to pixel coordinates.
     function Dx(x) {
@@ -613,7 +576,6 @@ let roundcode = function () {
         return Math.random() >= 0.5;
     }
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CALCULATIONS SECTION ]
-
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ GAME PIECES SECTION ]
     // move players according to velocity:
     function movepieces() {
@@ -666,18 +628,10 @@ let roundcode = function () {
             }
         }
 
-        //    for (wall in walls) {
-        //        var tmploc = walls[wall].loc;
-        //        for (iloc in tmploc) { 
-        //            tmparr.push(tmploc(iloc));
-        //        }        
-        //    }
-
         return tmparr;
 
     }
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ GAME PIECES SECTION ]
-
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ COLLISION SECTION ] // DEPRECIATED?!?!
     // REFACTOR INTO PLAYER OBJECT isFILLED process:
     function collide_isEdge(playernum = 0) {
@@ -769,7 +723,6 @@ let roundcode = function () {
         }
     }
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ COLLISION SECTION ]
-
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ LIFE BEGINS: ]
     function LEVEL_splashscreen() {
         // NOTES:
@@ -802,7 +755,6 @@ let roundcode = function () {
         background();
     }
     //  dirty framecount for dirty game loot.
-
     var currentframecount = 0;
 
     function dirty_Gameloop() {
@@ -827,22 +779,12 @@ let roundcode = function () {
         }
         drawPlayers();
 
-        //    find_direction(players[0].loc[0],players[0].loc[1]);
-
-
         GlobalAlpha(0.2);
         background();
         GlobalAlpha(1);
 
-        //    draw_linebox(1,1);
-        //drawbox(3,1);
-
-
-        //    fadeTitle();
-        //    players_look();
     }
     // -=-=-=-=-=-=-=-=-=-=-=-=- [ LIFE ENDS ]
-
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ GATHERING AI DATA (SENSE) BEGINS: ]
     function players_look() {
         for (player in players) {
@@ -943,16 +885,6 @@ let roundcode = function () {
             }
         }
 
-        // PURE DEBUGGING:
-        /*    var AIDATA = {
-                l: xleft,
-                r: xright,
-                u: yup,
-                d: ydown
-            }*/
-        // REFACTORED**  -  an array 
-        //    console.log('Available Squares Around Head:');
-        //    console.log(AIDATA);
 
         return [xleft, xright, yup, ydown];
 
@@ -964,19 +896,9 @@ let roundcode = function () {
 
         // START OF REAL FUNCTION:
         let thisval = arr.indexOf(Math.max.apply(null, arr));
-        //    console.log('max:');
-        //    console.log(Math.max.apply(null,arr)); // 4
-        //    console.log('index:');
-        //    console.log(arr.indexOf(Math.max.apply(null,arr)));
-
         return thisval;
 
     }
-    // -=-=-=-=-=-=-=-=-=-=--= [ AI RELATED LOGIC: ]
-    // THIS HAS TO TIE INTO SOCKET EMITS OF CONTROL DATA.
-
-    //var timers = [];
-    // exp endo
 
     var debugginData = {
         //  perhaps we move _verbose into here.
@@ -1097,7 +1019,6 @@ let roundcode = function () {
 
     }
 
-
     // -=-=-=-=-=- [ DEBUG CREATOR ] =-=-=-=-=-=-=-
     // -=-=-=-=- [CREATOR MODE MADNESS]
     // building a page/stage flipper:
@@ -1107,9 +1028,7 @@ let roundcode = function () {
         Completed_Stages.push(LEVEL_splashscreen);
         Completed_Stages.push(drawPlayers);
         Completed_Stages.push(dirty_Gameloop);
-        Completed_Stages.push(draw_snakeoutline);
 
-        //    Completed_Stages.push(LEVEL_reset);
         Completed_Stages[0]();
     }
     creator_mode();
@@ -1128,6 +1047,8 @@ let roundcode = function () {
 
     var timers = [];
 
-    quickstart();
 
 }
+
+
+roundcode();
