@@ -73,14 +73,3 @@ io.on('connection', function (socket) {
     });
 
 });
-
-
-global.testemit = function () {
-    // this is bound to letter 't' on terminal for testing:
-    io.emit('canvasload', true);
-}
-
-
-
-
-exports.testemit = testemit;

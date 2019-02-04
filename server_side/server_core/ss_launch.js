@@ -23,23 +23,19 @@ handle["/favicon.ico"] = requestHandlers.favicon;
 // wrong font name - FIX ME
 handle["/Audiowide-Regular.ttf"] = requestHandlers.fontA;
 handle["/snafu.css"] = requestHandlers.snafu_css;
-//handle the html aspect of the call:
-/*
 
-handle["/"] = requestHandlers.sn_html; // TBA ASSOCIATIONS.
-handle["/emptypage"] = requestHandlers.sn_html; // fwd
-handle["/index.html"] = requestHandlers.sn_html;
-*/
-// character_creator / Login
+// main:
 handle["/"] = requestHandlers.landingscreen; 
 handle["/cc"] = requestHandlers.landingscreen; 
 handle["/emptypage"] = requestHandlers.landingscreen; 
+handle["/index"] = requestHandlers.landingscreen;
+handle["/login"] = requestHandlers.landingscreen;
 handle["/index.html"] = requestHandlers.landingscreen;
 handle["/snafubab"] = requestHandlers.landingscreen;
-
-handle["/loginbasic.css"] = requestHandlers.cc_css;
-//handle["/character_creator.css"] = requestHandlers.cc_css;
-handle["/character_creator.js"] = requestHandlers.cc_js; 
+handle["/index.css"] = requestHandlers.cc_css;
+handle["/canvasc.js"] = requestHandlers.canvasc; 
+handle["/canvasg.js"] = requestHandlers.canvasg; 
+handle["/header.js"] = requestHandlers.header; 
 
 // ROUND SECTION DEPENDANCIES
 handle["/round.html"] = requestHandlers.round_html; 
@@ -49,8 +45,9 @@ handle["/round.main.js"] = requestHandlers.round_main_js;
 handle["/round.js"] = requestHandlers.round_js;
 
 handle["/socket.io.dev.js"] = requestHandlers.socketclient;
-handle["/character_creator.cookie.js"] = requestHandlers.cookiemain;
-handle["/character_creator.sfx.js"] = requestHandlers.cc_sfx_js;
+handle["/socket.io.dev.js.map"] = requestHandlers.socketclientmap;
+/*handle["/character_creator.cookie.js"] = requestHandlers.cookiemain;
+handle["/character_creator.sfx.js"] = requestHandlers.cc_sfx_js;*/
 // -=-=[ Launch ]
 handle["/fx000.wav"] = requestHandlers.fx000;
 handle["/fx001.wav"] = requestHandlers.fx001;

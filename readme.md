@@ -1,23 +1,14 @@
 # 'SNAFUBAB' 
 ### Situation: Normal, All F'd Up Beyond All Belief.
-####  A nostalgic mutation of intellivisions SNAFU.
+####  A nostalgic online multiplayer mutation of intellivisions SNAFU.
   
-  A multiplayer snake game.  I have never made a non-local multiplayer game before.
-  This project is for me to understand the best patterns related to online multiplayer backends.
+  Wish me luck!
   
-  The scoring is determined by who survived the longest.
+  I have zero experience at this; but high success rate at goal achieving.  I think I am using a lerp as a tween... 
   
-  The rules of each match are unknown, taken from a set of mutatable rules.
-  Sometimes the outter wall is not the limit, but how big is the hidden limit?
-  Sometimes the length slowly increases over time, other times it increases with each step.
   
-  The goal is to make it functional, then make it ellegant.  Also to avoid module use.
-  
-  Currently I am using only socket.io 
-  
-  security is not an focus in the least.  
-  
-  Perhaps if someone understands the nuts and bolts to a self-styled socket.io or session permanence pattern you could do me a solid and clue me in.
+  ## SNAFU indeed.
+
   
 # Other links
 
@@ -36,5 +27,8 @@
 
 # Communication Unity
 
-Comm-Unity is a state of communication unity.  If you are inspired to comment or 'lend me an IQ' you got that I don't.  Feel free to reach out.  Currently banned from twitter - perhaps Gab.ai or Minds.com 
+ Comm-Unity is a state of communication-unity.  If you are inspired to comment or 'lend me an IQ' by sharing something you understand, that I clearly don't.  I urge you to reach out.  Currently banned from twitter - perhaps Gab.ai or Minds.com - 
+ 
+>>### "*It takes a d74g0n to raise a village.*"
 
+ >#  ¯\\_(ツ)_/¯ Enjoy the show! ¯\\_(ツ)_/¯

@@ -30,7 +30,10 @@ node_modules/
 outter/
 sound/
 *.txt
+*.ttf
+
 _DEP/
+unused/
 
 # =========================
 # https://github.com/github/gitignore/blob/master/Node.gitignore

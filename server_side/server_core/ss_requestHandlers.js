@@ -20,35 +20,41 @@ const views = {
         return (views.viewdir + views.common + views.sound).toString();
     }
 };
-
+// -=-=-= [ COMMON ]
 function favicon(response) { // SYSTEM.RES
     global.clog("[ss_reqHan][favicon][SENT]");
     var img = fs.readFileSync(views.com() + '/favicon.png');
     response.writeHead(200, { "Content-Type": "image/png" });
     response.end(img, 'binary');
 }
-
+// unsure how to handle fonts to be honest: this is TBR:
 function fontA(response) { // SYSTEM.RES
     global.clog("[ss_reqHan][favicon][SENT]");
     var img = fs.readFileSync(views.com() + '/fontA.ttf');
     response.writeHead(200, { "Content-Type": "application/x-font-truetype" });
     response.end(img, 'binary');
 }
-
-/*
-function snafu_css(res) {
-    global.clog("[ss_reqHan][snafu_css]");
+// -=-=-= [ SOCKET ]
+function socketclient(res) {
+    global.clog("[ss_reqHan][socketclient]");
     res.writeHead(200, {
-        "Content-Type": "text/css"
+        "Content-Type": "application/javascript"
     }); //?
-    var sendingfile = fs.readFileSync(views.com() + '/snafu.css');
+    var sendingfile = fs.readFileSync('./server_core/socket.io.dev.js');
     res.write(sendingfile);
     res.end();
 }
-*/
 
-//application/x-font-truetype
-
+function socketclientmap(res) {
+    global.clog("[ss_reqHan][socketclient]");
+    res.writeHead(200, {
+        "Content-Type": "application/javascript"
+    }); //?
+    var sendingfile = fs.readFileSync('./server_core/socket.io.dev.js.map');
+    res.write(sendingfile);
+    res.end();
+}
+// -=-=-= [ INDEX ]
 function landingscreen(res) {
     global.clog("[ss_reqHan][landingscreen][SENT]");
     res.writeHead(200, { "Content-Type": "text/html" }); 
@@ -58,39 +64,37 @@ function landingscreen(res) {
 }
 
 function cc_css(res) {
-    global.clog("[ss_reqHan][cc_css][SENT]");
+    global.clog("[ss_reqHan][index][SENT]");
     res.writeHead(200, { "Content-Type": "text/css" }); 
     var sendingfile = fs.readFileSync(views.cc() + '/index.css');
     res.write(sendingfile);
     res.end();
 }
-/*
 
-function cc_js(res) {
-    global.clog("[ss_reqHan][sn_csstog][SENT]");
+function canvasc(res) {
+    global.clog("[ss_reqHan][canvasc][SENT]");
     res.writeHead(200, { "Content-Type": "application/javascript" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.js');
+    var sendingfile = fs.readFileSync(views.cc() + '/canvasc.js');
     res.write(sendingfile);
     res.end();
 }
 
-function cookiemain(res) {
-    global.clog("[ss_reqHan][cookiemain][SENT]");
+function canvasg(res) {
+    global.clog("[ss_reqHan][canvasg][SENT]");
     res.writeHead(200, { "Content-Type": "application/javascript" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.cookie.js');
+    var sendingfile = fs.readFileSync(views.cc() + '/canvasg.js');
     res.write(sendingfile);
     res.end();
 }
 
-function cc_sfx_js(res) {
-    global.clog("[ss_reqHan][cc_sfx_js][SENT]");
+function header(res) {
+    global.clog("[ss_reqHan][header][SENT]");
     res.writeHead(200, { "Content-Type": "application/javascript" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/character_creator.sfx.js');
+    var sendingfile = fs.readFileSync(views.cc() + '/header.js');
     res.write(sendingfile);
     res.end();
 }
-*/
-
+// -=-=-= [ ROUND ]
 function round_html(res) {
     global.clog("[ss_reqHan][round_html]");
     res.writeHead(200, { "Content-Type": "text/html" }); 
@@ -128,17 +132,6 @@ function round_js(res) {
     res.write(sendingfile);
     res.end();
 }
-
-function socketclient(res) {
-    global.clog("[ss_reqHan][socketclient]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync('./server_core/socket.io.dev.js');
-    res.write(sendingfile);
-    res.end();
-}
-
 // -=-=-= [ SFX ]
 function fx000(res) {
     global.clog("[ss_reqHan][fx000][SENT]");
@@ -164,18 +157,21 @@ function ost001(res) {
     res.end();
 }
 
-
+// common:
 exports.favicon = favicon;
 exports.fontA = fontA;
-//exports.snafu_css = snafu_css;
-// views:
-exports.landingscreen = landingscreen;
-// character creation view:
-exports.cc_css = cc_css;
-//exports.cc_js = cc_js;
-//exports.cookiemain = cookiemain;
-//exports.cc_sfx_js = cc_sfx_js;
+// socket:
 exports.socketclient = socketclient;
+exports.socketclientmap = socketclientmap;
+
+// main:
+exports.landingscreen = landingscreen;
+exports.cc_css = cc_css;
+exports.canvasc = canvasc;
+exports.canvasg = canvasg;
+exports.header = header;
+
+// REFACTOR:: TBR::
 // round view:
 exports.round_html = round_html;
 exports.round_css = round_css;
@@ -183,7 +179,7 @@ exports.round_main_js = round_main_js;
 exports.round_js = round_js;
 //exports.robotstxt = robotstxt;   
 
-
+// audio dependancies:
 exports.fx000 = fx000;
 exports.fx001 = fx001;
 exports.ost001 = ost001;
