@@ -128,7 +128,7 @@ socket.on('welcome', function (data) {
     global.setCookie('sid', socket.id, 1);
     // DEBUG LEVEL
     //        global.readAllCookies();
-    global.prepWrapper(data);
+    global.hideModal();
 });
 
 const global = window;
@@ -157,30 +157,9 @@ global.setCookie = function (name, value, days) {
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
-global.prepWrapper = function (htmlin) {
-    let Name_modal = document.getElementById('Name_modal');
+global.hideModal = function (modalid = 'Name_modal') {
+    let Name_modal = document.getElementById(modalid);
     Name_modal.style.display = 'none';
-    // READY BUTTON RELATED ready()
-
-    //            global.setScreen(htmlin);
-    //            window.wrapper.style.display = 'block';
-}
-
-//TBR::
-global.setRoundHtml = function (htmldata) {
-    let roundAnchor = document.getElementById('roundAnchor');
-    roundAnchor.innerHTML = htmldata;
-    document.getElementById('roundframe').style.display = 'none';
-    document.getElementById('roundframe').style.display = 'block';
-}
-//TBR:: no patch in the code - we will send it with index.html
-global.prepRound = function (htmlin) {
-    // used with ready_btn:
-    let Name_modal = document.getElementById('Name_modal');
-    // hide login modal:
-    Name_modal.style.display = 'none';
-    // post 'htmlin' data:
-    global.setRoundHtml(htmlin.toString());
 }
 
 let BIN = {};
@@ -237,10 +216,14 @@ BIN.buts = {
             global.setCookie('state', 'greet', 1);
             socket.emit('login', clientdata);
             //                    setTimeout(roundcode, 1000);
+            document.getElementById('score_div').style.display = 'block';
+            document.getElementById('board').style.display = 'block';
+            
+            roundcode(window);
         }
 
         login();
-        //    prepWrapper();
+        
     },
     defaults: function () {
         clog('[BIN.buts.defaults]');

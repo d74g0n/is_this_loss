@@ -18,6 +18,7 @@ function quote_generator() {
     'Recognize Abstract Patterns',
     'When does a sheep dog bark?',
     'All we do is Pattern Match',
+    'The World is about to change',
 ];
     let _rndQuoteIndex = function () {
         return (Math.random() * ((quote_lib.length - 1) - 0) + 0).toFixed(0);

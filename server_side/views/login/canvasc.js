@@ -105,7 +105,6 @@ _LB.createPreviewCanvas = function () {
     _LB.setStyles(_e.preview_canvas);
     // WIP WIP
     _e.preview_canvas.onclick = window.gsound_sys.toggle_ost;
-
     // get Lobby context for drawing.
     _LB.ctx = _e.preview_canvas.getContext('2d');
 };
