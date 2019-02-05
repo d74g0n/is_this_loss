@@ -118,6 +118,10 @@ button {
     transition: 0.2s;
 }
 
+#btn_join {
+    display: none;
+}
+
 #topper {
     background: black;
     top: 0px;

@@ -215,10 +215,10 @@ BIN.buts = {
             clientdata.state = 'greet';
             global.setCookie('state', 'greet', 1);
             socket.emit('login', clientdata);
-            //                    setTimeout(roundcode, 1000);
             document.getElementById('score_div').style.display = 'block';
             document.getElementById('board').style.display = 'block';
-            
+            document.getElementById('btn_join').style.display = 'block';
+            document.getElementById('btn_join').style.marginTop = '24px';
             roundcode(window);
         }
 

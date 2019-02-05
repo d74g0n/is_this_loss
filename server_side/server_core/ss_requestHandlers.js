@@ -30,13 +30,13 @@ function favicon(response) { // SYSTEM.RES
 // unsure how to handle fonts to be honest: this is TBR:
 function fontA(response) { // SYSTEM.RES
     global.clog("[ss_reqHan][favicon][SENT]");
-    var img = fs.readFileSync(views.com() + '/fontA.ttf');
+    var img = fs.readFileSync(views.com() + '/orangekid.ttf');
     response.writeHead(200, { "Content-Type": "application/x-font-truetype" });
     response.end(img, 'binary');
 }
 // -=-=-= [ SOCKET ]
 function socketclient(res) {
-    global.clog("[ss_reqHan][socketclient]");
+    global.clog("[ss_reqHan][socketclient][SENT]");
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?
@@ -46,7 +46,7 @@ function socketclient(res) {
 }
 
 function socketclientmap(res) {
-    global.clog("[ss_reqHan][socketclient]");
+    global.clog("[ss_reqHan][socketclientmap][SENT]");
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?
@@ -96,7 +96,7 @@ function header(res) {
 }
 // -=-=-= [ ROUND ]
 function round_html(res) {
-    global.clog("[ss_reqHan][round_html]");
+    global.clog("[ss_reqHan][round_html][SENT]");
     res.writeHead(200, { "Content-Type": "text/html" }); 
     var sendingfile = fs.readFileSync(views.round() + '/round.html');
     res.write(sendingfile);
@@ -104,7 +104,7 @@ function round_html(res) {
 }
 
 function round_css(res) {
-    global.clog("[ss_reqHan][round_css]");
+    global.clog("[ss_reqHan][round_css][SENT]");
     res.writeHead(200, {
         "Content-Type": "text/css"
     }); //?
@@ -114,7 +114,7 @@ function round_css(res) {
 }
 
 function round_main_js(res) {
-    global.clog("[ss_reqHan][round_main_js]");
+    global.clog("[ss_reqHan][round_main_js][SENT]");
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?

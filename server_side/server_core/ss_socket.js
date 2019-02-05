@@ -1,11 +1,32 @@
 var fs = require('fs');
 
-function loadandsendwrapperdata(state) {
+
+
+/* 
+Phase 0 - connect (no real atn paid)
+
+Phase 1 - SS[socket.login] Recieve player.dat from login process. 
+        - organize - server side data.
+        
+        - decide on AI fillers.
+        
+        
+
+
+
+
+
+*/
+
+
+
+
+/*function loadandsendwrapperdata(state) {
     // choose by state which file:
     var wrapperdata = fs.readFileSync('./views/round/round_wrapper.html', 'binary');
-    
+    console.log('USEDUSED!?!?');
     return wrapperdata;
-}
+}*/
 // -=-=- ABOVE IS FISHOUT OF WATER^^^
 // -=-=-=- CLEAN START:: SS_SOCKET
 
@@ -38,7 +59,7 @@ const session_manager = function (socket) {
 
 io.on('connection', function (socket) {
     var d = new Date();
-    console.log("[" + socket.id.toString() + "][" + d + " ] Clients Connected: " + io.engine.clientsCount);
+    console.log("[NEWID][" + socket.id.toString() + "][" + d + " ] Clients Connected: " + io.engine.clientsCount);
     //add's newest client in while emitting that ithas done so to new client only:
     // session_manager(socket);
     // DEBUG :: below is verbose of above:: DEBUG::
@@ -60,12 +81,17 @@ io.on('connection', function (socket) {
         });
     */
 
+    // -=-= PHASE ONE:
     socket.on('login', function (player_data) {
+        //phase 1 gather players data:
+        console.log('[' + player_data.sid + ']');
         console.log('[io_socket][on.LOGIN][' + JSON.stringify(player_data) + ']');
-
-        let wrapperdat = loadandsendwrapperdata('TBA');
-        // trigger gamestateload.
-        io.emit('welcome', wrapperdat);
+// this:
+//        sessionsConnections[socket.handshake.sessionID].emit('console_message', 'REGISTERED');
+        // is this:
+        global.sendCPM(socket.handshake.sessionID, 'SAY SOMETHING CLEVER - REGGY' );
+        
+        io.emit('welcome', 'welcome');
     });
 
     socket.on('controllerdata', function (data) {
@@ -74,3 +100,11 @@ io.on('connection', function (socket) {
     });
 
 });
+
+
+global.sendCPM = function(who, msg = 'no msg defined') {
+     sessionsConnections[who].emit('console_message', msg);
+}
+
+
+

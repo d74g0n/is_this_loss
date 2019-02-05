@@ -8,7 +8,7 @@ function route(handle, pathname, response) {
     if (typeof handle[pathname] === 'function') {
         // todo: metadata grabbing.
         // metacheck();
-        global.clog("[ss_router][route][" + pathname + "]=>[PASSED][ss_reqHand]");
+//        global.clog("[ss_router][route][" + pathname + "]=>[PASSED][ss_reqHand]");
         handle[pathname](response); // THE DO THE SHIT COMMAND.
     } else {
         //        console.log("[ROUTE_sERR][404 Not Found: " + pathname + "]");

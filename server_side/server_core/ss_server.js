@@ -5,7 +5,7 @@ function start(route, handle) {
     function onRequest(request, response) {
         var pathname = url.parse(request.url).pathname;
         var clientip = request.connection.remoteAddress;
-        global.clog("[ss_server][Start{onRequest}][Cl_IP: " + clientip + "]");
+//        global.clog("[ss_server][Start{onRequest}][Cl_IP: " + clientip + "]");
         route(handle, pathname, response);
     }
     let qserver = global.http.createServer(onRequest).listen(webserver_port);
