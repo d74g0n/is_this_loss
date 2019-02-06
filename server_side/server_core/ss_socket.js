@@ -56,12 +56,22 @@ let sync_player_prototype = {
         sync_player_data.plsid.push(login_data.sid);
         sync_player_data.plstate.push(login_data.state);
         sync_player_data.playersconnected++;
-        
+        console.log('-=-=-=-=-Intro:');
         console.log(JSON.stringify(sync_player_data));
         
     },
     lsdisconnect: function(socketid) {
-        return sync_player_data.playersconnected--;
+
+        let disco_index = sync_player_data.plsid.indexOf(socketid);
+        
+//        .splice(disco_index, 1);
+        sync_player_data.plname.splice(disco_index, 1);
+        sync_player_data.plcolor.splice(disco_index, 1);
+        sync_player_data.plsid.splice(disco_index, 1);
+        sync_player_data.plstate.splice(disco_index, 1);
+        sync_player_data.playersconnected--;
+        console.log('-=-=-=-=-Disco:');
+        console.log(JSON.stringify(sync_player_data));
     }
 }
 /*
@@ -132,6 +142,13 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         var d = new Date();
         console.log("[" + socket.id.toString() + "][" + d + " ] Clients Connected: " + io.engine.clientsCount);
+        
+
+        sync_player_prototype.lsdisconnect(socket.id.toString());
+        
+        
+        console.log('playerdisco index:' + sync_player_data.plsid.indexOf( socket.id.toString()));
+        
         //        console.log("[io_socket][" + d + " ] Clients Connected: " + io.engine.clientsCount);
     });
     /*
