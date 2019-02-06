@@ -120,8 +120,12 @@ socket.on('console_message', function (data) {
     document.getElementById('footcenter').innerHTML = window.footyprep(data);
     console.log('[console_message.io]' + data);
 });
+socket.on('sync_players', function (data) {
+    
+    console.log('[sync_players.io]' + JSON.stringify(data));
+});
 
-socket.on('welcome', function (data) {
+socket.on('setcookies', function (data) {
     console.log('[onwelcome]');
     //         console.log(JSON.stringify(data));
     global.setCookie('state', 'lobby', 1);
