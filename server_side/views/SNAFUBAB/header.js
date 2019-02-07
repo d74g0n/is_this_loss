@@ -120,9 +120,11 @@ socket.on('console_message', function (data) {
 });
 
 socket.on('draw data', function(data){
-    console.log('DRAWDATA::');
-    console.log(data);
-    global._SDS.drawOnlineBodies(data);
+//    console.log('DRAWDATA::');
+//    console.log(data);
+//    global._SDS.drawOnlineBodies(data);
+//    global._SE.drawBodies(data);
+    global._SE.drawAll(data);
 });
 
 socket.on('sync_players', function (data) {

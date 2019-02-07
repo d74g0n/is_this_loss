@@ -40,7 +40,7 @@ let roundcode = function (global) {
         return canvas.getContext('2d');
     })();
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CANVAS SECTION ]
-  
+
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ DRAWING SECTION ]
     // set globalalpha
     function GlobalAlpha(num = 1) {
@@ -118,25 +118,6 @@ let roundcode = function (global) {
         c.strokeText(string, scaleX, scaleY);
         // REMEMBER SHADOWING?
     }
-    // draws all the players to screen:
-    function drawPlayers() {
-        // send each players location array to draw_array 1 by 1
-        for (player in players) {
-            draw_array(players[player].loc);
-        }
-    }
-    // draw the list of squares:
-    function draw_array(arr_of_arrs) {
-        // This is the RENDER process for all snakes - need to lerp a head in here.
-        // probably leave head for a lerping by rasing removing =0 or changing to =1:
-        for (i = arr_of_arrs.length - 1; i >= 0; i--) {
-            var x = arr_of_arrs[i][0];
-            var y = arr_of_arrs[i][1];
-            var col = arr_of_arrs[i][2];
-            dSq(x, y, col);
-            //        drawbox(x,y); // GOOFIN AROUND !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        }
-    }
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CALCULATIONS SECTION ]
     // scales the x values to pixel coordinates.
     function Dx(x) {
@@ -152,9 +133,8 @@ let roundcode = function (global) {
     function RndBool() {
         return Math.random() >= 0.5;
     }
-    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CALCULATIONS SECTION ]
-   
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ LIFE BEGINS: ]
+
     function LEVEL_splashscreen() {
         // NOTES:
         //  Add something like a snake drawing a box around splashwords.
@@ -182,34 +162,13 @@ let roundcode = function (global) {
         GlobalAlpha(1);
     }
 
-    function LEVEL_reset() {
-        background();
-    }
     //  dirty framecount for dirty game loot.
-
-    var game_state = {
-        framenum: 0,
-        fps: 120,
-        nextframe: function () {
-            game_state.framenum++;
-            if (game_state.framenum > game_state.fps) {
-                game_state.framenum = 1;
-            }
-            return game_state.framenum;
-        }
-
-    }
-
-    window.game_state = game_state;
 
     function dirty_Gameloop() {
 
-        game_state.nextframe();
+
         console.log('-=-=- [ FRAME ]-=-=-');
 
-        movepieces();
-
-        collisions();
         if (_alivecount() == -1 && timers[0]) {
             console.log('EVERYBODY DEAD!');
             console.log('DO NEXT ROUND SHIT');
@@ -218,15 +177,64 @@ let roundcode = function (global) {
             console.log('TIMER REMOVED');
             clearInterval(timers[0]);
         }
-        drawPlayers();
 
-        GlobalAlpha(0.2);
-        background();
-        GlobalAlpha(1);
 
-    }  // ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // -=-=-=-=-=-=-=-=-=-=-=-=- [ LIFE ENDS ]
-    
+    } // ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+    // -=-=- NEW WIPS::
+
+    global._SE = {
+        version: 'server/socket engine',
+        drawBodies: function (bodydata) {
+            //            background();
+            for (i = bodydata.length - 1; i >= 0; i--) {
+                var x = bodydata[i][0];
+                var y = bodydata[i][1];
+                var col = bodydata[i][2];
+                dSq(x, y, col);
+            }
+        },
+        drawScore: function (index, num) {
+            //post score      
+        },
+        drawAll: function (data) {
+
+            //            background();
+            global._SE.fadelogic();
+            global._SE.drawBodies(data);
+
+        },
+        fadedesc: 'little fade then dont system:',
+        fadetick: 10,
+        isFade: true,
+        fadelogic: function () {
+            if (global._SE.isFade) {
+                global._SE.fadetick--;
+            }
+            if (global._SE.fadetick > 0 && global._SE.isFade) {
+                global._SE.fadeBg();
+            } else {
+                console.log('done fade');
+            }
+            if (global._SE.fadetick < 1) {
+                global._SE.isFade = false;
+                global._SE.fadetick = 10;
+            }
+        },
+        fadeBg: function () {
+            GlobalAlpha(0.2);
+            c.fillStyle = game_defaults.bg;
+            c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
+            GlobalAlpha(1);
+        },
+
+    }
+
+
+
+    // -=-=-=-=-=-=-=-=-=-=-=-=- [ CONTROLLER INPUT READS ]
+
     document.onkeydown = keychecker;
 
     function keychecker(e) {
@@ -302,36 +310,13 @@ let roundcode = function (global) {
     var timers = [];
 
 
+    // -=-=-=-=-=-=-=-=-=-=-=-=- [ EXECUTE ON RUN:
     LEVEL_splashscreen();
 
-    global._SE = {
-        version: 'server/socket engine',
-        drawBodies: function (bodydata) {
-            for (i = bodydata.length - 1; i >= 0; i--) {
-                var x = bodydata[i][0];
-                var y = bodydata[i][1];
-                var col = bodydata[i][2];
-                dSq(x, y, col);
-            }
-        },
-
-    }
-
-} // end of roundcode
 
 
-
-global._SDS = {
-    version: 'server draw system 1.0',
-    drawOnlineBodies: function (bodydata) {
-        global._SE.drawBodies(bodydata);
-    },
-
-
-}
-
-
-// outside of round.js closure;
+} // -=-= [ end of 'roundcode' Enclosure.
+// -=-= [ outside of round.js closure;
 
 BIN.buts.join = function () {
 
