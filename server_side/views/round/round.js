@@ -366,7 +366,7 @@ let roundcode = function (global) {
         background();
         GlobalAlpha(1);
 
-    }
+    }  // ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
     // -=-=-=-=-=-=-=-=-=-=-=-=- [ LIFE ENDS ]
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ GATHERING AI DATA (SENSE) BEGINS: ]
     function players_look() {
@@ -374,11 +374,11 @@ let roundcode = function (global) {
             //LRUD=leftRightUpDown
             players[player].setLRUD(indexofmax(player_look(player)));
         }
-    }
+    }// ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     function player_look(playerindex) {
         return qcheck(players[playerindex].loc[0][0], players[playerindex].loc[0][1]);
-    }
+    }// ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     function isValid(arrofvals = [0]) {
         // making my own manual filter
@@ -393,12 +393,12 @@ let roundcode = function (global) {
         console.log(newarr);
         return newarr;
 
-    }
+    }// ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ AI RELATED LOGIC: ]
     function qcheck(x = 1, y = 1) {
         // function is used a wrapper for check_directions()
         return check_directions([[x, y]]);
-    }
+    }// ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     function check_directions(xy_target_arr) {
         // REFACTOR REFACTOR: Can be embedded in qcheck.
@@ -471,7 +471,7 @@ let roundcode = function (global) {
 
         return [xleft, xright, yup, ydown];
 
-    }
+    }// ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     function indexofmax(arr = [0]) {
         // used to find best choice of qcheck(x,y)
@@ -481,7 +481,7 @@ let roundcode = function (global) {
         let thisval = arr.indexOf(Math.max.apply(null, arr));
         return thisval;
 
-    }
+    }// ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     document.onkeydown = keychecker;
 
