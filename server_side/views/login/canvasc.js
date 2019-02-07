@@ -1,4 +1,4 @@
-console.log('[INIT=>][canvasc.js]');
+console.log('[3/4][canvasc.js][init]');
 
 let engine = {};
 let _e = engine;

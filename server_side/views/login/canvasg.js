@@ -16,10 +16,10 @@ function change_cursor(cursortype = 'default') {
     // check if alread is there for 'secret triggers'
     // returns true when already is set.  evolves to cursor_mgmt?
     if (current_cursor == cursortype) {
-        clog('[cursor_match:][' + cursortype + ']');
+//        clog('[cursor_match:][' + cursortype + ']');
         return true;
     } else {
-        clog('[change_cursor:][' + cursortype + ']');
+//        clog('[change_cursor:][' + cursortype + ']');
         return document.body.style.cursor = cursortype;
     }
 }
@@ -92,5 +92,5 @@ color_picker.onmouseout = default_cursor;
 draw_gradient(color_picker); /// TEMPORARY
 }
 
-console.log('[INIT=>][canvasg.js]');
+console.log('[4/4][canvasg.js][init]');
 init_gradient();

@@ -5,7 +5,7 @@ let roundcode = function (global) {
             return console.log(x);
         }
     };
-    clog('[note][clog() replaces console.log]');
+//    clog('[note][clog() replaces console.log]');
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CANVAS SECTION ]
     const game_defaults = {

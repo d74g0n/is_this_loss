@@ -1,4 +1,4 @@
-console.log('[header.js init]');
+console.log('[1/4][header.js][init]');
 
 window.gsound_sys = {};
 // -=-=-=- [ GLOBAL Sound System ]
@@ -44,7 +44,7 @@ let main_vol = window.gsound_sys.main_vol;
     }
 
     sfx = load_sounds(how_many);
-    console.log('[SFX LOADED]');
+    console.log('[2/4][header.js][SFX][init]');
 })();
 
 function load_ost_track(num = 0) {
@@ -118,7 +118,7 @@ socket.on('connection_quote', function (data) {
 
 socket.on('console_message', function (data) {
     document.getElementById('footcenter').innerHTML = window.footyprep(data);
-    console.log('[console_message.io]' + data);
+    console.log('[eYe]' + data);
 });
 socket.on('sync_players', function (data) {
     
@@ -190,8 +190,8 @@ BIN.buts = {
         }
         document.getElementById("inputName").value = value;
         preview_snake.color = value2;
-        clog('[BIN.buts.load][lname][' + value + ']');
-        clog('[BIN.buts.load][color]' + value2 + ']');
+/*        clog('[BIN.buts.load][lname][' + value + ']');
+        clog('[BIN.buts.load][color]' + value2 + ']');*/
     },
     save: function () {
         // AUDIO NOTE:
@@ -200,8 +200,8 @@ BIN.buts = {
 
         preview_snake.name = value;
         var value2 = preview_snake.color;
-        clog('[BIN.buts.save][' + value + ']');
-        clog('[BIN.buts.save][' + value2 + ']');
+/*        clog('[BIN.buts.save][' + value + ']');
+        clog('[BIN.buts.save][' + value2 + ']');*/
         global.setCookie('name', value, 7);
         global.setCookie('color', value2, 7);
     },
@@ -230,10 +230,10 @@ BIN.buts = {
         
     },
     defaults: function () {
-        clog('[BIN.buts.defaults]');
+//        clog('[BIN.buts.defaults]');
         preview_snake.color = BIN.game_defaults.color_init;
         document.getElementById("inputName").value = 'SNAFU_MASTER';
         // STEREO WIRING:: 
-        //                sfx[0].play();
+        sfx[0].play();
     }
 }
