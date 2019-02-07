@@ -221,7 +221,7 @@ let roundcode = function (global) {
         // zero is player one.
         playernum--;
 
-    const pallette_main = {
+        const pallette_main = {
             red: 'rgb(204,43,43)',
             yellow: 'rgb(255,181,79)', // marigold. (complement of blue)
             blue: 'rgb(12,163,255)', // (lighthappy)
@@ -231,7 +231,7 @@ let roundcode = function (global) {
             orange: 'rgb(255,128,57)', // comliment of cyan?
         }
 
-    const pallette_triad_y = {
+        const pallette_triad_y = {
             yellow: 'rgb(255,253,79)', // standard yellow.
             blue: 'rgb(104,196,255)', // amazing blue.
             red: 'rgb(204,43,43)', // poppin red.
@@ -240,7 +240,7 @@ let roundcode = function (global) {
 
 
 
-    let _spawning_Data = [
+        let _spawning_Data = [
         [2, 17, pallette_main.yellow, 'd'],
         [48, 17, pallette_main.green, 'a'],
         [25, 2, pallette_main.blue, 's'],
@@ -557,20 +557,20 @@ let roundcode = function (global) {
     var game_state = {
         framenum: 0,
         fps: 120,
-        nextframe: function(){
+        nextframe: function () {
             game_state.framenum++;
             if (game_state.framenum > game_state.fps) {
                 game_state.framenum = 1;
             }
             return game_state.framenum;
         }
-   
+
     }
-    
+
     window.game_state = game_state;
-    
+
     function dirty_Gameloop() {
-        
+
         game_state.nextframe();
         console.log('-=-=- [ FRAME ]-=-=-');
 
@@ -708,66 +708,54 @@ let roundcode = function (global) {
 
     }
 
-    var debugginData = {
-        //  perhaps we move _verbose into here.
-        pageindex: 0,
-        KeysOutputToConsole: false
-        //    isPaging: true
-    }
-
     document.onkeydown = keychecker;
 
     function keychecker(e) {
 
-/*        if (debugginData.KeysOutputToConsole) {
-            console.log('e.altKey:' + e.altKey);
-            console.log('e.ctrlKey:' + e.ctrlKey);
-            console.log('e.shiftKey:' + e.shiftKey);
-            console.log('e.key:' + e.key);
+        /* if (true) {
+        console.log('e.altKey:' + e.altKey);
+        console.log('e.ctrlKey:' + e.ctrlKey);
+        console.log('e.shiftKey:' + e.shiftKey);
+        console.log('e.key:' + e.key);
         }*/
+
+        if (e.key === "Escape") {
+            console.log('escape hit');
+            // build an escape menu.
+            document.getElementById('Name_modal').style.display = 'block';
+        }
 
         if (e.key == 'ArrowDown') {
             console.log('ArrowDown Triggered');
+            socket.emit('controllerdata', 's');
         }
         if (e.key == 'ArrowUp') {
             console.log('ArrowUp Triggered');
+            socket.emit('controllerdata', 'n');
         }
         if (e.key == 'ArrowLeft') {
-            players[0].turnLeft();
             console.log('ArrowLeft Triggered');
+            socket.emit('controllerdata', 'w');
         }
         if (e.key == 'ArrowRight') {
-            players[0].turnRight();
             console.log('ArrowRight Triggered');
+            socket.emit('controllerdata', 'e');
         }
 
-
         if (e.key == 'w') {
-            if (players[0].direction != 's') {
-                players[0].smW();
-                players[0].direction = e.key;
-            }
+            socket.emit('controllerdata', 'n');
             console.log('w Triggered');
         }
         if (e.key == 'a') {
-            if (players[0].direction != 'd') {
-                players[0].smA();
-                players[0].direction = e.key;
-            }
+            socket.emit('controllerdata', 'w');
             console.log('a Triggered');
         }
         if (e.key == 's') {
-            if (players[0].direction != 'w') {
-                players[0].smS();
-                players[0].direction = e.key;
-            }
+            socket.emit('controllerdata', 's');
             console.log('s Triggered');
         }
         if (e.key == 'd') {
-            if (players[0].direction != 'a') {
-                players[0].smD();
-                players[0].direction = e.key;
-            }
+            socket.emit('controllerdata', 'e');
             console.log('d Triggered');
         }
 
@@ -779,18 +767,6 @@ let roundcode = function (global) {
             }
         }
 
-        if (e.key == ',') {
-
-            players[0].turnLeft();
-
-        }
-
-        if (e.key == '.') {
-
-            players[0].turnRight();
-
-        }
-
         if (e.key == '2') {
             if (timers[0]) {
                 clearInterval(timers[0]);
@@ -800,45 +776,21 @@ let roundcode = function (global) {
 
         }
 
-        if (e.key == '-') {
-            if (debugginData.pageindex > 0) {
-                debugginData.pageindex--;
-            }
-            console.log('- pageindex--');
-        }
-        if (e.key == '+') {
-            if (debugginData.pageindex < Completed_Stages.length - 1) {
-                debugginData.pageindex++;
-            }
-            console.log('+ - pageindex++');
-        }
-
-        if (e.key == ' ') {
-            //        console.log('legend' + Completed_Stages);
-            //        console.log('[_dD.pageindex: ' + debugginData.pageindex + ']');
-            Completed_Stages[debugginData.pageindex]();
-
-            if (e.shiftKey == true) {
-                //            console.log(Completed_Stages[debugginData.pageindex]);
-            }
-        }
-
-        //    console.log(e);
 
     }
 
 
     var timers = [];
 
-    
+
     LEVEL_splashscreen();
 
 }
 
 // outside of round.js closure;
 
-BIN.buts.join = function(){
-    
+BIN.buts.join = function () {
+
     let joiner_data = {
         name: preview_snake.name,
         color: preview_snake.color,
@@ -846,9 +798,5 @@ BIN.buts.join = function(){
     };
     // call socket to do the dirty work.
     console.log(joiner_data);
-    
+
 }
-
-
-
-
