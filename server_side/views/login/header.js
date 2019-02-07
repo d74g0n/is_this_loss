@@ -120,18 +120,21 @@ socket.on('console_message', function (data) {
     document.getElementById('footcenter').innerHTML = window.footyprep(data);
     console.log('[eYe]' + data);
 });
+
+socket.on('draw data', function(data){
+    console.log('DRAWDATA::');
+    console.log(data);
+    global._SDS.drawOnlineBodies(data);
+});
+
 socket.on('sync_players', function (data) {
     
     console.log('[sync_players.io]' + JSON.stringify(data));
 });
 
 socket.on('setcookies', function (data) {
-    console.log('[onwelcome]');
-    //         console.log(JSON.stringify(data));
     global.setCookie('state', 'lobby', 1);
     global.setCookie('sid', socket.id, 1);
-    // DEBUG LEVEL
-    //        global.readAllCookies();
     global.hideModal();
 });
 

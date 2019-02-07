@@ -6,7 +6,9 @@ global.datestamp = function () {
     return d;
 }
 const _date = global.datestamp;
-// Game Setup Information:
+
+
+// -=-=-=- [ Game Setup Information:
 let spawning_data = [
 // only got 8 slots for now:
     [2, 17, 'e'],
@@ -18,35 +20,34 @@ let spawning_data = [
     [10, 32, 'n'],
     [40, 2, 's']
 ];
-// TOTALLY UNUSED::
-var game_data = {
-    players: [], //add socket id's  index is the player number
-    tpi: undefined, // total player index's ((connected)) 0 = 1
-    filledtiledata: [], //for sending to clients to draw.
-    round_data: {
-        frame: 0,
-        fps: 120,
-        speed: 15,
-        increment: function () {
-            active_game_data.round_data.frame++;
-            if (active_game_data.round_data.frame > active_game_data.round_data.fps) {
-                active_game_data.round_data.frame = 0;
-            }
-            return active_game_data.round_data.frame;
-        },
-        mframe: function () {
-            // uses modolo on current frame to speed factor and returns if frame is active
-            if (active_game_data.round_data.frame % active_game_data.round_data.speed == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        },
 
-    }, //round_data end
-}
-// list of Players created:
+// Players logics:
 let loggedinplayers = [];
+let _LPs = {
+    version: 'Player/List obj mutator',
+    moveAllPlayers: function () {
+        for (player in loggedinplayers) {
+            loggedinplayers[player].move();
+        }
+    },
+    addPlayer: function (player_data) {
+        // adds player to loggedinplayers::
+        let plindex = (_PDat.plsid.length - 1);
+        //x, y, direction supplied by SPAWN TABLE::
+        let x = spawning_data[plindex][0];
+        let y = spawning_data[plindex][1];
+        let direction = spawning_data[plindex][2];
+        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
+    },
+    removePlayer: function (index) {
+        loggedinplayers.splice(index, 1);
+    },
+    readout: function () {
+        console.log('-=-=-[loggedinplayers:');
+        console.log(loggedinplayers);
+        console.log('-=-=-[end_LIPS_readout()]-=-=-');
+    },
+};
 // player game data client-server syncronicity:
 let _PDat = {
     plname: [],
@@ -64,51 +65,42 @@ let PDproto = {
         _PDat.plsid.push(login_data.sid);
         _PDat.plstate.push(login_data.state);
         _PDat.playersconnected = _PDat.plname.length;
-        addPlayer(login_data);
-        //        _PDat.grabbodies();
+        _LPs.addPlayer(login_data);
         PDproto.grabbodies();
-
-        // CLEANME DEBUGGING:
-        console.log('-=-=-=-=-Intro:');
-        console.log(JSON.stringify(_PDat));
-        console.log('LIPs::');
-        console.log(loggedinplayers);
+        // Debug Readouts:
+        // _LPs.readout();
+        PDproto.readout();
     },
     lsdisconnect: function (socketid) {
         let disco_index = _PDat.plsid.indexOf(socketid);
-        // CLEANME DEBUGGING:      
         _PDat.plname.splice(disco_index, 1);
         _PDat.plcolor.splice(disco_index, 1);
         _PDat.plsid.splice(disco_index, 1);
         _PDat.plstate.splice(disco_index, 1);
-        loggedinplayers.splice(disco_index, 1); // HOPE THIS WORKS>
+        _LPs.removePlayer(disco_index);
         _PDat.playersconnected = _PDat.plname.length;
-        console.log('-=-=-=-=-Disco:');
-        console.log(JSON.stringify(_PDat));
-        console.log('LIPs::');
-        console.log(loggedinplayers);
+        // Debug Readouts:
+        // _LPs.readout();
+        PDproto.readout();
     },
     grabbodies: function () {
+        //pushes all player.body tile info to PDat.bodies:
         _PDat.bodies = new Array();
         let _lips = loggedinplayers;
         for (player in _lips) {
             let _body = _lips[player].body;
             for (pair in _body) {
                 _PDat.bodies.push(_body[pair]);
-                console.log('pushed ln77=>' + _body[pair]);
             }
         }
+    },
+    readout: function () {
+        console.log('-=-=-[ _PDat:');
+        // stringify is for smallest readout::
+        // console.log(JSON.stringify(_PDat));
+        console.log(_PDat);
+        console.log('-=-=-[end _PDat readout()]-=-=-');
     }
-}
-
-function addPlayer(player_data) {
-    // adds player to loggedinplayers::
-    let plindex = (_PDat.plsid.length - 1);
-    //x, y, direction supplied by SPAWN TABLE::
-    let x = spawning_data[plindex][0];
-    let y = spawning_data[plindex][1];
-    let direction = spawning_data[plindex][2];
-    loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
 }
 
 function createPlayer(name, color, x, y, direction, socketid) {
@@ -243,6 +235,11 @@ io.on('connection', function (socket) {
         PDproto.pllogin(player_data);
         io.emit('setcookies');
         io.emit('sync_players', _PDat);
+    });
+
+    socket.on('drawdata', function () {
+        PDproto.grabbodies();
+        socket.emit('draw data', _PDat.bodies);
     });
 
 
