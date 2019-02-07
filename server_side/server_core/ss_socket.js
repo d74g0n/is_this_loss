@@ -1,14 +1,12 @@
 var fs = require('fs');
-
+// quickie date function:
 global.datestamp = function () {
     let d = new Date().toLocaleTimeString();
     console.log('[TEST][' + d + ']');
     return d;
 }
-
 const _date = global.datestamp;
-
-// -=-=-=-=- [ Spawn Data ]
+// Game Setup Information:
 let spawning_data = [
 // only got 8 slots for now:
     [2, 17, 'e'],
@@ -20,12 +18,7 @@ let spawning_data = [
     [10, 32, 'n'],
     [40, 2, 's']
 ];
-
-
-
-// -=-=-=-=- [ spawn data end ]
-// -=-=-=-=-=-=- [ SS GAME DATA / GAME::
-// gd unused atm::
+// TOTALLY UNUSED::
 var game_data = {
     players: [], //add socket id's  index is the player number
     tpi: undefined, // total player index's ((connected)) 0 = 1
@@ -52,56 +45,65 @@ var game_data = {
 
     }, //round_data end
 }
-
-
-
-// used::
+// list of Players created:
 let loggedinplayers = [];
-
-// server tracking simplified player data.
-let sync_player_data = {
+// player game data client-server syncronicity:
+let _PDat = {
     plname: [],
     plcolor: [],
     plsid: [],
     plstate: [],
     bodies: [],
+
 }
 // functions helping the above process:
-let sync_player_prototype = {
+let PDproto = {
     pllogin: function (login_data) {
-        sync_player_data.plname.push(login_data.name);
-        sync_player_data.plcolor.push(login_data.color);
-        sync_player_data.plsid.push(login_data.sid);
-        sync_player_data.plstate.push(login_data.state);
-        sync_player_data.playersconnected++;
+        _PDat.plname.push(login_data.name);
+        _PDat.plcolor.push(login_data.color);
+        _PDat.plsid.push(login_data.sid);
+        _PDat.plstate.push(login_data.state);
+        _PDat.playersconnected = _PDat.plname.length;
         addPlayer(login_data);
+        //        _PDat.grabbodies();
+        PDproto.grabbodies();
+
         // CLEANME DEBUGGING:
         console.log('-=-=-=-=-Intro:');
-        console.log(JSON.stringify(sync_player_data));
+        console.log(JSON.stringify(_PDat));
         console.log('LIPs::');
         console.log(loggedinplayers);
     },
     lsdisconnect: function (socketid) {
-        let disco_index = sync_player_data.plsid.indexOf(socketid);
+        let disco_index = _PDat.plsid.indexOf(socketid);
         // CLEANME DEBUGGING:      
-        sync_player_data.plname.splice(disco_index, 1);
-        sync_player_data.plcolor.splice(disco_index, 1);
-        sync_player_data.plsid.splice(disco_index, 1);
-        sync_player_data.plstate.splice(disco_index, 1);
+        _PDat.plname.splice(disco_index, 1);
+        _PDat.plcolor.splice(disco_index, 1);
+        _PDat.plsid.splice(disco_index, 1);
+        _PDat.plstate.splice(disco_index, 1);
         loggedinplayers.splice(disco_index, 1); // HOPE THIS WORKS>
-        sync_player_data.playersconnected--;
+        _PDat.playersconnected = _PDat.plname.length;
         console.log('-=-=-=-=-Disco:');
-        console.log(JSON.stringify(sync_player_data));
+        console.log(JSON.stringify(_PDat));
         console.log('LIPs::');
         console.log(loggedinplayers);
+    },
+    grabbodies: function () {
+        _PDat.bodies = new Array();
+        let _lips = loggedinplayers;
+        for (player in _lips) {
+            let _body = _lips[player].body;
+            for (pair in _body) {
+                _PDat.bodies.push(_body[pair]);
+                console.log('pushed ln77=>' + _body[pair]);
+            }
+        }
     }
 }
 
-
-// -=-=-=-=-=- [ GAME Functions BEGGINING ]
-// Adding and MGMT  of players data.
 function addPlayer(player_data) {
-    let plindex = (sync_player_data.plsid.length - 1);
+    // adds player to loggedinplayers::
+    let plindex = (_PDat.plsid.length - 1);
     //x, y, direction supplied by SPAWN TABLE::
     let x = spawning_data[plindex][0];
     let y = spawning_data[plindex][1];
@@ -121,7 +123,7 @@ function createPlayer(name, color, x, y, direction, socketid) {
         this.y = y;
         this.direction = direction;
         this.body = [];
-        
+
         this.bodyDrawData = function () {
             return [this.x, this.y, this.color, this.direction];
         }
@@ -156,8 +158,8 @@ function createPlayer(name, color, x, y, direction, socketid) {
 
 
         this.init = function () {
-            //only rendering body - so head is always in body.
-            this.body.unshift([this.x, this.y]);
+            //head is always in body.
+            this.body.unshift(this.bodyDrawData());
             this.setVelocity();
         };
 
@@ -169,10 +171,8 @@ function createPlayer(name, color, x, y, direction, socketid) {
     return new Player(name, color, x, y, direction, socketid);
 
 } // -=-=-=- createPlayerend
-// -=-=-=-=-=-=- [ SS GAME DATA / GAME ENDER
 
 // -=-=-=-=-=-=- [ SS QUOTE GENERATOR
-
 function quote_generator() {
     const quote_lib = [
     'Q',
@@ -193,18 +193,18 @@ function quote_generator() {
 }
 // -=-=-=-=-=-=- [ SS QUOTE GENERATOR END ^^
 
+// -=-=-=- [ SOCKET RELATED LOGICS:: 
 var sessionsConnections = {};
 const io = global.io;
 console.log('[ss_socket][Listening]');
-
+// manages socket ids:
 const session_manager = function (socket) {
     sessionsConnections[socket.handshake.sessionID] = socket;
     return sessionsConnections[socket.handshake.sessionID];
 }
-
-// -=-=-= [ Phase Zero ]
+// connetion event:
 io.on('connection', function (socket) {
-    // future logging:
+    // future: insert logging:
     var d = new Date();
     console.log("[NEWID][" + socket.id.toString() + "][" + d.toLocaleTimeString() + " ] Clients Connected: " + io.engine.clientsCount);
     //add's newest client in while emitting that it has done so to new client only:
@@ -213,14 +213,14 @@ io.on('connection', function (socket) {
     sessionsConnections[socket.handshake.sessionID].emit('connection_quote', quote_generator());
     //  -=-=-=-=- end of 'on connection' core ^    
 
-    
+
     socket.on('disconnect', function () {
         var d = new Date();
         console.log("[" + socket.id.toString() + "][" + d + " ] Clients Connected: " + io.engine.clientsCount);
 
-        sync_player_prototype.lsdisconnect(socket.id.toString());
+        PDproto.lsdisconnect(socket.id.toString());
 
-        console.log('playerdisco index:' + sync_player_data.plsid.indexOf(socket.id.toString()));
+        console.log('playerdisco index:' + _PDat.plsid.indexOf(socket.id.toString()));
     });
 
     /*
@@ -230,7 +230,7 @@ io.on('connection', function (socket) {
         });
     */
 
-    // -=-= PHASE ONE:
+    // -=-= Create Player / Enter Game Pool:
     socket.on('login', function (player_data) {
         /* [ legend:: player_data = .name .color .sid . state ]*/
         console.log('[' + player_data.sid + ']');
@@ -240,9 +240,9 @@ io.on('connection', function (socket) {
         // send 'console_pm' ::
         global.sendCPM(socket.handshake.sessionID, "[LOGGED-IN]");
 
-        sync_player_prototype.pllogin(player_data);
+        PDproto.pllogin(player_data);
         io.emit('setcookies');
-        io.emit('sync_players', sync_player_data);
+        io.emit('sync_players', _PDat);
     });
 
 
@@ -252,7 +252,7 @@ io.on('connection', function (socket) {
         //        let sid = data.sid;
         let sid = socket.id;
         let newdirection = data;
-        let loggedinplayerindex = sync_player_data.plsid.indexOf(sid);
+        let loggedinplayerindex = _PDat.plsid.indexOf(sid);
         let ActivePlayer = loggedinplayers[loggedinplayerindex];
 
 
@@ -299,8 +299,7 @@ io.on('connection', function (socket) {
     });
 
 });
-
-
+// private console message sending: who=socket.id
 global.sendCPM = function (who, msg = 'no msg defined') {
     sessionsConnections[who].emit('console_message', msg);
 }
