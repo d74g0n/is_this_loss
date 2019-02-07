@@ -36,12 +36,6 @@ handle["/index.css"] = requestHandlers.cc_css;
 handle["/canvasc.js"] = requestHandlers.canvasc; 
 handle["/canvasg.js"] = requestHandlers.canvasg; 
 handle["/header.js"] = requestHandlers.header; 
-
-// ROUND SECTION DEPENDANCIES
-handle["/round.html"] = requestHandlers.round_html; 
-handle["/round"] = requestHandlers.round_html; 
-handle["/round.css"] = requestHandlers.round_css; 
-handle["/round.main.js"] = requestHandlers.round_main_js;
 handle["/round.js"] = requestHandlers.round_js;
 
 handle["/socket.io.dev.js"] = requestHandlers.socketclient;

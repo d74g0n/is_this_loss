@@ -3,16 +3,8 @@ var fs = require('fs');
 
 const views = {
     viewdir: './views' ,
-    chardir: '/login',
-    rounddir: '/round',
-    common: '/common',
+    common: '/SNAFUBAB',
     sound: '/sfx',
-    cc: function () {
-        return (views.viewdir + views.chardir).toString();
-    },
-    round: function() {
-        return (views.viewdir + views.rounddir).toString();
-    },
     com: function() {
         return (views.viewdir + views.common).toString();
     },
@@ -58,7 +50,7 @@ function socketclientmap(res) {
 function landingscreen(res) {
     global.clog("[ss_reqHan][landingscreen][SENT]");
     res.writeHead(200, { "Content-Type": "text/html" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/index.html');
+    var sendingfile = fs.readFileSync(views.com() + '/index.html');
     res.write(sendingfile);
     res.end();
 }
@@ -66,7 +58,7 @@ function landingscreen(res) {
 function cc_css(res) {
     global.clog("[ss_reqHan][index][SENT]");
     res.writeHead(200, { "Content-Type": "text/css" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/index.css');
+    var sendingfile = fs.readFileSync(views.com() + '/index.css');
     res.write(sendingfile);
     res.end();
 }
@@ -74,7 +66,7 @@ function cc_css(res) {
 function canvasc(res) {
     global.clog("[ss_reqHan][canvasc][SENT]");
     res.writeHead(200, { "Content-Type": "application/javascript" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/canvasc.js');
+    var sendingfile = fs.readFileSync(views.com() + '/canvasc.js');
     res.write(sendingfile);
     res.end();
 }
@@ -82,7 +74,7 @@ function canvasc(res) {
 function canvasg(res) {
     global.clog("[ss_reqHan][canvasg][SENT]");
     res.writeHead(200, { "Content-Type": "application/javascript" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/canvasg.js');
+    var sendingfile = fs.readFileSync(views.com() + '/canvasg.js');
     res.write(sendingfile);
     res.end();
 }
@@ -90,35 +82,7 @@ function canvasg(res) {
 function header(res) {
     global.clog("[ss_reqHan][header][SENT]");
     res.writeHead(200, { "Content-Type": "application/javascript" }); 
-    var sendingfile = fs.readFileSync(views.cc() + '/header.js');
-    res.write(sendingfile);
-    res.end();
-}
-// -=-=-= [ ROUND ]
-function round_html(res) {
-    global.clog("[ss_reqHan][round_html][SENT]");
-    res.writeHead(200, { "Content-Type": "text/html" }); 
-    var sendingfile = fs.readFileSync(views.round() + '/round.html');
-    res.write(sendingfile);
-    res.end();
-}
-
-function round_css(res) {
-    global.clog("[ss_reqHan][round_css][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "text/css"
-    }); //?
-    var sendingfile = fs.readFileSync(views.round() + '/round.css');
-    res.write(sendingfile);
-    res.end();
-}
-
-function round_main_js(res) {
-    global.clog("[ss_reqHan][round_main_js][SENT]");
-    res.writeHead(200, {
-        "Content-Type": "application/javascript"
-    }); //?
-    var sendingfile = fs.readFileSync(views.round() + '/round.main.js');
+    var sendingfile = fs.readFileSync(views.com() + '/header.js');
     res.write(sendingfile);
     res.end();
 }
@@ -128,7 +92,7 @@ function round_js(res) {
     res.writeHead(200, {
         "Content-Type": "application/javascript"
     }); //?
-    var sendingfile = fs.readFileSync(views.round() + '/round.js');
+    var sendingfile = fs.readFileSync(views.com() + '/round.js');
     res.write(sendingfile);
     res.end();
 }
@@ -170,13 +134,9 @@ exports.cc_css = cc_css;
 exports.canvasc = canvasc;
 exports.canvasg = canvasg;
 exports.header = header;
-
-// REFACTOR:: TBR::
-// round view:
-exports.round_html = round_html;
-exports.round_css = round_css;
-exports.round_main_js = round_main_js;
 exports.round_js = round_js;
+
+// TODO::
 //exports.robotstxt = robotstxt;   
 
 // audio dependancies:

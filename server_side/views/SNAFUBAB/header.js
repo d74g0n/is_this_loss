@@ -1,5 +1,13 @@
 console.log('[1/4][header.js][init]');
+/*
+header.js:
+    essentially contains all logic that does not require html tags to have been drawn
+    -- sound / socket
 
+*/
+
+
+// -=-=-= [ SOUND SYSTEM: 
 window.gsound_sys = {};
 // -=-=-=- [ GLOBAL Sound System ]
 window.gsound_sys.toggle_ost = function () {
@@ -84,20 +92,12 @@ function splay(media) {
         });
     }
 }
+//load_ost_track(); // this causes music to autoplay.
 // -=-=- End of gsound_sys functions^
 
-//load_ost_track(); // this causes music to autoplay.
-
-
-
-
-
-
-
-
-
-// [B&W][NOTE] - SINGLE PLAYER = IF NO SOCKET CONNECTION
+// -=-=-= [ SOCKET SYSTEMS: 
 const socket = io('http://localhost:1055'); // -=- connect
+// UNNEEDED?!:: TBR::
 window.socket = socket; // -=- alias global socket    
 
 window.footyprep = function (msg) {
