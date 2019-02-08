@@ -215,7 +215,7 @@ let roundcode = function (global) {
             if (global._SE.fadetick > 0 && global._SE.isFade) {
                 global._SE.fadeBg();
             } else {
-                console.log('done fade');
+                background();
             }
             if (global._SE.fadetick < 1) {
                 global._SE.isFade = false;
@@ -321,7 +321,7 @@ let roundcode = function (global) {
 BIN.buts.join = function () {
 
 
-    socket.emit('drawdata');
+    socket.emit('req_draw_data');
 
 
 }

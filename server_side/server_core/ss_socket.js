@@ -1,4 +1,26 @@
 var fs = require('fs');
+
+// -=-=-=-=-=-=- [ SS QUOTE GENERATOR
+function quote_generator() {
+    const quote_lib = [
+    'Q',
+    'WWG1WGA',
+    'Pay Attention',
+    'Degenerates, Degenerate ~ Eddie Day',
+    'Happy wife, Happy life ~ Eddie Day',
+    'Recognize Abstract Patterns',
+    'When does a sheep dog bark?',
+    'All we Do is Pattern Match',
+    'The World is about to change',
+    'I AM',
+];
+    let _rndQuoteIndex = function () {
+        return (Math.random() * ((quote_lib.length - 1) - 0) + 0).toFixed(0);
+    }
+    return quote_lib[_rndQuoteIndex()];
+}
+// -=-=-=-=-=-=- [ SS QUOTE GENERATOR END ^^
+
 // quickie date function:
 global.datestamp = function () {
     let d = new Date().toLocaleTimeString();
@@ -148,7 +170,6 @@ function createPlayer(name, color, x, y, direction, socketid) {
 
         }
 
-
         this.init = function () {
             //head is always in body.
             this.body.unshift(this.bodyDrawData());
@@ -164,26 +185,31 @@ function createPlayer(name, color, x, y, direction, socketid) {
 
 } // -=-=-=- createPlayerend
 
-// -=-=-=-=-=-=- [ SS QUOTE GENERATOR
-function quote_generator() {
-    const quote_lib = [
-    'Q',
-    'WWG1WGA',
-    'Pay Attention',
-    'Degenerates, Degenerate ~ Eddie Day',
-    'Happy wife, Happy life ~ Eddie Day',
-    'Recognize Abstract Patterns',
-    'When does a sheep dog bark?',
-    'All we Do is Pattern Match',
-    'The World is about to change',
-    'I AM',
-];
-    let _rndQuoteIndex = function () {
-        return (Math.random() * ((quote_lib.length - 1) - 0) + 0).toFixed(0);
-    }
-    return quote_lib[_rndQuoteIndex()];
+let _G = {
+    isStarted: false,
+    framenum: 0,
+    checkforReadyPlayers: function() {
+        let ready_count = 0;
+        _PDat.plstate.forEach(function(datapoint) {
+            console.log(datapoint);
+            if (datapoint == 'ready') {
+                ready_count++;
+            }
+        });
+        console.log('[ready_count:]'+ ready_count);
+    },
+    startRound: function () {
+      _G.isStarted = true;
+        
+    },
+    startRoundTimer: function () {
+        
+    },
+    stopRoundTimer: function () {
+        
+    },
 }
-// -=-=-=-=-=-=- [ SS QUOTE GENERATOR END ^^
+
 
 // -=-=-=- [ SOCKET RELATED LOGICS:: 
 var sessionsConnections = {};
@@ -237,9 +263,16 @@ io.on('connection', function (socket) {
         io.emit('sync_players', _PDat);
     });
 
-    socket.on('drawdata', function () {
+    socket.on('req_draw_data', function () {
         PDproto.grabbodies();
-        socket.emit('draw data', _PDat.bodies);
+        
+        _G.checkforReadyPlayers();
+        
+        socket.emit('draw_data', _PDat.bodies);
+    });
+    
+    socket.on('mutate_state', function(state) {
+       //client updates State (ready. unready, etc) 
     });
 
 

@@ -119,7 +119,7 @@ socket.on('console_message', function (data) {
     console.log('[eYe]' + data);
 });
 
-socket.on('draw data', function(data){
+socket.on('draw_data', function(data){
 //    console.log('DRAWDATA::');
 //    console.log(data);
 //    global._SDS.drawOnlineBodies(data);
