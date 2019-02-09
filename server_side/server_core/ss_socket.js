@@ -24,13 +24,14 @@ function quote_generator() {
 // quickie date function:
 global.datestamp = function () {
     let d = new Date().toLocaleTimeString();
-    console.log('[TEST][' + d + ']');
     return d;
 }
 const _date = global.datestamp;
 
 
 // -=-=-=- [ Game Setup Information:
+// TROUBLE TRACKING SPAWING POINTS::: 
+let used_spawnindexes = [];
 let spawning_data = [
 // only got 8 slots for now:
     [2, 17, 'e'],
@@ -77,7 +78,7 @@ let _PDat = {
     plsid: [],
     plstate: [],
     bodies: [],
-
+    playersconnected: 0,
 }
 // functions helping the above process:
 let PDproto = {
@@ -188,28 +189,60 @@ function createPlayer(name, color, x, y, direction, socketid) {
 let _G = {
     isStarted: false,
     framenum: 0,
-    checkforReadyPlayers: function() {
+    fps: 120,
+    nextframe: function () {
+        if (_G.framenum > _G.fps) {
+            _G.framenum = 1;
+        }
+        return _G.framenum++;
+    },
+    speed: 6, // 6index = 8 = 15fps
+    roundspeed: 6,
+    fastfactor: [1, 2, 3, 4, 5, 6, 8, 10],
+    slowfactor: [120, 60, 40, 30, 24, 20, 15, 12],
+    modolo: function (speed = 6) {
+        if (_G.framenum % _G.fastfactor(speed) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    timers: [],
+    startTimer: function (fps = _G.fps) {
+        _G.timers.push(setInterval(_G.mainLoop, 1000 / fps));
+    },
+    stopTimer: function (index = 0) {
+        if (_G.timers[index]) {
+            clearInterval(_G.timers[index]);
+            _G.timers.pop();
+        }
+    },
+    checkforReadyPlayers: function () {
         let ready_count = 0;
-        _PDat.plstate.forEach(function(datapoint) {
-            console.log(datapoint);
+        _PDat.plstate.forEach(function (datapoint) {
             if (datapoint == 'ready') {
                 ready_count++;
             }
         });
-        console.log('[ready_count:]'+ ready_count);
+//        console.log('[ready_count:]' + ready_count);
+        
+        if (ready_count == loggedinplayers.length) {
+            // START GAME.
+            console.log('ALL PLAYERS READY SET GO!');
+        }
+        
+//        return ready_count;
+        
     },
     startRound: function () {
-      _G.isStarted = true;
-        
+        _G.isStarted = true;
     },
-    startRoundTimer: function () {
-        
-    },
-    stopRoundTimer: function () {
-        
+    mainLoop: function () {
+        if (_G.modolo(_G.roundspeed)) {
+            // do limited code.
+        }
     },
 }
-
 
 // -=-=-=- [ SOCKET RELATED LOGICS:: 
 var sessionsConnections = {};
@@ -259,26 +292,40 @@ io.on('connection', function (socket) {
         global.sendCPM(socket.handshake.sessionID, "[LOGGED-IN]");
 
         PDproto.pllogin(player_data);
-        io.emit('setcookies');
-        io.emit('sync_players', _PDat);
+        sessionsConnections[socket.handshake.sessionID].emit('setcookies');
+        sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat); // maybe BROADCAST level
+/*        io.emit('setcookies');
+        io.emit('sync_players', _PDat);*/
     });
-
+    // -=-= Player Request Data:
     socket.on('req_draw_data', function () {
         PDproto.grabbodies();
-        
+
+//        _G.checkforReadyPlayers();
+        //TESTING::
+        sessionsConnections[socket.handshake.sessionID].emit('draw_data', _PDat.bodies);
+//                socket.emit('draw_data', _PDat.bodies);
+    });
+    // -=-= Player Updating State: (greet, ready, playing)
+    socket.on('mutate_state', function (state = undefined) {
+        let sid = socket.id;
+        let loggedinplayerindex = _PDat.plsid.indexOf(sid);
+        _PDat.plstate[loggedinplayerindex] = state;
+        console.log('[io][P#'+loggedinplayerindex+'][statechange:]['+state+']');
         _G.checkforReadyPlayers();
         
-        socket.emit('draw_data', _PDat.bodies);
-    });
-    
-    socket.on('mutate_state', function(state) {
-       //client updates State (ready. unready, etc) 
+        //client updates State (ready. unready, etc) 
     });
 
-
-
-    // Basic Multiplayer controller system:
+    // -=-= Players Basic Multiplayer controller system:
     socket.on('controllerdata', function (data) {
+        let local_console_readout = false;
+        let lcr = function(msg) {
+            if (local_console_readout) {
+                console.log(msg);
+            }
+            
+        };
         //        let sid = data.sid;
         let sid = socket.id;
         let newdirection = data;
@@ -290,9 +337,9 @@ io.on('connection', function (socket) {
             if (ActivePlayer.direction != 's') {
                 ActivePlayer.direction = 'n';
                 ActivePlayer.setVelocity();
-                console.log('[CD][' + sid + '][North]' + _date());
+                lcr('[CD][' + sid + '][North]' + _date());
             } else {
-                console.log('[CD][' + sid + '][North][DENIED]');
+                lcr('[CD][' + sid + '][North][DENIED]');
             }
 
         }
@@ -300,9 +347,9 @@ io.on('connection', function (socket) {
             if (ActivePlayer.direction != 'e') {
                 ActivePlayer.direction = 'w';
                 ActivePlayer.setVelocity();
-                console.log('[CD][' + sid + '][West]' + _date());
+                lcr('[CD][' + sid + '][West]' + _date());
             } else {
-                console.log('[CD][' + sid + '][West][DENIED]');
+                lcr('[CD][' + sid + '][West][DENIED]');
             }
 
         }
@@ -310,18 +357,18 @@ io.on('connection', function (socket) {
             if (ActivePlayer.direction != 'w') {
                 ActivePlayer.direction = 'e';
                 ActivePlayer.setVelocity();
-                console.log('[CD][' + sid + '][East]' + _date());
+                lcr('[CD][' + sid + '][East]' + _date());
             } else {
-                console.log('[CD][' + sid + '][East][DENIED]');
+                lcr('[CD][' + sid + '][East][DENIED]');
             }
         }
         if (data == 's') {
             if (ActivePlayer.direction != 'n') {
                 ActivePlayer.direction = 's';
                 ActivePlayer.setVelocity();
-                console.log('[CD][' + sid + '][South]' + _date());
+                lcr('[CD][' + sid + '][South]' + _date());
             } else {
-                console.log('[CD][' + sid + '][South][DENIED]');
+                lcr('[CD][' + sid + '][South][DENIED]');
             }
         }
 
