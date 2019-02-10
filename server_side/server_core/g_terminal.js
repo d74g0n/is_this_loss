@@ -1,5 +1,9 @@
 // https://stackoverflow.com/questions/5006821/nodejs-how-to-read-keystrokes-from-stdin
 console.log('[_terminal][LOADED]');
+
+let ttimers = [];
+
+
 var stdin = process.stdin;
 // without this, we would only get streams once enter is pressed***
 stdin.setRawMode(true);
@@ -16,14 +20,29 @@ stdin.on('data', function (key) {
         clearConsole();
         console.log('[_terminal][CLEAR][CTRL+C TO EXIT]');
     }
-    if (key === 't') {}
-    if (key === 'e') {}
+    if (key === '1') {
+        console.log('[_terminal][1]');
+        if (ttimers[0]) {
+            console.log('[TIMER ALREADY ACTIVE]');
+        } else {
+            ttimers.push(setInterval(global._G.mainLoop, 1000 / 1));
+        }
+    }
+    if (key === '2') {
+        console.log('[_terminal][2]');
+        if (ttimers[0]) {
+            clearInterval(ttimers[0]);
+             console.log('[_terminal][1][TIMERSTOPPED]');
+            ttimers.pop();
+        }
+
+    }
 
     if (key === '\u0003') {
         // ctrl-c
         process.exit();
     }
-    
+
     // write the key to stdout all messy normal like
     // process.stdout.write(key);
     console.log('[_terminal][KEYPRESSED:][' + key + ']');

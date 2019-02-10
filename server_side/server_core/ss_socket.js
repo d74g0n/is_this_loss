@@ -44,6 +44,56 @@ let spawning_data = [
     [40, 2, 's']
 ];
 
+function spawnShuffle() {
+    used_spawnindexes = undefined;
+    used_spawnindexes = [];
+    if (loggedinplayers.length > 1) {
+        loggedinplayers.forEach(function (plObj) {
+
+            let spwnsetup = getSpawnpoint();
+            plObj.x = spwnsetup[0];
+            plObj.y = spwnsetup[1];
+            plObj.direction = spwnsetup[2];
+
+        });
+    }
+    // take all players - do spawn locations.
+
+
+
+}
+
+
+function getSpawnpoint() {
+    let spawnroll = Math.floor(Math.random() * spawning_data.length);
+    let matchcount = 0;
+
+    used_spawnindexes.forEach(function (usedspawn) {
+        if (spawnroll == usedspawn) {
+            console.log('MATCH');
+            matchcount++;
+            console.log('SpRoll:' + spawnroll);
+            console.log('usedSp:' + used_spawnindexes);
+        }
+    }) //end forEach
+
+    console.log('matches:' + matchcount);
+
+    if (matchcount == 0) {
+        if (spawning_data[spawnroll]) {
+            used_spawnindexes.push(spawnroll);
+            return spawning_data[spawnroll];
+        } else {
+            // failed try again::
+            getSpawnpoint();
+        }
+    } else {
+        // failed try again::
+        getSpawnpoint();
+    }
+}
+
+
 // Players logics:
 let loggedinplayers = [];
 let _LPs = {
@@ -57,9 +107,14 @@ let _LPs = {
         // adds player to loggedinplayers::
         let plindex = (_PDat.plsid.length - 1);
         //x, y, direction supplied by SPAWN TABLE::
-        let x = spawning_data[plindex][0];
-        let y = spawning_data[plindex][1];
-        let direction = spawning_data[plindex][2];
+
+        let spwnsetup = getSpawnpoint();
+        let x = spwnsetup[0];
+        let y = spwnsetup[1];
+        let direction = spwnsetup[2];
+
+
+
         loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
     },
     removePlayer: function (index) {
@@ -101,6 +156,7 @@ let PDproto = {
         _PDat.plsid.splice(disco_index, 1);
         _PDat.plstate.splice(disco_index, 1);
         _LPs.removePlayer(disco_index);
+
         _PDat.playersconnected = _PDat.plname.length;
         // Debug Readouts:
         // _LPs.readout();
@@ -186,7 +242,7 @@ function createPlayer(name, color, x, y, direction, socketid) {
 
 } // -=-=-=- createPlayerend
 
-let _G = {
+global._G = {
     isStarted: false,
     framenum: 0,
     fps: 120,
@@ -196,12 +252,17 @@ let _G = {
         }
         return _G.framenum++;
     },
+    movePlayers: function() {
+      loggedinplayers.forEach(function(P) {
+          P.move();
+      });
+    },
     speed: 6, // 6index = 8 = 15fps
     roundspeed: 6,
     fastfactor: [1, 2, 3, 4, 5, 6, 8, 10],
     slowfactor: [120, 60, 40, 30, 24, 20, 15, 12],
     modolo: function (speed = 6) {
-        if (_G.framenum % _G.fastfactor(speed) == 0) {
+        if (global._G.framenum % global._G.fastfactor[global._G.speed] == 0) {
             return true;
         } else {
             return false;
@@ -224,25 +285,31 @@ let _G = {
                 ready_count++;
             }
         });
-//        console.log('[ready_count:]' + ready_count);
-        
+        //        console.log('[ready_count:]' + ready_count);
+
         if (ready_count == loggedinplayers.length) {
             // START GAME.
             console.log('ALL PLAYERS READY SET GO!');
         }
-        
-//        return ready_count;
-        
+
+        //        return ready_count;
+
     },
     startRound: function () {
         _G.isStarted = true;
     },
     mainLoop: function () {
+        io.emit('clear');
+        global._G.movePlayers();
+        
         if (_G.modolo(_G.roundspeed)) {
             // do limited code.
         }
+//        global._SE.background('darkgreen');
+        io.emit('render', _PDat.bodies);
     },
 }
+const _G = global._G;
 
 // -=-=-=- [ SOCKET RELATED LOGICS:: 
 var sessionsConnections = {};
@@ -294,37 +361,37 @@ io.on('connection', function (socket) {
         PDproto.pllogin(player_data);
         sessionsConnections[socket.handshake.sessionID].emit('setcookies');
         sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat); // maybe BROADCAST level
-/*        io.emit('setcookies');
-        io.emit('sync_players', _PDat);*/
+        /*        io.emit('setcookies');
+                io.emit('sync_players', _PDat);*/
     });
     // -=-= Player Request Data:
     socket.on('req_draw_data', function () {
         PDproto.grabbodies();
 
-//        _G.checkforReadyPlayers();
+        //        _G.checkforReadyPlayers();
         //TESTING::
         sessionsConnections[socket.handshake.sessionID].emit('draw_data', _PDat.bodies);
-//                socket.emit('draw_data', _PDat.bodies);
+        //                socket.emit('draw_data', _PDat.bodies);
     });
     // -=-= Player Updating State: (greet, ready, playing)
     socket.on('mutate_state', function (state = undefined) {
         let sid = socket.id;
         let loggedinplayerindex = _PDat.plsid.indexOf(sid);
         _PDat.plstate[loggedinplayerindex] = state;
-        console.log('[io][P#'+loggedinplayerindex+'][statechange:]['+state+']');
+        console.log('[io][P#' + loggedinplayerindex + '][statechange:][' + state + ']');
         _G.checkforReadyPlayers();
-        
+
         //client updates State (ready. unready, etc) 
     });
 
     // -=-= Players Basic Multiplayer controller system:
     socket.on('controllerdata', function (data) {
         let local_console_readout = false;
-        let lcr = function(msg) {
+        let lcr = function (msg) {
             if (local_console_readout) {
                 console.log(msg);
             }
-            
+
         };
         //        let sid = data.sid;
         let sid = socket.id;

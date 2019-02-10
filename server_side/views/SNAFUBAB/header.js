@@ -124,8 +124,13 @@ socket.on('draw_data', function(data){
 //    console.log(data);
 //    global._SDS.drawOnlineBodies(data);
 //    global._SE.drawBodies(data);
+    
     global._SE.drawAll(data);
 });
+
+
+
+
 
 socket.on('sync_players', function (data) {
     

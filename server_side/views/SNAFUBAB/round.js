@@ -62,7 +62,7 @@ let roundcode = function (global) {
     // set table colour:
     function background(color = game_defaults.bg) {
         c.fillStyle = color;
-        c.fillRect(0, 0, canvas.width, canvas.height)
+        c.fillRect(0, 0, canvas.width, canvas.height);
     }
     // stroke_outline_Square:
     function sSq(x, y, color = 'rgba(255,255,255,1)') {
@@ -187,7 +187,7 @@ let roundcode = function (global) {
     global._SE = {
         version: 'server/socket engine',
         drawBodies: function (bodydata) {
-            //            background();
+//            background();
             for (i = bodydata.length - 1; i >= 0; i--) {
                 var x = bodydata[i][0];
                 var y = bodydata[i][1];
@@ -200,8 +200,8 @@ let roundcode = function (global) {
         },
         drawAll: function (data) {
 
-            //            background();
-            global._SE.fadelogic();
+            
+//            global._SE.fadelogic();
             global._SE.drawBodies(data);
 
         },
@@ -215,7 +215,7 @@ let roundcode = function (global) {
             if (global._SE.fadetick > 0 && global._SE.isFade) {
                 global._SE.fadeBg();
             } else {
-                background();
+                global._SE.background();
             }
             if (global._SE.fadetick < 1) {
                 global._SE.isFade = false;
@@ -227,6 +227,10 @@ let roundcode = function (global) {
             c.fillStyle = game_defaults.bg;
             c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
             GlobalAlpha(1);
+        },
+        background: function (color = game_defaults.bg) {
+            c.fillStyle = color;
+            c.fillRect(0, 0, canvas.width, canvas.height);
         },
 
     }
@@ -290,7 +294,7 @@ let roundcode = function (global) {
             if (timers[0]) {
                 console.log('[TIMER ALREADY ACTIVE]');
             } else {
-                timers.push(setInterval(dirty_Gameloop, 1000 / game_defaults.fps));
+//                timers.push(setInterval(dirty_Gameloop, 1000 / game_defaults.fps));
             }
         }
 
@@ -317,6 +321,19 @@ let roundcode = function (global) {
 
 } // -=-= [ end of 'roundcode' Enclosure.
 // -=-= [ outside of round.js closure;
+
+
+socket.on('render', function(data){
+//    console.log('rendering');
+    socket.emit('req_draw_data');
+//    global._SE.drawAll(data);
+});
+socket.on('clear', function(){
+    console.log('clearing');
+    global._SE.fadelogic();
+//    global._SE.background();
+});
+
 
 BIN.buts.join = function () {
 
