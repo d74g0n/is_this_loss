@@ -157,9 +157,6 @@ let roundcode = function (global) {
             //post score      
         },
         drawAll: function (data) {
-
-
-            //            global._SE.fadelogic();
             global._SE.drawBodies(data);
 
         },
@@ -247,16 +244,22 @@ let roundcode = function (global) {
 
     }
 
-    var timers = [];
     // -=-=-=-=-=-=-=-=-=-=-=-=- [ EXECUTE ON RUN:
     _D.LEVEL_splashscreen();
 
 } // -=-= [ end of 'roundcode' Enclosure.
 // -=-= [ outside of round.js closure;
 
+let lastrenderdata = [];
 
 socket.on('render', function (data) {
-    _SE.drawAll(data);
+    if (data !== lastrenderdata) {
+        lastrenderdata = data;
+        _SE.fadelogic();
+        _SE.drawAll(data);
+    } else {
+        console.log('SKIPPING RENDER = REDUNDANT');
+    }
 });
 
 socket.on('clear', function () {
