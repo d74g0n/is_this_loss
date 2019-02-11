@@ -28,7 +28,6 @@ global.datestamp = function () {
 }
 const _date = global.datestamp;
 
-
 // -=-=-=- [ Game Setup Information:
 // TROUBLE TRACKING SPAWING POINTS::: 
 let used_spawnindexes = [];
@@ -58,11 +57,7 @@ function spawnShuffle() {
         });
     }
     // take all players - do spawn locations.
-
-
-
 }
-
 
 function getSpawnpoint() {
     let spawnroll = Math.floor(Math.random() * spawning_data.length);
@@ -252,10 +247,10 @@ global._G = {
         }
         return _G.framenum++;
     },
-    movePlayers: function() {
-      loggedinplayers.forEach(function(P) {
-          P.move();
-      });
+    movePlayers: function () {
+        loggedinplayers.forEach(function (P) {
+            P.move();
+        });
     },
     speed: 6, // 6index = 8 = 15fps
     roundspeed: 6,
@@ -301,11 +296,11 @@ global._G = {
     mainLoop: function () {
         io.emit('clear');
         global._G.movePlayers();
-        
+
         if (_G.modolo(_G.roundspeed)) {
             // do limited code.
         }
-//        global._SE.background('darkgreen');
+        //        global._SE.background('darkgreen');
         PDproto.grabbodies();
         io.emit('render', _PDat.bodies);
     },
