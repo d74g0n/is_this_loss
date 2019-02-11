@@ -1,3 +1,5 @@
+let localPD = {};
+
 let roundcode = function (global) {
     const clog = function (x) {
         if (true) {
@@ -121,7 +123,10 @@ let roundcode = function (global) {
             _D.clrShadow();
         },
 
-    }
+    };
+
+
+
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CALCULATIONS SECTION ]
     // scales the x values to pixel coordinates.
     function Dx(x) {
@@ -140,7 +145,6 @@ let roundcode = function (global) {
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ LIFE BEGINS: ]
 
 
-
     // -=-=- NEW WIPS::
 
     global._SE = {
@@ -153,8 +157,19 @@ let roundcode = function (global) {
                 _D.dSq(x, y, col);
             }
         },
-        drawScore: function (index, num) {
-            //post score      
+        drawScore: function (PDdata) {
+            for (score in PDdata.plname) {
+                let psInd = document.getElementsByClassName(('ps' + score).toString());
+                
+                psInd.style.color = PDdata.plcolor[score];
+                psInd.innerHTML = PDdata.plscore[score];
+                
+                let pnInd = document.getElementsByClassName(('ps' + score).toString());
+                
+                pnInd.style.color = PDdata.plcolor[score];
+                pnInd.innerHTML = PDdata.plname[score].toString();
+                
+            }
         },
         drawAll: function (data) {
             global._SE.drawBodies(data);
@@ -255,8 +270,9 @@ let lastrenderdata = [];
 socket.on('render', function (data) {
     if (data !== lastrenderdata) {
         lastrenderdata = data;
-        _SE.fadelogic();
-        _SE.drawAll(data);
+        global._SE.fadelogic();
+        global._SE.drawAll(data);
+        
     } else {
         console.log('SKIPPING RENDER = REDUNDANT');
     }
@@ -272,30 +288,37 @@ BIN.buts.join = function () {
     socket.emit('req_draw_data');
     socket.emit('mutate_state', 'ready');
 
+
+
 }
 
+socket.on('sync_players', function (data) {
+    localPD = data;
+//console.log(data);
+    global._SE.drawScore(data);
 
+});
 
 
 // ANALYZE THIS IS ALIVE::: FOR SS::
-    //  dirty framecount for dirty game loot.
-    /*
+//  dirty framecount for dirty game loot.
+/*
 
-        function dirty_Gameloop() {
-
-
-            console.log('-=-=- [ FRAME ]-=-=-');
-
-            if (_alivecount() == -1 && timers[0]) {
-                console.log('EVERYBODY DEAD!');
-                console.log('DO NEXT ROUND SHIT');
-                console.log('FRAME: ' + game_state.framenum);
-
-                console.log('TIMER REMOVED');
-                clearInterval(timers[0]);
-            }
+    function dirty_Gameloop() {
 
 
-        } // ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
+        console.log('-=-=- [ FRAME ]-=-=-');
 
-    */
+        if (_alivecount() == -1 && timers[0]) {
+            console.log('EVERYBODY DEAD!');
+            console.log('DO NEXT ROUND SHIT');
+            console.log('FRAME: ' + game_state.framenum);
+
+            console.log('TIMER REMOVED');
+            clearInterval(timers[0]);
+        }
+
+
+    } // ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+*/

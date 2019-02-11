@@ -124,7 +124,6 @@ socket.on('draw_data', function(data){
 //    console.log(data);
 //    global._SDS.drawOnlineBodies(data);
 //    global._SE.drawBodies(data);
-    
     global._SE.drawAll(data);
 });
 
@@ -132,10 +131,7 @@ socket.on('draw_data', function(data){
 
 
 
-socket.on('sync_players', function (data) {
-    
-    console.log('[sync_players.io]' + JSON.stringify(data));
-});
+
 
 socket.on('setcookies', function (data) {
     global.setCookie('state', 'lobby', 1);

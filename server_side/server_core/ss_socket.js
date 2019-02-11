@@ -108,6 +108,7 @@ let _PDat = {
     plcolor: [],
     plsid: [],
     plstate: [],
+    plscore: [0,0,0,0,0,0,0,0],
     bodies: [],
     playersconnected: 0,
 }
@@ -278,7 +279,7 @@ global._G = {
     },
     timers: [],
     startTimer: function (fps = _G.fps) {
-        _G.timers.push(setInterval(_G.mainLoop, 1000 / fps));
+        _G.timers.push(setInterval(_G.mainLoop, 1000 / _G.fps));
     },
     stopTimer: function (index = 0) {
         if (_G.timers[index]) {
@@ -318,6 +319,8 @@ global._G = {
 //        io.emit('clear');
         PDproto.grabbodies();
         io.emit('render', _PDat.bodies);
+        // trying to sync score.
+        io.emit('sync_players', _PDat);
     },
 }
 const _G = global._G;
@@ -375,6 +378,11 @@ io.on('connection', function (socket) {
         /*        io.emit('setcookies');
                 io.emit('sync_players', _PDat);*/
     });
+    
+    socket.on('scoredata', function() {
+       sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat)
+    });
+    
     // -=-= Player Request Data:
     socket.on('req_draw_data', function () {
         PDproto.grabbodies();
