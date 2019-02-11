@@ -234,6 +234,7 @@ let roundcode = function (global) {
         },
 
     }
+    const _SE = global._SE;
 
 
 
@@ -290,24 +291,7 @@ let roundcode = function (global) {
             console.log('d Triggered');
         }
 
-        if (e.key == '1') {
-            if (timers[0]) {
-                console.log('[TIMER ALREADY ACTIVE]');
-            } else {
-//                timers.push(setInterval(dirty_Gameloop, 1000 / game_defaults.fps));
-            }
-        }
-
-        if (e.key == '2') {
-            if (timers[0]) {
-                clearInterval(timers[0]);
-                timers.pop();
-            }
-
-
-        }
-
-
+      
     }
 
 
@@ -323,14 +307,24 @@ let roundcode = function (global) {
 // -=-= [ outside of round.js closure;
 
 
+
+
 socket.on('render', function(data){
 //    console.log('rendering');
-    socket.emit('req_draw_data');
+    //    socket.emit('req_draw_data');
+//  
+    _SE.drawAll(data);
 //    global._SE.drawAll(data);
 });
+
+
+
+
+
 socket.on('clear', function(){
-    console.log('clearing');
-    global._SE.fadelogic();
+//    console.log('clearing');
+//    global._SE.fadelogic();
+    _SE.fadelogic();
 //    global._SE.background();
 });
 

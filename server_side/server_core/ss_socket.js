@@ -306,6 +306,7 @@ global._G = {
             // do limited code.
         }
 //        global._SE.background('darkgreen');
+        PDproto.grabbodies();
         io.emit('render', _PDat.bodies);
     },
 }
@@ -386,7 +387,7 @@ io.on('connection', function (socket) {
 
     // -=-= Players Basic Multiplayer controller system:
     socket.on('controllerdata', function (data) {
-        let local_console_readout = false;
+        let local_console_readout = true;
         let lcr = function (msg) {
             if (local_console_readout) {
                 console.log(msg);

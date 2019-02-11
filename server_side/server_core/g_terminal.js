@@ -25,7 +25,7 @@ stdin.on('data', function (key) {
         if (ttimers[0]) {
             console.log('[TIMER ALREADY ACTIVE]');
         } else {
-            ttimers.push(setInterval(global._G.mainLoop, 1000 / 1));
+            ttimers.push(setInterval(global._G.mainLoop, 1000 / 10));
         }
     }
     if (key === '2') {
