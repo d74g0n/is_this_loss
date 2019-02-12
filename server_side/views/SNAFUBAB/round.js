@@ -1,4 +1,3 @@
-let localPD = {};
 
 let roundcode = function (global) {
     const clog = function (x) {
@@ -81,8 +80,8 @@ let roundcode = function (global) {
             c.strokeStyle = color;
             //    c.strokeStyle = 'black';
             var s = CanvasDefault.scale;
-            x = Dx(x);
-            y = Dy(y);
+            x = _D.X(x);
+            y = _D.Y(y);
             c.strokeRect(x + 0.5, y + 0.5, s, s);
             c.stroke();
         },
@@ -97,8 +96,8 @@ let roundcode = function (global) {
             var s = CanvasDefault.scale;
             //    x = x + (x * s) + CanvasDefault._left;
             //    y = y + (y * s) + CanvasDefault._top;
-            x = Dx(x);
-            y = Dy(y);
+            x = _D.X(x);
+            y = _D.Y(y);
 
             c.beginPath();
             c.fillStyle = color;
@@ -108,6 +107,18 @@ let roundcode = function (global) {
         dSq: function (x, y, color = 'rgba(255,255,255,1)') {
             _D.sSq(x, y, color);
             _D.fSq(x, y, color);
+        },
+        X: function (x) {
+            // Translates x to pixels
+            return (x + (x * CanvasDefault.scale) + CanvasDefault._left);
+        },
+        Y: function (y) {
+            // Translates y to pixels
+            return (y + (y * CanvasDefault.scale) + CanvasDefault._top);
+        },
+        RndBool: function () {
+            // pretty sure unused:: extra
+            return Math.random() >= 0.5;
         },
 
         LEVEL_splashscreen: function () {
@@ -124,26 +135,7 @@ let roundcode = function (global) {
         },
 
     };
-
-
-
-    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CALCULATIONS SECTION ]
-    // scales the x values to pixel coordinates.
-    function Dx(x) {
-        // Translates x to pixels
-        return (x + (x * CanvasDefault.scale) + CanvasDefault._left);
-    }
-    // scales the y values to pixel coordinates.
-    function Dy(y) {
-        // Translates y to pixels
-        return (y + (y * CanvasDefault.scale) + CanvasDefault._top);
-    }
-    // Random boolean:
-    function RndBool() {
-        return Math.random() >= 0.5;
-    }
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ LIFE BEGINS: ]
-
 
     // -=-=- NEW WIPS::
 
@@ -158,17 +150,22 @@ let roundcode = function (global) {
             }
         },
         drawScore: function (PDdata) {
-            for (score in PDdata.plname) {
-                let psInd = document.getElementsByClassName(('ps' + score).toString());
-                
-                psInd.style.color = PDdata.plcolor[score];
-                psInd.innerHTML = PDdata.plscore[score];
-                
-                let pnInd = document.getElementsByClassName(('ps' + score).toString());
-                
-                pnInd.style.color = PDdata.plcolor[score];
-                pnInd.innerHTML = PDdata.plname[score].toString();
-                
+
+            let cnt = PDdata.plname.length - 1;
+
+
+            // restucture this loop to have incremental index:
+            for (cnt; cnt > 0; cnt--) {
+                let psInd = document.getElementsByClassName(('ps' + cnt + ""));
+
+                psInd.style.color = PDdata.plcolor[cnt];
+                psInd.innerHTML = PDdata.plscore[cnt];
+
+                let pnInd = document.getElementsByClassName(("pn" + cnt + ""));
+
+                pnInd.style.color = PDdata.plcolor[cnt];
+                pnInd.innerHTML = PDdata.plname[cnt].toString();
+
             }
         },
         drawAll: function (data) {
@@ -177,7 +174,7 @@ let roundcode = function (global) {
         },
         fadedesc: 'little fade then dont system:',
         useage: 'set to True for it to cycle through',
-        fadetick: 10,
+        fadetick: 180,
         isFade: true,
         fadelogic: function () {
             if (global._SE.isFade) {
@@ -194,7 +191,7 @@ let roundcode = function (global) {
             }
         },
         fadeBg: function () {
-            _D.GlobalAlpha(0.2);
+            _D.GlobalAlpha(0.1);
             c.fillStyle = game_defaults.bg;
             c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
             _D.GlobalAlpha(1);
@@ -259,27 +256,20 @@ let roundcode = function (global) {
 
     }
 
-    // -=-=-=-=-=-=-=-=-=-=-=-=- [ EXECUTE ON RUN:
+    // -=-=-=-=-=-=-=-=-=-=-=-=- [ EXECUTE ON LOAD:
     _D.LEVEL_splashscreen();
 
 } // -=-= [ end of 'roundcode' Enclosure.
 // -=-= [ outside of round.js closure;
 
-let lastrenderdata = [];
 
 socket.on('render', function (data) {
-    if (data !== lastrenderdata) {
-        lastrenderdata = data;
         global._SE.fadelogic();
         global._SE.drawAll(data);
-        
-    } else {
-        console.log('SKIPPING RENDER = REDUNDANT');
-    }
 });
 
 socket.on('clear', function () {
-    _SE.fadelogic();
+//    global._SE.fadelogic();
 });
 
 BIN.buts.join = function () {
@@ -293,12 +283,16 @@ BIN.buts.join = function () {
 }
 
 socket.on('sync_players', function (data) {
-    localPD = data;
-//console.log(data);
-    global._SE.drawScore(data);
+
+//    global._SE.drawScore(data);
 
 });
 
+socket.on('post_scores', function (scoredata) {
+
+//    global._SE.drawScore(scoredata);
+
+});
 
 // ANALYZE THIS IS ALIVE::: FOR SS::
 //  dirty framecount for dirty game loot.

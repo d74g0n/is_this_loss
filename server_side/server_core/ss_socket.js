@@ -1,5 +1,25 @@
 var fs = require('fs');
+/*
+notes:
 
+- spawn point set random crash? (seems like out of range stuff)
+- add score to player obj.
+- PData score process.
+- kinda hate the plname namenclature = -pl's from alias's
+
+- Quote generator vs json data && it's own JS module.
+
+- scoreboard drawing
+
+- functionally redesign the PDat to rebuild itself before each from players/logged in players.
+
+- working on syncronizing score data // posting to html is failing in current design.
+
+- need to breakup socket and game logic into seperate JS files.
+
+- it appears as if I will have to build this using a web-session object; attaching players etc...
+   [ the greet status vs the ready status reveals greet is very much in limbo in servers logic mostly running possible interferences]
+*/
 // -=-=-=-=-=-=- [ SS QUOTE GENERATOR
 function quote_generator() {
     const quote_lib = [
@@ -29,8 +49,6 @@ global.datestamp = function () {
 const _date = global.datestamp;
 
 // -=-=-=- [ Game Setup Information:
-// TROUBLE TRACKING SPAWING POINTS::: 
-let used_spawnindexes = [];
 
 // Players logics:
 let loggedinplayers = [];
@@ -60,7 +78,7 @@ let _LPs = {
         console.log(loggedinplayers);
         console.log('-=-=-[end_LIPS_readout()]-=-=-');
     },
-    shuffle: function (array = [0, 1, 2, 3, 4, 5, 6, 7, 8]) {
+    shuffle: function (array = [0, 1, 2, 3, 4, 5, 6, 7]) {
         var currentIndex = array.length,
             temporaryValue, randomIndex;
 
@@ -97,20 +115,23 @@ let _LPs = {
             loggedinplayers[player].setspawndata(spawning_data[roundspawnorder[player]]);
             loggedinplayers[player].setVelocity();
             loggedinplayers[player].addtoBody();
-            console.log('[ln146][socket]setRoundSpawnPoints -=-=-=-=-=-=-=-=-=-=-=-=-=-');
-            console.log(loggedinplayers[player]);
+            /*            console.log('[ln146][socket]setRoundSpawnPoints -=-=-=-=-=-=-=-=-=-=-=-=-=-');
+                        console.log(loggedinplayers[player]);*/
         }
     }
 };
-// player game data client-server syncronicity:
+// PlayerData for syncronizing clients:
+// should rebuild itself before each broadcast/sync:
+// This is 'Online player Summary Object'
+// TODO Rename -pl::
 let _PDat = {
+    playersconnected: 0,
     plname: [],
     plcolor: [],
     plsid: [],
     plstate: [],
-    plscore: [0,0,0,0,0,0,0,0],
+    plscore: [],
     bodies: [],
-    playersconnected: 0,
 }
 // functions helping the above process:
 let PDproto = {
@@ -122,6 +143,7 @@ let PDproto = {
         _PDat.playersconnected = _PDat.plname.length;
         _LPs.addPlayer(login_data);
         PDproto.grabbodies();
+        PDproto.pdatRefresh();
         // Debug Readouts:
         // _LPs.readout();
         PDproto.readout();
@@ -138,8 +160,9 @@ let PDproto = {
 
         //reset bodies data:
         _PDat.bodies = [];
+        PDproto.pdatRefresh();
         PDproto.grabbodies();
-        
+
         // Debug Readouts:
         // _LPs.readout();
         PDproto.readout();
@@ -156,6 +179,7 @@ let PDproto = {
         }
     },
     readout: function () {
+        PDproto.pdatRefresh();
         console.log('-=-=-[ _PDat:');
         // stringify is for smallest readout::
         // console.log(JSON.stringify(_PDat));
@@ -174,6 +198,25 @@ let PDproto = {
         // if you got here without hitting false, it's true:
         return true;
     },
+    pdatRefresh: function () {
+        //function to rebuild PDat:
+        _PDat.plname = [];
+        _PDat.plsid = [];
+        _PDat.plcolor = [];
+        _PDat.plstate = [];
+        _PDat.plscore = [];
+
+        loggedinplayers.forEach(function (P) {
+            _PDat.plname.push(P.name);
+            _PDat.plsid.push(P.sid);
+            _PDat.plcolor.push(P.color);
+            _PDat.plstate.push(P.state);
+            _PDat.plscore.push(P.score);
+        });
+
+        //        PDproto.readout();
+
+    }
 }
 
 function createPlayer(name, color, x, y, direction, socketid) {
@@ -182,8 +225,11 @@ function createPlayer(name, color, x, y, direction, socketid) {
         this.sid = socketid;
         this.name = name;
         this.color = color;
+        this.isAlive = true;
         this.vx = 0;
         this.vy = 0;
+        this.score = 0;
+        this.state = 'nostate';
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -194,21 +240,29 @@ function createPlayer(name, color, x, y, direction, socketid) {
             this.x = data[0];
             this.y = data[1];
             this.direction = data[2];
-
         };
 
         this.addtoBody = function () {
-            this.body.unshift(this.bodyDrawData());
-        }
+            if (this.isAlive) {
+                if (global._G.isCollision(this.x, this.y)) {
+                    this.isAlive = false;
+                    console.log(this.name + ' has died!');
+                } else {
+                    this.body.unshift(this.bodyDrawData());
+                }
+            }
+        };
 
         this.bodyDrawData = function () {
             return [this.x, this.y, this.color, this.direction];
-        }
+        };
 
         this.move = function () {
             this.x = this.x + this.vx;
             this.y = this.y + this.vy;
-            this.body.unshift(this.bodyDrawData());
+            this.addtoBody();
+            
+//            this.body.unshift(this.bodyDrawData());
         };
 
         this.setVelocity = function () {
@@ -307,6 +361,30 @@ global._G = {
     startRound: function () {
         _G.isStarted = true;
     },
+    isCollision: function (x, y) {
+        // inserted into the Player - addtoBody() function.
+//        console.log('isCollision data['+x+']['+y+']');
+        let dx = 49;
+        let dy = 33;
+
+        if (x < 1 || y < 1 || x > dx || y > dy) {
+            console.log('wall collision detected: ' + x + "," + y);
+            return true;
+        }
+
+//        PDproto.grabbodies();
+        _PDat.bodies.forEach(function (tiledata) {
+
+            if (tiledata[0] == x && tiledata[1] == y) {
+                console.log('collision detected: ' + x + "," + y);
+                return true;
+            }
+
+        });
+
+        return false;
+
+    },
     mainLoop: function () {
 
 
@@ -315,8 +393,8 @@ global._G = {
             global._G.movePlayers();
         }
 
-        
-//        io.emit('clear');
+
+        //        io.emit('clear');
         PDproto.grabbodies();
         io.emit('render', _PDat.bodies);
         // trying to sync score.
@@ -378,11 +456,11 @@ io.on('connection', function (socket) {
         /*        io.emit('setcookies');
                 io.emit('sync_players', _PDat);*/
     });
-    
-    socket.on('scoredata', function() {
-       sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat)
+
+    socket.on('scoredata', function () {
+        sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat)
     });
-    
+
     // -=-= Player Request Data:
     socket.on('req_draw_data', function () {
         PDproto.grabbodies();
