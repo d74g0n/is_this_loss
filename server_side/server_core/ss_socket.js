@@ -30,12 +30,10 @@ function quote_generator() {
 // quickie date function:
 global.datestamp = function () {
     let d = new Date().toLocaleTimeString();
-    return d;
+    return '[' + d + ']';
 }
 const _date = global.datestamp;
-
 // -=-=-=- [ Game Setup Information:
-
 // Players logics:
 let loggedinplayers = [];
 let _LPs = {
@@ -103,14 +101,11 @@ let _LPs = {
             loggedinplayers[player].addtoBody();
         }
     },
-    setState: function(index = 0, state = 'nostate') {
+    setState: function (index = 0, state = 'nostate') {
         loggedinplayers[index].state = state;
     },
 };
-// PlayerData for syncronizing clients:
-// should rebuild itself before each broadcast/sync:
 // This is 'Online player Summary Object'
-// TODO Rename -pl::
 let _PDat = {
     playersconnected: 0,
     plname: [],
@@ -120,6 +115,8 @@ let _PDat = {
     plscore: [],
     bodies: [],
 }
+// needed for terminal:
+global._PDat = _PDat;
 // functions helping the above process:
 let PDproto = {
     pllogin: function (login_data) {
@@ -204,16 +201,16 @@ let PDproto = {
         //        PDproto.readout();
 
     }
-    
-}
 
+}
+// player obj
 function createPlayer(name, color, x, y, direction, socketid) {
 
     function Player(name, color, x, y, direction, socketid) {
         this.sid = socketid;
         this.name = name;
         this.color = color;
-        this.isAlive = true;
+        this.isAlive = false;
         this.vx = 0;
         this.vy = 0;
         this.score = 0;
@@ -254,10 +251,8 @@ function createPlayer(name, color, x, y, direction, socketid) {
         };
 
         this.setVelocity = function () {
-
             this.vx = 0;
             this.vy = 0;
-
             switch (this.direction) {
                 case 'w':
                     this.vx = -1;
@@ -272,7 +267,6 @@ function createPlayer(name, color, x, y, direction, socketid) {
                     this.vy = 1;
                     break;
             }
-
         }
 
         this.init = function () {
@@ -289,7 +283,7 @@ function createPlayer(name, color, x, y, direction, socketid) {
     return new Player(name, color, x, y, direction, socketid);
 
 } // -=-=-=- createPlayerend
-
+// main game functions:
 global._G = {
     isStarted: false,
     // for keeping new-ready status from interfering with game:
@@ -310,10 +304,10 @@ global._G = {
     speed: 6, // 6index = 8 = 15fps
     roundspeed: 6,
     fastfactor: [1, 2, 3, 4, 5, 6, 8, 10],
-    slowfactor: [120, 60, 40, 30, 24, 20, 15, 12],
-    modolo: function (speed = 6) {
+    slowfactor: [120, 60, 40, 30, 24, 20, 15, 12, 10, 8, 6, 5, 4, 3, 2, 1],
+    modolo: function (speed = this.roundspeed) {
         _G.nextframe();
-        if (global._G.framenum % global._G.slowfactor[global._G.speed] == 0) {
+        if (global._G.framenum % global._G.slowfactor[global._G.roundspeed] == 0) {
             return true;
         } else {
             return false;
@@ -323,6 +317,7 @@ global._G = {
     startTimer: function (fps = _G.fps) {
         console.log('[_G][startTimer]');
         _G.timers.push(setInterval(_G.mainLoop, 1000 / fps));
+        _G.isStarted = true;
     },
     stopTimer: function (index = 0) {
         if (_G.timers[index]) {
@@ -333,6 +328,10 @@ global._G = {
         } else {
             console.log('[_G][stopTimer][DEBUG][NOTIMER TO STOP][ERR]');
         }
+    },
+    changeRoundSpeed: function (change = 0) {
+        console.log('[changeRoundSpeed][changefactor => ' + change + ']')
+        global._G.roundspeed = global._G.roundspeed + change;
     },
     checkforReadyPlayers: function () {
         let ready_count = 0;
@@ -348,30 +347,58 @@ global._G = {
         }
 
     },
+    checkforEmptyGame: function () {
+      if (_PDat.playersconnected <= 0)  {
+          return true;
+      } else {
+          return false;
+      }
+    },
     isAnybodyAlive: function () {
+        // this checks who is alive; then doubles as score setter.
         let alivecount = 0;
-        loggedinplayers.forEach(function(P){
+        loggedinplayers.forEach(function (P) {
             if (P.isAlive) {
                 alivecount++;
             }
         });
-        
-        if (alivecount == 0) {
-            console.log('[_G][isAnybodyAlive]=>[NOPE]');
+
+        if (alivecount == 1) {
+            console.log('[_G][isAnybodyAlive]=>[CALC WINNER SCORE]');
+            loggedinplayers.forEach(function (P) {
+                // find the remaining living dude:
+                if (P.isAlive) {
+                    //increment score:
+                    P.score++;
+                    P.isAlive = false;
+                }
+            });
             _G.stopTimer();
         }
-        
+
+        if (alivecount == 0) {
+            console.log('[_G][isAnybodyAlive]=>[NO SCORE GIVEN]');
+            _G.stopTimer();
+        }
+
     },
     startRound: function () {
+        // Players Become Alive Here:
+        let roundmsg = '[roundmsg][';
+        loggedinplayers.forEach(function (P) {
+            roundmsg = roundmsg + P.name + ']['
+            P.isAlive = true;
+        });
+        roundmsg = roundmsg + '][ARE ALIVE!]';
+        console.log(roundmsg);
         console.log('[socket][startRound] ALL PLAYERS READY SET GO!');
         console.log('do 3 second countdown');
-        
-        setTimeout(function(){
-            _G.isStarted = true;
+
+        setTimeout(function () {
             console.log('3,2,1...GO!');
             _G.startTimer();
-        }, 1000);
-        
+        }, 3000);
+
     },
     isCollision: function (x, y) {
         // inserted into the Player - addtoBody() function.
@@ -402,6 +429,10 @@ global._G = {
     },
     mainLoop: function () {
 
+        if (_G.checkforEmptyGame()) {
+            console.log('NOBODY PLAYING!');
+            _G.stopTimer();
+        }
 
 
         if (_G.modolo(_G.roundspeed)) {
@@ -430,14 +461,13 @@ const session_manager = function (socket) {
 // connetion event:
 io.on('connection', function (socket) {
     // future: insert logging:
-    var d = new Date();
-    console.log("[NEWID][" + socket.id.toString() + "][" + d.toLocaleTimeString() + " ] Clients Connected: " + io.engine.clientsCount);
+    //    var d = new Date();
+    console.log("[connect=>][" + socket.id.toString() + "]" + _date() + " Clients Connected: " + io.engine.clientsCount);
     //add's newest client in while emitting that it has done so to new client only:
     // session_manager(socket);
     session_manager(socket).emit('console_message', '[CONNECTED]');
     sessionsConnections[socket.handshake.sessionID].emit('connection_quote', quote_generator());
     //  -=-=-=-=- end of 'on connection' core ^    
-
 
     socket.on('disconnect', function () {
         var d = new Date();
@@ -458,7 +488,7 @@ io.on('connection', function (socket) {
     // -=-= Create Player / Enter Game Pool:
     socket.on('login', function (player_data) {
         /* [ legend:: player_data = .name .color .sid . state ]*/
-//        console.log('[' + player_data.sid + ']');
+        //        console.log('[' + player_data.sid + ']');
         console.log('[io_socket][on.LOGIN][' + JSON.stringify(player_data) + ']');
         // this:
         // sessionsConnections[socket.handshake.sessionID].emit('console_message', 'REGISTERED');
@@ -471,7 +501,7 @@ io.on('connection', function (socket) {
         /*        io.emit('setcookies');
                 io.emit('sync_players', _PDat);*/
     });
-
+    // Messy:
     socket.on('scoredata', function () {
         sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat);
     });
@@ -485,16 +515,16 @@ io.on('connection', function (socket) {
     socket.on('mutate_state', function (state = undefined) {
         let sid = socket.id;
         let loggedinplayerindex = _PDat.plsid.indexOf(sid);
-        
+
         _LPs.setState(loggedinplayerindex, state);
         PDproto.pdatRefresh();
 
         PDproto.readout(); // VERBOSE
-     
+
         console.log('[io][P#' + loggedinplayerindex + '][statechange:][' + state + ']');
         _G.checkforReadyPlayers();
-        
-         sessionsConnections[socket.handshake.sessionID].emit('rx_mutate_state', state);
+
+        sessionsConnections[socket.handshake.sessionID].emit('rx_mutate_state', state);
 
         //client updates State (ready. unready, etc) 
     });

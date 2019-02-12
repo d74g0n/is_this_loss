@@ -35,8 +35,6 @@ let roundcode = function (global) {
         clog('[LOAD][initCanvas]|[Dimensions:(W:' + canvas.width + ' H:' + canvas.height + ')]');
         return canvas.getContext('2d');
     })();
-    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ CANVAS SECTION ]
-
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- [ DRAWING SECTION ]
     let _D = {
         version: 'client drawing engine',
@@ -136,9 +134,6 @@ let roundcode = function (global) {
 
     };
     // -=-=-=-=-=-=-=-=-=-=-=-=-=--= [ LIFE BEGINS: ]
-
-    // -=-=- NEW WIPS::
-
     global._SE = {
         version: 'server/socket engine',
         drawBodies: function (bodydata) {
@@ -199,8 +194,6 @@ let roundcode = function (global) {
 
     }
     const _SE = global._SE;
-
-
     // -=-=-=-=-=-=-=-=-=-=-=-=- [ CONTROLLER INPUT READS ]
     document.onkeydown = keychecker;
 
@@ -255,13 +248,11 @@ let roundcode = function (global) {
 
 
     }
-
     // -=-=-=-=-=-=-=-=-=-=-=-=- [ EXECUTE ON LOAD:
     _D.LEVEL_splashscreen();
 
 } // -=-= [ end of 'roundcode' Enclosure.
 // -=-= [ outside of round.js closure;
-
 
 socket.on('render', function (data) {
         global._SE.fadelogic();
@@ -274,45 +265,15 @@ socket.on('clear', function () {
 
 BIN.buts.join = function () {
 
-
     socket.emit('req_draw_data');
     socket.emit('mutate_state', 'ready');
-
-
 
 }
 
 socket.on('sync_players', function (data) {
-
 //    global._SE.drawScore(data);
-
 });
 
 socket.on('post_scores', function (scoredata) {
-
 //    global._SE.drawScore(scoredata);
-
 });
-
-// ANALYZE THIS IS ALIVE::: FOR SS::
-//  dirty framecount for dirty game loot.
-/*
-
-    function dirty_Gameloop() {
-
-
-        console.log('-=-=- [ FRAME ]-=-=-');
-
-        if (_alivecount() == -1 && timers[0]) {
-            console.log('EVERYBODY DEAD!');
-            console.log('DO NEXT ROUND SHIT');
-            console.log('FRAME: ' + game_state.framenum);
-
-            console.log('TIMER REMOVED');
-            clearInterval(timers[0]);
-        }
-
-
-    } // ANALYSE AND REMOVE CANGUT!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-*/
