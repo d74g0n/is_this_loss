@@ -128,7 +128,9 @@ socket.on('draw_data', function(data){
 });
 
 
-
+socket.on('rx_mutate_state', function (data) {
+    global.setCookie('state', 'ready', 1);
+});
 
 
 

@@ -1,24 +1,10 @@
 var fs = require('fs');
 /*
 notes:
+- Timerstarts is round flow.
+- Timerends is end of game logic - will need to reform for next round.
+- scoreboard and messaging (onscreen) systems imparative
 
-- spawn point set random crash? (seems like out of range stuff)
-- add score to player obj.
-- PData score process.
-- kinda hate the plname namenclature = -pl's from alias's
-
-- Quote generator vs json data && it's own JS module.
-
-- scoreboard drawing
-
-- functionally redesign the PDat to rebuild itself before each from players/logged in players.
-
-- working on syncronizing score data // posting to html is failing in current design.
-
-- need to breakup socket and game logic into seperate JS files.
-
-- it appears as if I will have to build this using a web-session object; attaching players etc...
-   [ the greet status vs the ready status reveals greet is very much in limbo in servers logic mostly running possible interferences]
 */
 // -=-=-=-=-=-=- [ SS QUOTE GENERATOR
 function quote_generator() {
@@ -116,7 +102,10 @@ let _LPs = {
             loggedinplayers[player].setVelocity();
             loggedinplayers[player].addtoBody();
         }
-    }
+    },
+    setState: function(index = 0, state = 'nostate') {
+        loggedinplayers[index].state = state;
+    },
 };
 // PlayerData for syncronizing clients:
 // should rebuild itself before each broadcast/sync:
@@ -215,6 +204,7 @@ let PDproto = {
         //        PDproto.readout();
 
     }
+    
 }
 
 function createPlayer(name, color, x, y, direction, socketid) {
@@ -245,6 +235,7 @@ function createPlayer(name, color, x, y, direction, socketid) {
                 if (global._G.isCollision(this.x, this.y)) {
                     this.isAlive = false;
                     console.log('[this.addtoBody()] ' + this.name + ' has died!');
+                    _G.isAnybodyAlive();
                 } else {
                     this.body.unshift(this.bodyDrawData());
                 }
@@ -330,12 +321,17 @@ global._G = {
     },
     timers: [],
     startTimer: function (fps = _G.fps) {
-        _G.timers.push(setInterval(_G.mainLoop, 1000 / _G.fps));
+        console.log('[_G][startTimer]');
+        _G.timers.push(setInterval(_G.mainLoop, 1000 / fps));
     },
     stopTimer: function (index = 0) {
         if (_G.timers[index]) {
+            console.log('[_G][stopTimer]');
+            _G.isStarted = false;
             clearInterval(_G.timers[index]);
             _G.timers.pop();
+        } else {
+            console.log('[_G][stopTimer][DEBUG][NOTIMER TO STOP][ERR]');
         }
     },
     checkforReadyPlayers: function () {
@@ -345,18 +341,37 @@ global._G = {
                 ready_count++;
             }
         });
-        //        console.log('[ready_count:]' + ready_count);
 
         if (ready_count == loggedinplayers.length) {
-            // START GAME.
-            console.log('ALL PLAYERS READY SET GO!');
+            console.log('[checkforReadyPlayers][calling=>][startRound]');
+            global._G.startRound();
         }
 
-        //        return ready_count;
-
+    },
+    isAnybodyAlive: function () {
+        let alivecount = 0;
+        loggedinplayers.forEach(function(P){
+            if (P.isAlive) {
+                alivecount++;
+            }
+        });
+        
+        if (alivecount == 0) {
+            console.log('[_G][isAnybodyAlive]=>[NOPE]');
+            _G.stopTimer();
+        }
+        
     },
     startRound: function () {
-        _G.isStarted = true;
+        console.log('[socket][startRound] ALL PLAYERS READY SET GO!');
+        console.log('do 3 second countdown');
+        
+        setTimeout(function(){
+            _G.isStarted = true;
+            console.log('3,2,1...GO!');
+            _G.startTimer();
+        }, 1000);
+        
     },
     isCollision: function (x, y) {
         // inserted into the Player - addtoBody() function.
@@ -443,7 +458,7 @@ io.on('connection', function (socket) {
     // -=-= Create Player / Enter Game Pool:
     socket.on('login', function (player_data) {
         /* [ legend:: player_data = .name .color .sid . state ]*/
-        console.log('[' + player_data.sid + ']');
+//        console.log('[' + player_data.sid + ']');
         console.log('[io_socket][on.LOGIN][' + JSON.stringify(player_data) + ']');
         // this:
         // sessionsConnections[socket.handshake.sessionID].emit('console_message', 'REGISTERED');
@@ -470,9 +485,16 @@ io.on('connection', function (socket) {
     socket.on('mutate_state', function (state = undefined) {
         let sid = socket.id;
         let loggedinplayerindex = _PDat.plsid.indexOf(sid);
-        _PDat.plstate[loggedinplayerindex] = state;
+        
+        _LPs.setState(loggedinplayerindex, state);
+        PDproto.pdatRefresh();
+
+        PDproto.readout(); // VERBOSE
+     
         console.log('[io][P#' + loggedinplayerindex + '][statechange:][' + state + ']');
         _G.checkforReadyPlayers();
+        
+         sessionsConnections[socket.handshake.sessionID].emit('rx_mutate_state', state);
 
         //client updates State (ready. unready, etc) 
     });
