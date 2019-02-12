@@ -45,11 +45,17 @@ let _LPs = {
     },
     addPlayer: function (player_data) {
         // adds player to loggedinplayers::
-        let plindex = (_PDat.plsid.length - 1);
+        // old messy::
+//        let plindex = (_PDat.plsid.length - 1);
         let x = 0;
         let y = 0;
         let direction = 0;
-        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
+        // old messy::
+//        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
+        loggedinplayers.push(createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid));
+        
+        
+        // move to all players ready::
         _LPs.setRoundSpawnPoints();
 
 
@@ -172,10 +178,13 @@ let PDproto = {
     },
     checkAllClientStates: function (state = 'ready') {
         // used for checking readyup and players deaths.
+        _PDat.pdatRefresh();
         _PDat.plstate.forEach(function (data) {
-            if (state == data) {} else {
+            if (state == data) {
+                
+            } else {
                 console.log('state:' + state + ' vs data: ' + data + ' NOMATCH FALSE');
-                // break out of checkState with false if anything false:
+                // break out of checkAllClientStates with false if anything false:
                 return false;
             }
         });
@@ -290,15 +299,35 @@ function createPlayer(name, color, x, y, direction, socketid) {
 
 } // -=-=-=- createPlayerend
 // main game functions:
+
+global._RULES = {
+    hasLengthTracking: false,
+    starting_pl_Length: 1,
+    hasLengthGrowing: false,
+    LengthGrowRate: 1000, //timers?  TBA
+    hasDeathDelete: false,
+    hasWalls: false,
+    ruleRando: function () {
+        //do random bool on most of global.RULES
+        // TADO
+    },
+}
+
 global._G = {
     isStarted: false,
     // for keeping new-ready status from interfering with game:
     isActive: false,
     framenum: 0,
     fps: 120,
+    seconds: 0,
+    isSecond: false,
     nextframe: function () {
         if (_G.framenum > _G.fps) {
             _G.framenum = 1;
+            _G.seconds++;
+            _G.isSecond = true;
+        } else {
+            _G.isSecond = false;
         }
         return _G.framenum++;
     },
@@ -349,6 +378,8 @@ global._G = {
 
         if (ready_count == loggedinplayers.length) {
             console.log('[checkforReadyPlayers][calling=>][startRound]');
+            // WIP::
+            _LPs.setRoundSpawnPoints();
             global._G.startRound();
         }
 
@@ -508,8 +539,21 @@ io.on('connection', function (socket) {
                 io.emit('sync_players', _PDat);*/
     });
     // Messy:
-    socket.on('scoredata', function () {
-        sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat);
+    socket.on('getscoredata', function () {
+        
+        // broadcast level emit:
+        let SBlist = [];
+        loggedinplayers.forEach(function(P){
+            let ptrunk = {};
+            ptrunk.name = P.name;
+            ptrunk.color = P.color;
+            ptrunk.score = P.score;
+            SBlist.push(ptrunk);
+        });
+        console.log('LISTLIST:::');
+        console.log(SBlist);
+        io.emit('post_scores', SBlist);
+//        sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat);
     });
 
     // -=-= Player Request Data:

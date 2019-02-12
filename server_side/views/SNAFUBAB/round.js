@@ -188,6 +188,7 @@ let roundcode = function (global) {
         fadeBg: function () {
             _D.GlobalAlpha(0.1);
             c.fillStyle = game_defaults.bg;
+            // this fillRect only covered the logo - which left snakes with ghost tails.
 //            c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
             c.fillRect(240, 100, canvas.width , canvas.height);
             _D.GlobalAlpha(1);
@@ -214,37 +215,37 @@ let roundcode = function (global) {
         }
 
         if (e.key == 'ArrowDown') {
-            console.log('ArrowDown Triggered');
             socket.emit('controllerdata', 's');
+            console.log('ArrowDown =>SENT');
         }
         if (e.key == 'ArrowUp') {
-            console.log('ArrowUp Triggered');
             socket.emit('controllerdata', 'n');
+            console.log('ArrowUp =>SENT');
         }
         if (e.key == 'ArrowLeft') {
-            console.log('ArrowLeft Triggered');
             socket.emit('controllerdata', 'w');
+            console.log('ArrowLeft =>SENT');
         }
         if (e.key == 'ArrowRight') {
-            console.log('ArrowRight Triggered');
             socket.emit('controllerdata', 'e');
+            console.log('ArrowRight =>SENT');
         }
 
         if (e.key == 'w') {
             socket.emit('controllerdata', 'n');
-            console.log('w Triggered');
+            console.log('north =>SENT');
         }
         if (e.key == 'a') {
             socket.emit('controllerdata', 'w');
-            console.log('a Triggered');
+            console.log('west =>SENT');
         }
         if (e.key == 's') {
             socket.emit('controllerdata', 's');
-            console.log('s Triggered');
+            console.log('south =>SENT');
         }
         if (e.key == 'd') {
             socket.emit('controllerdata', 'e');
-            console.log('d Triggered');
+            console.log('east =>SENT');
         }
 
 
@@ -268,6 +269,10 @@ BIN.buts.join = function () {
 
     socket.emit('req_draw_data');
     socket.emit('mutate_state', 'ready');
+    socket.emit('getscoredata');
+    
+    
+//    document.getElementById('pn0').innerHTML = '55';
 
 }
 
@@ -276,5 +281,19 @@ socket.on('sync_players', function (data) {
 });
 
 socket.on('post_scores', function (scoredata) {
-//    global._SE.drawScore(scoredata);
+
+    let Score = 'ps';
+    let Name = 'pn';
+    let sindex = 0;
+    
+    scoredata.forEach(function(P){
+        //send me player list with SB data.
+          document.getElementById('pn' + sindex).innerHTML = P.name;
+          document.getElementById('pn' + sindex).style.color = P.color;
+          document.getElementById('ps' + sindex).innerHTML = P.score;
+          document.getElementById('ps' + sindex).style.color = P.color;
+        sindex++;
+    });
+    
+    
 });
