@@ -169,7 +169,7 @@ let roundcode = function (global) {
         },
         fadedesc: 'little fade then dont system:',
         useage: 'set to True for it to cycle through',
-        fadetick: 180,
+        fadetick: 10,
         isFade: true,
         fadelogic: function () {
             if (global._SE.isFade) {
@@ -188,7 +188,8 @@ let roundcode = function (global) {
         fadeBg: function () {
             _D.GlobalAlpha(0.1);
             c.fillStyle = game_defaults.bg;
-            c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
+//            c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
+            c.fillRect(240, 100, canvas.width , canvas.height);
             _D.GlobalAlpha(1);
         },
 

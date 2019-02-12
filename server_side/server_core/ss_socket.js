@@ -219,6 +219,7 @@ function createPlayer(name, color, x, y, direction, socketid) {
         this.y = y;
         this.direction = direction;
         this.body = [];
+        this.length = 4;
         this.spawnpointindex = undefined;
         this.setspawndata = function (data) {
             this.body = [];
@@ -237,6 +238,11 @@ function createPlayer(name, color, x, y, direction, socketid) {
                     this.body.unshift(this.bodyDrawData());
                 }
             }
+            // if lengthmode::
+            if (this.length < this.body.length) {
+                this.body.pop();
+            }
+            
         };
 
         this.bodyDrawData = function () {
