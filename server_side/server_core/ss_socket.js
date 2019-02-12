@@ -74,9 +74,9 @@ let _LPs = {
         loggedinplayers.splice(index, 1);
     },
     readout: function () {
-        console.log('-=-=-[loggedinplayers:');
+        console.log('-=-=-[_LPs.readout()]-=-=-');
         console.log(loggedinplayers);
-        console.log('-=-=-[end_LIPS_readout()]-=-=-');
+        //        console.log('-=-=-[_LPs.readout()]-=-=-');
     },
     shuffle: function (array = [0, 1, 2, 3, 4, 5, 6, 7]) {
         var currentIndex = array.length,
@@ -115,8 +115,6 @@ let _LPs = {
             loggedinplayers[player].setspawndata(spawning_data[roundspawnorder[player]]);
             loggedinplayers[player].setVelocity();
             loggedinplayers[player].addtoBody();
-            /*            console.log('[ln146][socket]setRoundSpawnPoints -=-=-=-=-=-=-=-=-=-=-=-=-=-');
-                        console.log(loggedinplayers[player]);*/
         }
     }
 };
@@ -180,11 +178,11 @@ let PDproto = {
     },
     readout: function () {
         PDproto.pdatRefresh();
-        console.log('-=-=-[ _PDat:');
+        console.log('-=-=-[PDproto.readout()]-=-=-');
         // stringify is for smallest readout::
         // console.log(JSON.stringify(_PDat));
         console.log(_PDat);
-        console.log('-=-=-[end _PDat readout()]-=-=-');
+        console.log('-=-=-[end PDproto.readout()]-=-=-');
     },
     checkAllClientStates: function (state = 'ready') {
         // used for checking readyup and players deaths.
@@ -246,7 +244,7 @@ function createPlayer(name, color, x, y, direction, socketid) {
             if (this.isAlive) {
                 if (global._G.isCollision(this.x, this.y)) {
                     this.isAlive = false;
-                    console.log(this.name + ' has died!');
+                    console.log('[this.addtoBody()] ' + this.name + ' has died!');
                 } else {
                     this.body.unshift(this.bodyDrawData());
                 }
@@ -261,8 +259,7 @@ function createPlayer(name, color, x, y, direction, socketid) {
             this.x = this.x + this.vx;
             this.y = this.y + this.vy;
             this.addtoBody();
-            
-//            this.body.unshift(this.bodyDrawData());
+
         };
 
         this.setVelocity = function () {
@@ -363,24 +360,27 @@ global._G = {
     },
     isCollision: function (x, y) {
         // inserted into the Player - addtoBody() function.
-//        console.log('isCollision data['+x+']['+y+']');
+        //        console.log('isCollision data['+x+']['+y+']');
         let dx = 49;
         let dy = 33;
 
         if (x < 1 || y < 1 || x > dx || y > dy) {
-            console.log('wall collision detected: ' + x + "," + y);
+            console.log('[socket][collision][wall]: [' + x + "," + y + ']');
             return true;
         }
 
-//        PDproto.grabbodies();
+        let hitOtherBody = false;
+        //        PDproto.grabbodies();
         _PDat.bodies.forEach(function (tiledata) {
-
             if (tiledata[0] == x && tiledata[1] == y) {
-                console.log('collision detected: ' + x + "," + y);
-                return true;
+                hitOtherBody = true;
             }
-
         });
+
+        if (hitOtherBody) {
+            console.log('[socket][collision][body]: [' + x + "," + y + ']');
+            return true;
+        }
 
         return false;
 
@@ -458,7 +458,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('scoredata', function () {
-        sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat)
+        sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat);
     });
 
     // -=-= Player Request Data:
@@ -491,7 +491,6 @@ io.on('connection', function (socket) {
         let newdirection = data;
         let loggedinplayerindex = _PDat.plsid.indexOf(sid);
         let ActivePlayer = loggedinplayers[loggedinplayerindex];
-
 
         if (data == 'n') {
             if (ActivePlayer.direction != 's') {
