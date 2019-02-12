@@ -1,9 +1,8 @@
 var fs = require('fs');
 /*
 notes:
-- Timerstarts is round flow.
-- Timerends is end of game logic - will need to reform for next round.
-- scoreboard and messaging (onscreen) systems imparative
+- People dying on same frame have bias to first logged in.
+   sol:  track frame of death and compare for score/collsions logic.
 
 */
 // -=-=-=-=-=-=- [ SS QUOTE GENERATOR
@@ -46,19 +45,13 @@ let _LPs = {
     addPlayer: function (player_data) {
         // adds player to loggedinplayers::
         // old messy::
-//        let plindex = (_PDat.plsid.length - 1);
+        let plindex = (_PDat.plsid.length - 1);
         let x = 0;
         let y = 0;
         let direction = 0;
         // old messy::
-//        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
-        loggedinplayers.push(createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid));
-        
-        
-        // move to all players ready::
-        _LPs.setRoundSpawnPoints();
-
-
+        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
+//        _LPs.setRoundSpawnPoints();
     },
     removePlayer: function (index) {
         loggedinplayers.splice(index, 1);
@@ -425,6 +418,7 @@ global._G = {
         loggedinplayers.forEach(function (P) {
             roundmsg = roundmsg + P.name + ']['
             P.isAlive = true;
+            P.state = 'playing';
         });
         roundmsg = roundmsg + '][ARE ALIVE!]';
         console.log(roundmsg);

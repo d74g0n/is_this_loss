@@ -202,6 +202,7 @@ td  {
     padding-top: 4px;
     font-size: 64px;
     color: gold;
+    color: green;
     text-shadow: 0px 0px 2px 2px black;
 }
 
@@ -211,6 +212,7 @@ td  {
     margin: 0px;
     font-size: 12px;
     color: white;
+    color: green;
     text-shadow: 0px 0px 2px 2px black;
  }
 
