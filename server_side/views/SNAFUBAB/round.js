@@ -1,4 +1,3 @@
-
 let roundcode = function (global) {
     const clog = function (x) {
         if (true) {
@@ -189,8 +188,8 @@ let roundcode = function (global) {
             _D.GlobalAlpha(0.1);
             c.fillStyle = game_defaults.bg;
             // this fillRect only covered the logo - which left snakes with ghost tails.
-//            c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
-            c.fillRect(240, 100, canvas.width , canvas.height);
+            //            c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
+            c.fillRect(240, 100, canvas.width, canvas.height);
             _D.GlobalAlpha(1);
         },
 
@@ -257,27 +256,67 @@ let roundcode = function (global) {
 // -=-= [ outside of round.js closure;
 
 socket.on('render', function (data) {
-        global._SE.fadelogic();
-        global._SE.drawAll(data);
+    global._SE.fadelogic();
+    global._SE.drawAll(data);
 });
 
 socket.on('clear', function () {
-//    global._SE.fadelogic();
+    //    global._SE.fadelogic();
 });
 
 BIN.buts.join = function () {
 
-//    socket.emit('req_draw_data');
+    //    socket.emit('req_draw_data');
     socket.emit('mutate_state', 'ready');
     socket.emit('getscoredata');
-    
-    
-//    document.getElementById('pn0').innerHTML = '55';
+
+
+    document.getElementById('btn_join').style.display = 'none';
+
+    //    document.getElementById('pn0').innerHTML = '55';
 
 }
 
+
+global._ConsoleBar = {
+    maincellbot: document.getElementById('round_celldata'),
+    threetwoonego: function (num = 3) {
+        let countdown = num;
+       document.getElementById('round_celldata').style.color = 'gold';
+       document.getElementById('round_celldata').style.fontSize = '64px';
+        let timer = setInterval(function () {
+           document.getElementById('round_celldata').innerHTML = countdown.toString(); 
+//            console.log('ROUNDCOUNT:');
+//            console.log(countdown);
+            countdown--;
+            if (countdown <= 0) {
+                document.getElementById('round_celldata').innerHTML = "GO!"; 
+//                 console.log('GO!');
+//                global._ConsoleBar.maincellbot.innerHTML = "GO!"; 
+                clearInterval(timer);
+            }
+        }, 1000);
+        
+        
+        
+    },
+}
+
+const _CB = global._ConsoleBar;
+
+
+
+
+
+
+
 socket.on('sync_players', function (data) {
-//    global._SE.drawScore(data);
+    //    global._SE.drawScore(data);
+});
+
+socket.on('startcountdown', function (data) {
+    console.log('startcountdown HIT');
+    global._ConsoleBar.threetwoonego(data);
 });
 
 socket.on('post_scores', function (scoredata) {
@@ -285,15 +324,15 @@ socket.on('post_scores', function (scoredata) {
     let Score = 'ps';
     let Name = 'pn';
     let sindex = 0;
-    
-    scoredata.forEach(function(P){
+
+    scoredata.forEach(function (P) {
         //send me player list with SB data.
-          document.getElementById('pn' + sindex).innerHTML = P.name;
-          document.getElementById('pn' + sindex).style.color = P.color;
-          document.getElementById('ps' + sindex).innerHTML = P.score;
-          document.getElementById('ps' + sindex).style.color = P.color;
+        document.getElementById('pn' + sindex).innerHTML = P.name;
+        document.getElementById('pn' + sindex).style.color = P.color;
+        document.getElementById('ps' + sindex).innerHTML = P.score;
+        document.getElementById('ps' + sindex).style.color = P.color;
         sindex++;
     });
-    
-    
+
+
 });

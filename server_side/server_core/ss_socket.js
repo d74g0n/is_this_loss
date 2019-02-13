@@ -42,7 +42,7 @@ let _LPs = {
             loggedinplayers[player].move();
         }
     },
-    addPlayer: function (player_data) {
+    addPlayer: function (player_data, ssid) {
         // adds player to loggedinplayers::
         // old messy::
         let plindex = (_PDat.plsid.length - 1);
@@ -50,7 +50,9 @@ let _LPs = {
         let y = 0;
         let direction = 0;
         // old messy::
-        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid);
+        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, player_data.sid, ssid);
+        //fail::
+//        loggedinplayers[plindex] = createPlayer(player_data.name, player_data.color, x, y, direction, ssid);
 //        _LPs.setRoundSpawnPoints();
     },
     removePlayer: function (index) {
@@ -118,13 +120,13 @@ let _PDat = {
 global._PDat = _PDat;
 // functions helping the above process:
 let PDproto = {
-    pllogin: function (login_data) {
+    pllogin: function (login_data, ssid) {
         _PDat.plname.push(login_data.name);
         _PDat.plcolor.push(login_data.color);
         _PDat.plsid.push(login_data.sid);
         _PDat.plstate.push(login_data.state);
         _PDat.playersconnected = _PDat.plname.length;
-        _LPs.addPlayer(login_data);
+        _LPs.addPlayer(login_data, ssid);
         PDproto.grabbodies();
         PDproto.pdatRefresh();
         // Debug Readouts:
@@ -163,6 +165,7 @@ let PDproto = {
     },
     readout: function () {
         PDproto.pdatRefresh();
+//        _PDat.plsid = [];
         console.log('-=-=-[PDproto.readout()]-=-=-');
         // stringify is for smallest readout::
         // console.log(JSON.stringify(_PDat));
@@ -206,10 +209,12 @@ let PDproto = {
 
 }
 // player obj
-function createPlayer(name, color, x, y, direction, socketid) {
+function createPlayer(name, color, x, y, direction, socketid, ssid) {
 
-    function Player(name, color, x, y, direction, socketid) {
+    function Player(name, color, x, y, direction, socketid, ssid) {
         this.sid = socketid;
+        // plop a whole socket on there for emit easy.
+        this.ssid = ssid;
         this.name = name;
         this.color = color;
         this.isAlive = false;
@@ -292,11 +297,12 @@ function createPlayer(name, color, x, y, direction, socketid) {
 
 } // -=-=-=- createPlayerend
 // main game functions:
-
+// unused but TADO:
 global._RULES = {
     hasLengthTracking: false,
     starting_pl_Length: 1,
     hasLengthGrowing: false,
+    hasAIFillspawns: false,
     LengthGrowRate: 1000, //timers?  TBA
     hasDeathDelete: false,
     hasWalls: false,
@@ -424,9 +430,18 @@ global._G = {
         console.log(roundmsg);
         console.log('[socket][startRound] ALL PLAYERS READY SET GO!');
         console.log('do 3 second countdown');
+        
+        loggedinplayers.forEach(function(P){
+//            console.log(P.state);
+            if (P.state == 'playing') {
+                sessionsConnections[P.ssid].emit('startcountdown', 3);
+            }
+            
+            
+        });
 
         setTimeout(function () {
-            console.log('3,2,1...GO!');
+            console.log('[ASSUMING CLIENT PAUSE]=> 3,2,1...GO!');
             _G.startTimer();
         }, 3000);
 
@@ -487,6 +502,7 @@ console.log('[ss_socket][Listening]');
 // manages socket ids:
 const session_manager = function (socket) {
     sessionsConnections[socket.handshake.sessionID] = socket;
+//    console.log(sessionsConnections);
     return sessionsConnections[socket.handshake.sessionID];
 }
 // connetion event:
@@ -497,6 +513,7 @@ io.on('connection', function (socket) {
     //add's newest client in while emitting that it has done so to new client only:
     // session_manager(socket);
     session_manager(socket).emit('console_message', '[CONNECTED]');
+    
     sessionsConnections[socket.handshake.sessionID].emit('connection_quote', quote_generator());
     //  -=-=-=-=- end of 'on connection' core ^    
 
@@ -524,9 +541,13 @@ io.on('connection', function (socket) {
         // this:
         // sessionsConnections[socket.handshake.sessionID].emit('console_message', 'REGISTERED');
         // send 'console_pm' ::
+        
+//        console.log(sessionsConnections[socket.handshake.sessionID]);
         global.sendCPM(socket.handshake.sessionID, "[LOGGED-IN]");
 
-        PDproto.pllogin(player_data);
+        PDproto.pllogin(player_data, socket.handshake.sessionID);
+//        ?? WIP WIPWIPWIPWIPWIPWIPIWIP
+        
         sessionsConnections[socket.handshake.sessionID].emit('setcookies');
         sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat); // maybe BROADCAST level
         /*        io.emit('setcookies');
@@ -558,6 +579,7 @@ io.on('connection', function (socket) {
     // -=-= Player Updating State: (greet, ready, playing)
     socket.on('mutate_state', function (state = undefined) {
         let sid = socket.id;
+//        let sid = sessionsConnections[socket.handshake.sessionID];
         let loggedinplayerindex = _PDat.plsid.indexOf(sid);
 
         _LPs.setState(loggedinplayerindex, state);

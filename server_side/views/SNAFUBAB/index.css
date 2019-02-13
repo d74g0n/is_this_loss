@@ -265,7 +265,7 @@ td  {
 
 #consolebar {
     color: white;
-    background:black;
+    background:transparent;
     max-width: 870px; 
     max-height: 128px;
     height: 120px;
@@ -288,6 +288,7 @@ td  {
     align-content: center;
     background: black;
     border: 1px solid gold;
+    height: 64px;
 }
 
 #round_celltop {
