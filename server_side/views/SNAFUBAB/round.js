@@ -267,7 +267,7 @@ socket.on('clear', function () {
 
 BIN.buts.join = function () {
 
-    socket.emit('req_draw_data');
+//    socket.emit('req_draw_data');
     socket.emit('mutate_state', 'ready');
     socket.emit('getscoredata');
     

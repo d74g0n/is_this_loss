@@ -118,9 +118,7 @@ button {
     transition: 0.2s;
 }
 
-#btn_join {
-    display: none;
-}
+
 
 #topper {
     background: black;
@@ -236,13 +234,14 @@ td  {
         
 }
 
+/*
 #score_li {
     margin: 10px;
     padding-left: 8px;
     padding-right: 8px;
     float: left;
     display: block;
-    /*    height: 50px;*/
+        height: 50px;
     background: transparent;
     width: auto;
     max-width: 195px;
@@ -250,4 +249,51 @@ td  {
     padding-top: 8px;
     padding-bottom: 8px;
     border: 2px solid black;
+}
+*/
+
+#console_div {
+    display: none;
+    margin-top: 20px;
+
+}
+
+#btn_join {
+    display: none;
+    align-self: center;
+}
+
+#consolebar {
+    color: white;
+    background:black;
+    max-width: 870px; 
+    max-height: 128px;
+    height: 120px;
+    border: 2px solid darkgreen;
+    box-shadow: 0px 0px 2px 2px darkgreen;
+  
+}
+
+.console_top {
+    color: darkred;
+}
+
+.console_bottom {
+    color: red;
+    align-content: center;
+    align-items: center;
+}
+
+#round_celldata {
+    align-content: center;
+    background: black;
+    border: 1px solid gold;
+}
+
+#round_celltop {
+    background: black;
+    color: red;
+    font-size: 32px;
+    border: 1px solid gold;
+
 }
