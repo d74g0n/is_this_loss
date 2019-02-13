@@ -422,7 +422,7 @@ global._G = {
         // Players Become Alive Here:
         let roundmsg = '[roundmsg][';
         loggedinplayers.forEach(function (P) {
-            roundmsg = roundmsg + P.name + ']['
+            roundmsg = roundmsg + P.name + '][';
             P.isAlive = true;
             P.state = 'playing';
         });
@@ -430,15 +430,15 @@ global._G = {
         console.log(roundmsg);
         console.log('[socket][startRound] ALL PLAYERS READY SET GO!');
         console.log('do 3 second countdown');
-        
-        loggedinplayers.forEach(function(P){
+//        
+//        loggedinplayers.forEach(function(P){
 //            console.log(P.state);
-            if (P.state == 'playing') {
-                sessionsConnections[P.ssid].emit('startcountdown', 3);
-            }
+////            if (P.state == 'playing') {
+//                sessionsConnections[P.ssid].emit('startcountdown', 3);
+            io.emit('startcountdown', 3);
             
-            
-        });
+//            }            
+//        });
 
         setTimeout(function () {
             console.log('[ASSUMING CLIENT PAUSE]=> 3,2,1...GO!');

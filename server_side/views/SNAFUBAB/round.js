@@ -317,7 +317,9 @@ socket.on('sync_players', function (data) {
 
 socket.on('startcountdown', function (data) {
     console.log('startcountdown HIT');
+    
     global._ConsoleBar.threetwoonego(data);
+    
 });
 
 socket.on('post_scores', function (scoredata) {
