@@ -443,7 +443,7 @@ global._G = {
         setTimeout(function () {
             console.log('[ASSUMING CLIENT PAUSE]=> 3,2,1...GO!');
             _G.startTimer();
-        }, 3000);
+        }, 4000);
 
     },
     isCollision: function (x, y) {

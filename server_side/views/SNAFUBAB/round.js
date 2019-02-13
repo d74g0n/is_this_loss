@@ -279,26 +279,27 @@ BIN.buts.join = function () {
 
 
 global._ConsoleBar = {
+    writeToBottom: function(msg = 'ERR', color = 'gold', fontsize = '60px') {
+        document.getElementById('round_celldata').innerHTML = msg;
+        document.getElementById('round_celldata').style.color = color;
+        document.getElementById('round_celldata').style.fontSize = fontsize;
+    },
     maincellbot: document.getElementById('round_celldata'),
-    threetwoonego: function (num = 3) {
+    threetwoonego: function (num) {
         let countdown = num;
-       document.getElementById('round_celldata').style.color = 'gold';
-       document.getElementById('round_celldata').style.fontSize = '64px';
+        /*document.getElementById('round_celldata').style.color = 'gold';
+        document.getElementById('round_celldata').style.fontSize = '60px';*/
         let timer = setInterval(function () {
-           document.getElementById('round_celldata').innerHTML = countdown.toString(); 
-//            console.log('ROUNDCOUNT:');
-//            console.log(countdown);
-            countdown--;
-            if (countdown <= 0) {
-                document.getElementById('round_celldata').innerHTML = "GO!"; 
-//                 console.log('GO!');
-//                global._ConsoleBar.maincellbot.innerHTML = "GO!"; 
+            if (countdown == 0) {
                 clearInterval(timer);
+//                document.getElementById('round_celldata').innerHTML = "GO!";
+                _CB.writeToBottom('FIGHT!', 'red', '60px');
+            } else {
+//                document.getElementById('round_celldata').innerHTML = countdown.toString();
+                _CB.writeToBottom(countdown.toString(), 'gold', '60px');
             }
+            countdown--;
         }, 1000);
-        
-        
-        
     },
 }
 
