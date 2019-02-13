@@ -285,6 +285,7 @@ td  {
 }
 
 #round_celldata {
+    min-width: 161px;
     align-content: center;
     background: black;
     border: 1px solid gold;
