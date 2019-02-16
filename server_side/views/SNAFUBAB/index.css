@@ -215,7 +215,8 @@ td  {
  }
 
 #score_ul {
-    
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: transparent;
     max-width: 890px;   
     margin: 0;
     width: 95%;
@@ -274,6 +275,7 @@ td  {
   
 }
 
+/*middle cell of console:*/
 .console_top {
     color: darkred;
 }
@@ -297,6 +299,13 @@ td  {
     background: black;
     color: red;
     font-size: 32px;
+    border: 1px solid gold;
+
+}
+/*player data left(now) cell of console*/
+
+#con_playerdata {
+    background: black;
     border: 1px solid gold;
 
 }

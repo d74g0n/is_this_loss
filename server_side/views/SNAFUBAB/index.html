@@ -28,10 +28,9 @@ This is highest refactor
             <h5 id="quote">"Recognize Abstract Patterns"</h5>
         </center>
     </div>
-
     <br> <br> <br>
+    <!--    top payne above main canvas-->
     <center>
-
         <div id="score_div" style="margin-bottom: 24px">
             <ul id="score_ul">
                 <table style="width:100%">
@@ -58,54 +57,45 @@ This is highest refactor
                 </table>
             </ul>
         </div>
-
     </center>
-
     <center>
+        <!--        main game canvas-->
         <canvas id="board"></canvas>
-        <!--            <script type="text/javascript" src="round.main.js"></script>-->
         <script type="text/javascript" src="round.js"></script>
-
     </center>
- <center>
-
-        <div id="console_div" >
-                <table id="consolebar" style="width:100%;">
-                    <tr stlye="align-content: center;">
-                        
-                        <td id="console0" class="console_top"></td>
-                        <td id="console0" class="console_top"></td>
-                        <td id="console0" class="console_top"></td>
-                        <td id="round_celltop" class="console_top">
-                            <center>
-                            ROUND
-                            </center>
-                        </td>
-                        <td id="console0" class="console_top"></td>
-                        <td id="console0" class="console_top"></td>
-                        <td id="console0" class="console_top"></td>
-                    </tr>
-                    <tr stlye="align-content: center;">
-                        
-                        <td id="consoleb0" class="console_bottom"></td>
-                        <td id="consoleb0" class="console_bottom"></td>
-                        <td id="consoleb0" class="console_bottom"></td>
-                        <td id="round_celldata" class="console_bottom"><center><button id='btn_join' onclick='BIN.buts.join()' style="margin-top: 10px; background: transparent;">JOIN NEXT</button></center></td>
-
-                        <td id="consoleb0" class="console_bottom"></td>
-                        <td id="consoleb0" class="console_bottom"></td>
-                        <td id="consoleb0" class="console_bottom"></td>
-                    </tr>
-                </table>
-        </div>
-
-    </center>
+    <!--    bottom payne beneath canvas-->
     <center>
-
-
-
+        <div id="console_div">
+            <table id="consolebar" style="width:100%;">
+                <tr stlye="align-content: center;">
+                    <td id="console0" class="console_top"></td>
+                    <td id="console0" class="console_top"></td>
+                    <td id="console0" class="console_top"></td>
+                    <td id="round_celltop" class="console_top">
+                        <center>
+                            ROUND
+                        </center>
+                    </td>
+                    <td id="console0" class="console_top"></td>
+                    <td id="console0" class="console_top"></td>
+                    <td id="console0" class="console_top"></td>
+                </tr>
+                <tr stlye="align-content: center;">
+                    <td id="con_playerdata" class="console_bottom">
+                        <center><!--<br>HI-->
+                            <button id='btn_join' onclick='BIN.buts.join()' style="margin-top: 10px; background: transparent;">Click To</button>READY</center>
+                    </td>
+                    <td id="consoleb0" class="console_bottom"></td>
+                    <td id="consoleb0" class="console_bottom"></td>
+                    <td id="round_celldata" class="console_bottom"></td>
+                    <td id="consoleb0" class="console_bottom"></td>
+                    <td id="consoleb0" class="console_bottom"></td>
+                    <td id="consoleb0" class="console_bottom"></td>
+                </tr>
+            </table>
+        </div>
     </center>
-
+    <!--    landing modal featuring character creation logic -->
     <div id="Name_modal" class="modal">
         <center>
             <div class="modal-content">

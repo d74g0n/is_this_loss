@@ -306,6 +306,7 @@ global._RULES = {
     LengthGrowRate: 1000, //timers?  TBA
     hasDeathDelete: false,
     hasWalls: false,
+    ReadyUpCountNeeded: 2,
     ruleRando: function () {
         //do random bool on most of global.RULES
         // TADO
@@ -375,7 +376,7 @@ global._G = {
             }
         });
 
-        if (ready_count == loggedinplayers.length) {
+        if (ready_count >= _RULES.ReadyUpCountNeeded) {
             console.log('[checkforReadyPlayers][calling=>][startRound]');
             // WIP::
             _LPs.setRoundSpawnPoints();
@@ -392,12 +393,17 @@ global._G = {
     },
     isAnybodyAlive: function () {
         // this checks who is alive; then doubles as score setter.
+        // TADO insert Winner Ani - but first FRAME CALC who actually dies first.
+        // player object deathframe variable? most likely.
         let alivecount = 0;
         loggedinplayers.forEach(function (P) {
             if (P.isAlive) {
                 alivecount++;
             }
         });
+        
+        // if alive count is zero then check tie breaker deathframe stuff.
+        // but wait are they not all on the same frame here?  forEach being everyone?
 
         if (alivecount == 1) {
             console.log('[_G][isAnybodyAlive]=>[CALC WINNER SCORE]');
@@ -538,16 +544,10 @@ io.on('connection', function (socket) {
         /* [ legend:: player_data = .name .color .sid . state ]*/
         //        console.log('[' + player_data.sid + ']');
         console.log('[io_socket][on.LOGIN][' + JSON.stringify(player_data) + ']');
-        // this:
-        // sessionsConnections[socket.handshake.sessionID].emit('console_message', 'REGISTERED');
-        // send 'console_pm' ::
-        
-//        console.log(sessionsConnections[socket.handshake.sessionID]);
         global.sendCPM(socket.handshake.sessionID, "[LOGGED-IN]");
 
         PDproto.pllogin(player_data, socket.handshake.sessionID);
-//        ?? WIP WIPWIPWIPWIPWIPWIPIWIP
-        
+        // FOR EACH PLAYER EMIT THIS SHIT::
         sessionsConnections[socket.handshake.sessionID].emit('setcookies');
         sessionsConnections[socket.handshake.sessionID].emit('sync_players', _PDat); // maybe BROADCAST level
         /*        io.emit('setcookies');

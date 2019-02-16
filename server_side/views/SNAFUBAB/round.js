@@ -65,6 +65,25 @@ let roundcode = function (global) {
             c.strokeText(string, scaleX, scaleY);
             // REMEMBER SHADOWING?
         },
+        ScaleUpWrite: function (msg, color) {
+            let index = 10;
+//            _D.writeText(msg, undefined, 260, '100px serif', color, 'black', 'top');
+//            _D.writeText(msg, undefined, 260, '100px serif', color, 'black', 'bottom');
+            global._SE.isFade = true;
+            global._SE.fadetick = 20;
+            let timer = setInterval(function () {
+                index+= 12;
+                let istr = index + 'px';
+                global._SE.fadelogic();
+                _D.writeText(msg, undefined, 260, istr + ' serif', color, 'black', 'top');
+                _D.writeText(msg, undefined, 260, istr + ' serif', color, 'black', 'bottom');
+                if (index > 200) {
+                    clearInterval(timer);
+                    global._SE.isFade = false;
+                }
+            }, 1000 / 20);
+
+        },
         sSq: function (x, y, color = 'rgba(255,255,255,1)') {
             // draws a unfilled square (stroke) (sSq)
             if (x > 0) {
@@ -189,7 +208,7 @@ let roundcode = function (global) {
             c.fillStyle = game_defaults.bg;
             // this fillRect only covered the logo - which left snakes with ghost tails.
             //            c.fillRect(240, 100, canvas.width / 2.2, canvas.height / 2.2);
-            c.fillRect(240, 100, canvas.width, canvas.height);
+            c.fillRect(0, 0, canvas.width, canvas.height);
             _D.GlobalAlpha(1);
         },
 
@@ -246,11 +265,20 @@ let roundcode = function (global) {
             socket.emit('controllerdata', 'e');
             console.log('east =>SENT');
         }
+        if (e.key == '1') {
+            _D.ScaleUpWrite("WINNER", 'blue');
+            console.log('DEBUGGER =>ScaleupWriteTesting');
+        }
+
+        if (e.key == '2') {
+            _D.background();
+            console.log('DEBUGGER =>CLEAR CANVAS');
+        }
 
 
     }
     // -=-=-=-=-=-=-=-=-=-=-=-=- [ EXECUTE ON LOAD:
-    _D.LEVEL_splashscreen();
+    //    _D.LEVEL_splashscreen();
 
 } // -=-= [ end of 'roundcode' Enclosure.
 // -=-= [ outside of round.js closure;
@@ -279,7 +307,7 @@ BIN.buts.join = function () {
 
 
 global._ConsoleBar = {
-    writeToBottom: function(msg = 'ERR', color = 'gold', fontsize = '60px') {
+    writeToBottom: function (msg = 'ERR', color = 'gold', fontsize = '60px') {
         document.getElementById('round_celldata').innerHTML = msg;
         document.getElementById('round_celldata').style.color = color;
         document.getElementById('round_celldata').style.fontSize = fontsize;
@@ -292,10 +320,10 @@ global._ConsoleBar = {
         let timer = setInterval(function () {
             if (countdown == 0) {
                 clearInterval(timer);
-//                document.getElementById('round_celldata').innerHTML = "GO!";
+                //                document.getElementById('round_celldata').innerHTML = "GO!";
                 _CB.writeToBottom('FIGHT!', 'red', '60px');
             } else {
-//                document.getElementById('round_celldata').innerHTML = countdown.toString();
+                //                document.getElementById('round_celldata').innerHTML = countdown.toString();
                 _CB.writeToBottom(countdown.toString(), 'gold', '60px');
             }
             countdown--;
@@ -305,21 +333,15 @@ global._ConsoleBar = {
 
 const _CB = global._ConsoleBar;
 
-
-
-
-
-
-
 socket.on('sync_players', function (data) {
     //    global._SE.drawScore(data);
 });
 
 socket.on('startcountdown', function (data) {
     console.log('startcountdown HIT');
-    
+
     global._ConsoleBar.threetwoonego(data);
-    
+
 });
 
 socket.on('post_scores', function (scoredata) {
@@ -330,12 +352,33 @@ socket.on('post_scores', function (scoredata) {
 
     scoredata.forEach(function (P) {
         //send me player list with SB data.
+
+        let eleA = ('pn' + sindex).toString();
+        let eleB = ('ps' + sindex).toString();
         document.getElementById('pn' + sindex).innerHTML = P.name;
         document.getElementById('pn' + sindex).style.color = P.color;
+
+        function ChangeStroke(ele) { // add this to engine later.
+            var div = document.getElementById(ele);
+
+            if ('webkitTextStroke' in div.style) {
+                div.style.webkitTextStroke = "1px black";
+            } else {
+                console.log("[FAILED TO STYLE] => Your browser doesn't support webkitTextStroke!");
+            }
+        }
+        ChangeStroke(eleA);
+        ChangeStroke(eleB);
+
         document.getElementById('ps' + sindex).innerHTML = P.score;
         document.getElementById('ps' + sindex).style.color = P.color;
         sindex++;
     });
 
 
+});
+
+socket.on('winner_animation', function (winnercolor = 'white') {
+    //TADO - INSERT ON SERVER SIDE:
+    _D.ScaleUpWrite("GINNER!", winnercolor);
 });
